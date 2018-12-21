@@ -16,4 +16,21 @@ Course materials and notes for University of Maryland's class CMSC733: Computer 
 - [Deep Fakes](https://www.alanzucconi.com/2018/03/14/introduction-to-deepfakes/)
 
 ## Project 3
-- 
+- Structure from Motion 
+  - Feature Extraction and Matching
+  - Estimate F (with RANSAC)
+  - Estimate E from F (with RANSAC)
+  - Check Cheirality condition and Triangulation
+  - Linear PnP
+  - Non Linear PnP
+  - Bundle Adjustment
+  - Plot Camera Poses and 3D Structure
+- [SfM Learner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/)
+  - Depth Scale Alignment using predicted pose
+  - Plot Camera Poses and 3D Structure
+  
+## Project 4
+- Reconstruct 3D Scene using Point to Plane ICP on RGBD data
+- Implement [SharpMask?](https://arxiv.org/abs/1603.08695) to obtain segmentation in 2D
+- Fuse outputs of SharkMask in 3D?
+
