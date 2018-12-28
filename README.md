@@ -8,6 +8,7 @@ Course materials and notes for University of Maryland's class CMSC733: Computer 
 
 ## Project 2
 - Face Swap using Delaunay Triangulation and TPS  (Facial Landmarks detected using dlib)
+- [On Face Segmentation, Face Swapping, and Face Perception](https://arxiv.org/pdf/1704.06729.pdf)
 - [Fast Face-swap Using Convolutional Neural Networks](https://arxiv.org/pdf/1611.09577.pdf)
 - [HeadOn: Real-time Reenactment of Human Portrait Videos](http://niessnerlab.org/projects/thies2018headon.html)
 - [Photorealistic Facial Texture Inference Using Deep Neural Networks](https://arxiv.org/pdf/1612.00523v1.pdf)
