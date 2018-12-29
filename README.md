@@ -8,6 +8,13 @@ Course materials and notes for University of Maryland's class CMSC733: Computer 
 
 ## Project 2
 - Face Swap using Delaunay Triangulation and TPS  (Facial Landmarks detected using dlib)
+- Current ideas for Deep Learning 
+  - Implement [Joint 3D Face Reconstruction and Dense Alignment with Position Map Regression Network](https://arxiv.org/pdf/1803.07835.pdf) to regress 3D mesh of the face and use TPS to warp face and finally poisson blending to blend seamlessly
+  - Implement [Joint 3D Face Reconstruction and Dense Alignment with Position Map Regression Network](https://arxiv.org/pdf/1803.07835.pdf) to regress 3D mesh of the face then implement [Fast Face-swap Using Convolutional Neural Networks](https://arxiv.org/pdf/1611.09577.pdf) based blending using style transfer 
+
+
+References for Deep Learning 
+
 - [On Face Segmentation, Face Swapping, and Face Perception](https://arxiv.org/pdf/1704.06729.pdf)
 - [Fast Face-swap Using Convolutional Neural Networks](https://arxiv.org/pdf/1611.09577.pdf)
 - [HeadOn: Real-time Reenactment of Human Portrait Videos](http://niessnerlab.org/projects/thies2018headon.html)
