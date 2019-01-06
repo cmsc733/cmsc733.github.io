@@ -43,7 +43,7 @@ You are going to be implementing two deep learning approaches to estimate the ho
 
 <a name='datagen'></a>
 ## Data Generation
-To train a Convolutional Neural Network (CNN) to estimate homography between a pair of images (we call this network *HomographyNet*) we need data (pairs of images) with the known homogaraphy between them. This is in-general hard to obtain as we would need the 3D movement between the pair of images to obtain the homography between them. An easier option is to generate synthetic pairs of images to train a network. But what images do we use so that the network is not baised? Simple, use images from [MSCOCO dataset](http://cocodataset.org/#home) which contains images of a lot of objects in natural scenes. MSCOCO is quite large and it'll take forever to train on these images. Hence, we provide a small subset of MSCOCO for you to train your HomographyNet on. This dataset can be downloaded from [here](). 
+To train a Convolutional Neural Network (CNN) to estimate homography between a pair of images (we call this network *HomographyNet* and the original paper can be found [here](https://arxiv.org/pdf/1606.03798.pdf)) we need data (pairs of images) with the known homogaraphy between them. This is in-general hard to obtain as we would need the 3D movement between the pair of images to obtain the homography between them. An easier option is to generate synthetic pairs of images to train a network. But what images do we use so that the network is not baised? Simple, use images from [MSCOCO dataset](http://cocodataset.org/#home) which contains images of a lot of objects in natural scenes. MSCOCO is quite large and it'll take forever to train on these images. Hence, we provide a small subset of MSCOCO for you to train your HomographyNet on. This dataset can be downloaded from [here](). 
 
 Now that you've downloaded the dataset, we need to generate synthetic data, i.e., pairs of images with known homography between them. Before, we generate image pairs, we need all the image pairs to be of the same size (as HomographyNet is not fully convolutional, it cannot accept image sizes of arbitrary shape). First step in generating data is to obtain a random crop of the image (called patch). Then the original image will be warped using a random homography then the respective patch is extracted. While we perform this operation we need to ensure that we are not extracting the patch from outside the image after warping. An illustration is shown below.
 
@@ -107,7 +107,23 @@ Now, the extracted patches are shown below.
   <div style="clear:both;"></div>
 </div>
 
+Note that, we generated labels (ground truth homography between the two patches) as is given by \\(H_A^B\\). However, the authors in [this paper](https://arxiv.org/pdf/1606.03798.pdf) found that regressing the 9 values of the homography matrix directly yielded bad results. Instead, another way the authors found was to regress the amount the corners of the patch \\(P_A\\) denoted by \\(C_A\\) need to be moved so that they are aligned with \\(P_B\\). This is denoted by \\(H_{4Pt}\\) and will be used as our labels. Remember,  \\(H_{4Pt}\\) is given by \\(H_{4Pt} = C_B - C_A\\). 
 
+Now, we stack the image patches \\(P_A\\) and \\(P_B\\) depthwise to obtain an input of size \\(M_P\times N_P \times 2*K\\) where \\(K\\) is the number of channels in each patch/image (3 if RGB image and 1 if grayscale image). 
+
+The final output of data generation are these stacked image patches and the homography between them given by \\(H_{4Pt}\\). 
+
+The network architecture and the overview is shown below.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p1/HomographyNetSup.png" width="100%">
+  <div class="figcaption">
+  	Top: Overview of the system. Bottom: Architecture of the network which mimics the network given in [this paper](https://arxiv.org/pdf/1606.03798.pdf).
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+ 
 <a name='ph2sup'></a>
 ## Supervised Approach
 
