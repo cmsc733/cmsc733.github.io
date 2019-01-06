@@ -118,7 +118,7 @@ The network architecture and the overview is shown below.
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/HomographyNetSup.png" width="100%">
   <div class="figcaption">
-  	Top: Overview of the system. Bottom: Architecture of the network which mimics the network given in [this paper](https://arxiv.org/pdf/1606.03798.pdf).
+  	Top: Overview of the system. Bottom: Architecture of the network which mimics the network given in <a href="https://arxiv.org/pdf/1606.03798.pdf">this paper</a>.
   </div>
   <div style="clear:both;"></div>
 </div>
