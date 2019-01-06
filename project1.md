@@ -123,6 +123,7 @@ The network architecture and the overview is shown below.
   <div style="clear:both;"></div>
 </div>
 
+The loss function used is simple L2 loss between the predicted 4-point homography \\(\widetilde{H_{4Pt}}\\) and ground truth 4-point homography \\(H_{4Pt}\\). The loss function \\(l\\) is given by \\(l = \vert \vert \widetilde{H_{4Pt}} - H_{4Pt} \vert \vert_2\\). 
  
 <a name='ph2sup'></a>
 ## Supervised Approach
