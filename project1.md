@@ -113,6 +113,9 @@ Now, we stack the image patches \\(P_A\\) and \\(P_B\\) depthwise to obtain an i
 
 The final output of data generation are these stacked image patches and the homography between them given by \\(H_{4Pt}\\). 
 
+<a name='ph2sup'></a>
+## Supervised Approach
+
 The network architecture and the overview is shown below.
 
 <div class="fig fighighlight">
@@ -123,10 +126,11 @@ The network architecture and the overview is shown below.
   <div style="clear:both;"></div>
 </div>
 
-The loss function used is simple L2 loss between the predicted 4-point homography \\(\widetilde{H_{4Pt}}\\) and ground truth 4-point homography \\(H_{4Pt}\\). The loss function \\(l\\) is given by \\(l = \vert \vert \tilde{H_{4Pt}} - H_{4Pt} \vert \vert_2\\). 
+The loss function used is simple L2 loss between the predicted 4-point homography \\(\widetilde{H_{4Pt}}\\) and ground truth 4-point homography \\(H_{4Pt}\\). The loss function \\(l\\) is given by \\(l = \vert \vert \widetilde{H_{4Pt}} - H_{4Pt} \vert \vert_2\\). 
  
-<a name='ph2sup'></a>
-## Supervised Approach
+<a name='ph2unsup'></a>
+## Unsupervised Approach
+Though the supervised deep homography estimation works well, it needs a lot of data to generalize well and is generally not robust if good data augmentation is not provided as shown in [this paper](https://arxiv.org/abs/1709.03966). Now, we'll implement an unsupervised approach to estimate homography between image pairs using a CNN as given in [this paper](https://arxiv.org/abs/1709.03966). 
 
 
 <a name='sub'></a>
