@@ -9,6 +9,12 @@ Table of Contents:
 - [Deadline](#due)
 - [Problem Statement](#prob)
 - [Phase 1: Traditional Approach](#ph1)
+	- [Corner Detection](#corner)
+	- [Adaptive Non-Maximal Suppression (ANMS)](#anms)
+	- [Feature Descriptor](#feat-descriptor)
+	- [Feature Matching](#feat-matching)
+	- [RANSAC for outlier rejection and to estimate Robust Homography](#homography)
+	- [Blending Images](#blending)
 - [Phase 2: Deep Learning Approach](#ph2)
 	- [Data Generation](#datagen)
 	- [Supervised Approach](#ph2sup)
@@ -25,22 +31,137 @@ Table of Contents:
 
 <a name='prob'></a>
 ## Problem Statement 
-
+The purpose of this project is to stitch two or more images in order to create one seamless panorama image. Each image should have few repeated local features ($$\sim 30-50\%$$ or more, emperically chosen). In this project, you need to capture multiple such images. The following method of stitching images should work for most image sets but you'll need to be creative for working on harder image sets. 
 
 
 <a name='ph1'></a>
-## Traditional Approach
+## Phase 1: Traditional Approach
+An overview of the panorama stitching using the traditional approach is given below.
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/TraditionalOverview.png" width="100%">
   <div class="figcaption">
-  	Overview of panorama stitching using traditional method.
+  	Fig 1: Overview of panorama stitching using traditional method.
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+Sample input images and it's respective output are shown below.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p1/InputOutput.png" width="100%">
+  <div class="figcaption">
+  	Fig 2: First three images: Input to the panorama stitching algorithm, last image: output of the panorama stitching algorithm.
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<a name='corner'></a>
+### Corner Detection
+The first step in stitching a panorama is extracting corners like most computer vision tasks. Here we will use either Harris corners or Shi-Tomasi corners. Refer to ``cv2.cornerHarris`` or ``cv2.goodFeaturesToTrack`` to implement this part.
+
+<a name='anms'></a>
+### Adaptive Non-Maximal Suppression (ANMS)
+The objective of this step is to detect corners such that they are equally distributed across the image in order to avoid weird artifacts in warping. 
+
+In a real image, a corner is never perfectly sharp, each corner might get a lot of hits out of the $$N$$ strong corners - we want to choose only the $$N_{best}$$ best corners after ANMS. In essence, you will get a lot more corners than you should! ANMS will try to find corners which are true local maxima. The algorithm for implementing ANMS is given below.
+
+<div class="fig figcenter fighighlight">
+  <img src="/assets/2019/p1/anms.png" width="100%">
+  <div class="figcaption">
+  	Fig 3: ANMS algorithm.
+  </div>
+</div>
+
+Output of corner detection and ANMS is shown below. Observe that the output of ANMS is evenly distributed strong corners.
+
+<div class="fig figcenter fighighlight">
+  <img src="/assets/2019/p1/ANMSOutput.png" width="100%">
+  <div class="figcaption">
+  	Fig 4: Left: Output of corner detection. Right: Output of ANMS.
+  </div>
+</div>
+
+A sample output of ANMS for two different images are shown below.
+
+<div class="fig figcenter fighighlight">
+  <img src="/assets/2019/p1/anms-output.png" width="100%">
+  <div class="figcaption">
+  	Output of ANMS for different images.
+  </div>
+</div>
+
+<a name='feat-descriptor'></a>
+### Feature Descriptor
+In the previous step, you found the feature points (locations of the $$N$$ best best corners after ANMS are called the feature point locations). You need to describe each feature point by a feature vector, this is like encoding the information at each feature points by a vector. One of the easiest feature descriptor is described next.
+
+Take a patch of size $$40 \times 40$$ centered **(this is very important)** around the keypoint. Now apply gaussian blur (feel free to play around with the parameters, for a start you can use OpenCV's default parameters in ``cv2.GaussianBlur`` command. Now, sub-sample the blurred output (this reduces the dimension) to $$8 \times 8$$. Then reshape to obtain a $$64 \times 1$$ vector. Standardize the vector to have zero mean and variance of 1. Standardization is used to remove bias and to achieve some amount of illumination invariance.
+
+
+<a name='feat-match'></a>
+### Feature Matching
+In the previous step, you encoded each keypoint by $$64\times1$$ feature vector. Now, you want to match the feature points among the two images you want to stitch together. In computer vision terms, this step is called as finding feature correspondences within the 2 images. Pick a point in image 1, compute sum of square difference between all points in image 2. Take the ratio of best match (lowest distance) to the second best match (second lowest distance) and if this is below some ratio keep the matched pair or reject it. Repeat this for all points in image 1. You will be left with only the confident feature correspondences and these points will be used to estimate the transformation between the 2 images also called as Homography. Use the function ``cv2.drawMatches`` to visualize feature correspondences. Below is an image showing matched features.
+
+
+<div class="fig figcenter fighighlight">
+  <img src="/assets/2019/p1/FeatureMatching.png" width="100%">
+  <div class="figcaption">
+  	Fig 5: Output of Feature Matching. Observe the wrong matches. 
+  </div>
+</div>
+
+<a name='homography'></a>
+### RANSAC for outlier rejection and to estimate Robust Homography
+We now have matched all the features correspondences but not all matches will be right. To remove incorrect matches, we will use a robust method called *Random Sampling Concensus* or **RANSAC** to compute homography.
+
+Recall the RANSAC steps are: 
+1. Select four feature pairs (at random), $$p_i$$ from image 1, $$p_i^1$$ from image 2.
+2. Compute homography $$H$$ (exact).
+3. Compute inliers where $$SSD(p_i^1, Hp_i) < \texttt{thresh}$$. 
+4. Repeat the last three steps until you have exhausted $$N_{max}$$ number of iterations (specified by user) or you found more than percentage of inliers (Say $$90\%$$ for example).
+5. Keep largest set of inliers.
+6. Re-compute least-squares $$\hat{H}$$ estimate on all of the inliers.
+
+The output of feature matches after all outliers have been removed is shown below.
+
+<div class="fig figcenter fighighlight">
+  <img src="/assets/2019/p1/AfterRANSAC.png" width="100%">
+  <div class="figcaption">
+  	Fig 6: Feature matches after outliers have been removed using RANSAC. 
+  </div>
+</div>
+
+<a name='blending'></a>
+### Blending Images
+Panorama can be produced by overlaying the pairwise aligned images to create the final output image. The output panorama stitched from two images shown in the Fig. 6 are shown below.
+
+
+<div class="fig figcenter fighighlight">
+  <img src="/assets/pano/pano-output.png" width="80%">
+  <div class="figcaption"> Fig 7: Final Panorama output for images shown in Fig. 6. </div>
+</div>
+
+*Come up with a logic to blend the common region between images while not affecting the regions which are not common.* Here, common means shared region, i.e., a part of first image and part of second image should overlap in the output panorama. Describe what you did in your report. 
+
+<p style="background-color:#ddd; padding:5px"><b>Note:</b> The pipeline talks about how to stitch a pair of images, you need to extend this to work for multiple images. You can re-run your images pairwise or do something smarter.</p>
+Your end goal is to be able to stitch any number of given images - maybe 2 or 3 or 4 or 100, your algorithm should work. If a random image with no matches are given, your algorithm needs to report an error.
+
+<p style="background-color:#ddd; padding:5px"><b>Note:</b> When blending these images, there are inconsistency between pixels from different input images due to different exposure/white balance settings or photometric distortions or vignetting. This can be resolved by <i><a href="http://www.irisa.fr/vista/Papers/2003_siggraph_perez.pdf">Poisson blending</a></i>.
+
+
+
+An input and output of a seamless panorama of three images are shown below.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p1/InputOutput.png" width="100%">
+  <div class="figcaption">
+  	Fig 8: First three images: Input to the panorama stitching algorithm, last image: output of the panorama stitching algorithm.
   </div>
   <div style="clear:both;"></div>
 </div>
 
 <a name='ph2'></a>
-## Deep Learning Approach
+## Phase 2: Deep Learning Approach
 
 You are going to be implementing two deep learning approaches to estimate the homography between two images. The deep model effectively combines corner detection, ANMS, feature extraction, feature matching, RANSAC and estimate homography all into one. This not only makes the approach faster but also makes it robust if the network is generalizable (More on this [later](#ph2unsup)).
 
@@ -53,7 +174,7 @@ Now that you've downloaded the dataset, we need to generate synthetic data, i.e.
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/ActiveRegion.png" width="100%">
   <div class="figcaption">
-  	Patch is shown as dashed blue box. Active region is shown as a blue highlight -- this is the region where the top left corner of the patch can lie such that all the pixels in the patch will lie within the image after warping the random extracted patch. Red line shows the maximum perturbation \(\rho\). 
+  	Fig. 9: Patch is shown as dashed blue box. Active region is shown as a blue highlight -- this is the region where the top left corner of the patch can lie such that all the pixels in the patch will lie within the image after warping the random extracted patch. Red line shows the maximum perturbation \(\rho\). 
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -67,7 +188,7 @@ In step 2, perform a random perturbation in the range \\([-\rho, \rho]\\) of the
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/I1Patch.png" width="100%">
   <div class="figcaption">
-  	Extracted random patch \(P_A\) from original image \(I_A\) is shown as dashed blue box. Corners of the patch \(P_A\) denoted by \(C_A\) are are shown as blue circles.   
+  	Fig. 10: Extracted random patch \(P_A\) from original image \(I_A\) is shown as dashed blue box. Corners of the patch \(P_A\) denoted by \(C_A\) are are shown as blue circles.   
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -75,7 +196,7 @@ In step 2, perform a random perturbation in the range \\([-\rho, \rho]\\) of the
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/PerturbPts.png" width="100%">
   <div class="figcaption">
-  	Random perturbation applied to corners of the patch \(P_A\) denoted by \(C_A\) are shown as blue circles to obtain corners of patch \(P_B\) denoted by \(C_B\) are shown as red circles. 
+  	Fig. 11: Random perturbation applied to corners of the patch \(P_A\) denoted by \(C_A\) are shown as blue circles to obtain corners of patch \(P_B\) denoted by \(C_B\) are shown as red circles. 
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -83,7 +204,7 @@ In step 2, perform a random perturbation in the range \\([-\rho, \rho]\\) of the
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/PerturbPtsImg.png" width="100%">
   <div class="figcaption">
-  	Red dashed lines show the patch formed by perturbed point corners. Notice how the shape is not rectangular making it hard to extract data without adding extra data or masking.
+  	Fig. 12: Red dashed lines show the patch formed by perturbed point corners. Notice how the shape is not rectangular making it hard to extract data without adding extra data or masking.
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -95,7 +216,7 @@ In step 3, use the value of \\(H_A^B\\) to warp \\(I_A\\) and obtain \\(I_B\\). 
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/I2Patch.png" width="100%">
   <div class="figcaption">
-  	Red dashed lines show the patch \(P_B\) extracted from warped image \(I_B\).
+  	Fig. 13: Red dashed lines show the patch \(P_B\) extracted from warped image \(I_B\).
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -105,7 +226,7 @@ Now, the extracted patches are shown below.
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/Patches.png" width="100%">
   <div class="figcaption">
-  	Extracted Patches \(P_A\) and \(P_B\) with known homography between them. 
+  	Fig. 14: Extracted Patches \(P_A\) and \(P_B\) with known homography between them. 
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -119,7 +240,7 @@ The final output of data generation are these stacked image patches and the homo
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/DLOverview.png" width="100%">
   <div class="figcaption">
-  	Overview of panorama stitching using deep learning based method.
+  	Fig. 15: Overview of panorama stitching using deep learning based method.
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -133,7 +254,7 @@ The network architecture and the overview is shown below. *However, note that yo
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/HomographyNetSup.png" width="100%">
   <div class="figcaption">
-  	Top: Overview of the supervised deep learning system for homography estimation. Bottom: Architecture of the network which mimics the network given in <a href="https://arxiv.org/pdf/1606.03798.pdf">this paper</a>.
+  	Fig. 16: Top: Overview of the supervised deep learning system for homography estimation. Bottom: Architecture of the network which mimics the network given in <a href="https://arxiv.org/pdf/1606.03798.pdf">this paper</a>.
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -150,7 +271,7 @@ The data generation is exactly the same for this part (as we want to evaluate th
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/HomographyNetUnsup.png" width="100%">
   <div class="figcaption">
-    Overview of the unsupervised deep learning system for homography estimation.
+    Fig. 17: Overview of the unsupervised deep learning system for homography estimation.
   </div>
   <div style="clear:both;"></div>
 </div>
