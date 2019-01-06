@@ -157,7 +157,6 @@ An input and output of a seamless panorama of three images are shown below.
   <div class="figcaption">
   	Fig 8: First three images: Input to the panorama stitching algorithm, last image: output of the panorama stitching algorithm.
   </div>
-  <div style="clear:both;"></div>
 </div>
 
 <a name='ph2'></a>
