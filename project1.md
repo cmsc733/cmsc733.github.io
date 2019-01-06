@@ -27,7 +27,7 @@ Table of Contents:
 ## Traditional Approach
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p1/TraditionalOverview.PNG" width="100%">
+  <img src="/assets/2019/p1/TraditionalOverview.png" width="100%">
   <div class="figcaption">
   </div>
   <div style="clear:both;"></div>
@@ -36,6 +36,7 @@ Table of Contents:
 <a name='ph2'></a>
 ## Deep Learning Approach
 
+You are going to be implementing two deep learning approaches to estimate the homography between two images. The deep model effectively combines corner detection, ANMS, feature extraction, feature matching and RANSAC all into one. 
 
 
 <a name='sub'></a>
