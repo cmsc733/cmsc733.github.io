@@ -52,10 +52,13 @@
   <article class="post-content">
   <p><strong>This article is written by <a href="http://nitinjsanket.github.io">Nitin J. Sanket</a>.</strong></p>
 
-<p>Table of Contents:</p>
+<p>Table of Contents:<br />
+- <a href="#intro">Introduction</a><br />
+- <a href="#p4">Detailed Explanation of Project 4</a></p>
 
-<h2 id="introduction">Introduction</h2>
-<p>The SfM pipeline we talked about before relies on an optimization framework to do the bundle adjustment and you would’ve also observed that we also used <code class="highlighter-rouge">fminunc</code> or <code class="highlighter-rouge">lsqnonlin</code> for solving non-linear least squares in traingulation and PnP. This is not very efficient and there has to be a better way right? Guess what, there is! In 2012, Prof. Frank Dellaert published a hallmark paper called <a href="https://smartech.gatech.edu/handle/1853/45226">GTSAM</a> for solving such problems which are commonly classified as <strong>Pose Graph Optimization</strong> and uses the concept of <strong>Factor Graphs</strong>. This method has been improved over the years and has periodically improved it’s optimization methods with the latest literature. Though there are faster pose graph optimization frameworks like <a href="https://github.com/RainerKuemmerle/g2o"><strong>g2o</strong></a> or <a href="https://sourceforge.net/p/slam-plus-plus/wiki/Home/"><strong>SLAM++</strong></a>, GTSAM by far is one of the easiest frameworks to setup, use and understand and hence will be the our choice to solve this project.</p>
+<p><a name="intro"></a><br />
+## Introduction<br />
+The SfM pipeline we talked about before relies on an optimization framework to do the bundle adjustment and you would’ve also observed that we also used <code class="highlighter-rouge">fminunc</code> or <code class="highlighter-rouge">lsqnonlin</code> for solving non-linear least squares in traingulation and PnP. This is not very efficient and there has to be a better way right? Guess what, there is! In 2012, Prof. Frank Dellaert published a hallmark paper called <a href="https://smartech.gatech.edu/handle/1853/45226">GTSAM</a> for solving such problems which are commonly classified as <strong>Pose Graph Optimization</strong> and uses the concept of <strong>Factor Graphs</strong>. This method has been improved over the years and has periodically improved it’s optimization methods with the latest literature. Though there are faster pose graph optimization frameworks like <a href="https://github.com/RainerKuemmerle/g2o"><strong>g2o</strong></a> or <a href="https://sourceforge.net/p/slam-plus-plus/wiki/Home/"><strong>SLAM++</strong></a>, GTSAM by far is one of the easiest frameworks to setup, use and understand and hence will be the our choice to solve this project.</p>
 
 <p>Let us consider a toy example to understand how one would solve SfM/SLAM in GTSAM. For the purpose of brevity, I am assuming that you have followed the setup insturctions <a href="https://borg.cc.gatech.edu/download.html">here</a> and setup GTSAM 3.2.1 on your computer with MATLAB compatibility. For any issues or help regarding the setup feel free to contact the TAs. Now, let’s get back to the problem in hand. The problem is defined as follows. Our robot lives in a 2D world with certain number of unique landmarks  \(N\). <strong>The origin in the world and the scale is arbitrary</strong>, i.e., any point in the map can be chosen as the origin. A common choice is the <strong>start of service</strong> or the pose (position and orientation) of the robot at the beginning of the algorithm is chosen as the origin. The scale being arbitrary just means that all the distances are measured to some <strong>relative scale</strong>, i.e., metric scale is unknown. We only know that a landmark is twice as far as the other landmark and this could metrically mean that one landmark is 2m away or 2cm away, the information about this is not known. This is the case when we have only one camera. However, if a distance sensor like a SONAR or a LIDAR is used we would know the metric scale. Note that this doesn’t change anything in the algorithm or the framework but merely changes the units in the computation.</p>
 
@@ -203,7 +206,8 @@ P(\mathbf{\Theta}) \propto \prod_{t=0}^T \phi_t(\theta_t) \prod_{\{ i, j\}, i< j
   <div style="clear:both;"></div>
 </div>
 
-<p>Notice that we only obtain the tag corner locations on the image. We need to compute the camera pose from these corners. We have encoutered this scenario before, i.e., given the image coordinates \(\mathbf{x}\) and their corresponding world coordinates \(\mathbf{X}\), we need to compute the camera pose. This is exactly the same as the Perspective-n-Point problem we saw earlier. Let us consider a special case of this problem, if we assume that all the points lie on a plane (for the april tag it does anyway). The transformation from the world to the image plane becomes a <strong>Homography</strong>. Let us write this down mathematically. The projection formula is given by:</p>
+<p><a name="homography"></a><br />
+Notice that we only obtain the tag corner locations on the image. We need to compute the camera pose from these corners. We have encoutered this scenario before, i.e., given the image coordinates \(\mathbf{x}\) and their corresponding world coordinates \(\mathbf{X}\), we need to compute the camera pose. This is exactly the same as the Perspective-n-Point problem we saw earlier. Let us consider a special case of this problem, if we assume that all the points lie on a plane (for the april tag it does anyway). The transformation from the world to the image plane becomes a <strong>Homography</strong>. Let us write this down mathematically. The projection formula is given by:</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{bmatrix} u \\ v \\ w\end{bmatrix} = K \begin{bmatrix} r_1 & r_2 & r_3 & T \end{bmatrix} \begin{bmatrix} X \\ Y \\ Z \\ W \end{bmatrix} %]]></script>
@@ -287,6 +291,97 @@ R = U \begin{bmatrix}1 & 0 & 0\\ 0 & 1 & 0\\ 0 & 0 & \det{UV^T} \end{bmatrix}V^T
 </div>
 
 <p>One could use the <code class="highlighter-rouge">LevenbergMarquardtOptimizer</code> or the <code class="highlighter-rouge">DoglegOptimizer</code> to solve for the parameters of the graph.</p>
+
+<p><a name="p4"></a><br />
+## Detailed Explanation of Project 4<br />
+Now, let’s look at how GTSAM will be used in Project 4. As mentioned in the <a href="https://cmsc426.github.io/2018/proj/p4/">project desciption</a>, we are given detected april tag corners in the frames of a video sequence. We want to find the 3D locations of these april tag corners in the world frame and the pose (position and orientation) of the camera in the world frame for every video frame. Now, let’s recall all the information we know in this project.</p>
+
+<ul>
+  <li>The carpet of april tags are placed over the floor which can be assumed to be a flat surface/plane.</li>
+  <li>The quadrotor is moving reasonably slowly.</li>
+  <li>Let us <strong>choose</strong> the first tag detection in the first frame as the world origin and the vector in the direction of \(p_1\) to \(p_2\) be world \(X\) and vector in direction of \(p_1\) to \(p_4\) be world \(Y\).</li>
+  <li>All april tags are of the same size and this size is known.</li>
+  <li>The april tags are rigidly attached to the ground with minimal effect from the downforce of the propellers of the quadrotor.</li>
+</ul>
+
+<p>In order for GTSAM to work well, we need to initialize the values of the factor graph to a reasonable values. The next part of this section talks about building the factor graph and initializing the values.</p>
+
+<p>Let us consider the first frame of a sequence. Let us denote the pose of the camera as \(x_0\) and let Tag 10’s left bottom corner be the world origin as shown in the Figure below. Here the X-Y-Z axes are shown in Red, Green and Blue respectively. A top view of the world is shown in the top right hand side of the figure with the Tag ID’s (10 to 18) highlighted.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/sfm/gtsamextra1.png" />
+  <div class="figcaption">
+ The camera pose in the first frame is \(x_0\). Bottom row shows the image seen by the camera (video frame) with detected april tag corners highlighted in red. 
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<p>Also, observe the video frame/image in the bottom row with detected tag corners highlighted in red. The data given to us are these detected tag corners (the ones shown as red dots). Now, let’s look at the factor graph corresponding to the first frame. We need to initialize the values in the bubble and specify the contraints denoted by the solid bubbles. First of all, Tag 10’s left bottom corner was chosen as the origin, this can be fed as a <code class="highlighter-rouge">PriorFactor</code> on the \(L_{10}^1\). Now, we want to obtain a value for the initial pose \(x_0\). This can be done by the knowledge of the pose of any (one or more) tags. Note that, until now, we only know the pose of Tag 10 (<strong>as we chose it as the world origin</strong>). To estimate \(x_0\) given \(L_{10}^1, L_{10}^2, L_{10}^3, L_{10}^4\), we’ll use the <a href="#homography">homography equations we discussed before</a> (because both the tag in the world and in the image are planar in nature). Using these homography equations, we obtain the pose of the camera with respect to the Tag 10 World frame, i.e., \(R_0\) and \(T_0\) which together constitute the value of \(x_0\).</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/sfm/gtsamextra2.png" />
+  <div class="figcaption">
+ Factor Graph for Frame 1. The things in the bubble need to be initialized, the the solid bubbles are constraints. Things in code font (courier font) refer to the GTSAM syntax and normal font refer to explanations. 
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<p>Now, we need to initialize the world frame co-ordinates of other tags (other than Tag 10, 11-18 in this example). Recall that we have the pose of the camera \(x_0\) in the world frame and the image co-ordinates of the tag corners. To obtain the world frame co-ordinates of other tags it is as easy as plugging in the values to the camera projection equation or the pinhole model.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix} u \\ v \\ w\end{bmatrix} = K \begin{bmatrix} r_1 & r_2 & r_3 & T \end{bmatrix} \begin{bmatrix} X \\ Y \\ Z \\ W \end{bmatrix} %]]></script>
+
+<p>Here, we need to obtain the values of \(\begin{bmatrix} X \ Y \ Z \ W \end{bmatrix}^T\) given other values in the equation.</p>
+
+<p>Now, let’s look at the second frame as shown below.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/sfm/gtsamextra3.png" />
+  <div class="figcaption">
+ The camera pose in the second frame is \(x_1\). Middle row shows the top view of the world frame with Tag IDs. Bottom row shows the image seen by the camera (video frame) with detected april tag corners highlighted in red and blue. The red tag corners denote the tags common between frames 1 and 2 and blue tag corners denote the new tags observed in frame 2 which were not seen in frame 1.  
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<p>The graph for this frame is shown below.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/sfm/gtsamextra4.png" />
+  <div class="figcaption">
+ Factor Graph for Frame 2. The things in the bubble need to be initialized, the the solid bubbles are constraints. Things in code font (courier font) refer to the GTSAM syntax and normal font refer to explanations. 
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<p>As before, we need to initialize the pose of the camera \(x_1\) given the knowledge of the pose of any (one or more) tags. Now, we have knowledge of the pose of all the common tags we saw in both frames 1 and 2 (red corners in frame 2’s image). We can use the homography equation again to obtain the value of \(x_1\) (Note that here we have a lot more than 4 equations in contrast to frame 1).</p>
+
+<p>To obtain the world frame co-ordinates of blue corners (\(L_{18}^1 \cdots L_{28}^4 \)) we use the pinhole equation as before given the pose of the camera \(x_1\) and the image co-ordinates of these tags.</p>
+
+<p>However, we moved from \(x_0\) to \(x_1\) as shown below.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/sfm/gtsamextra5.png" />
+  <div class="figcaption">
+ The camera moved from \(x_0\) in frame 1 to \(x_1\) in frame 2.
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<p>If we add in the constraint between the two camera poses, we obtain the factor graph given below.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/sfm/gtsamextra6.png" />
+  <div class="figcaption">
+ Factor Graph for frames 1 and 2.
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<p>The <code class="highlighter-rouge">BetweenFactor</code> between \(x_0\) and \(x_1\) indicates an odometry measurement obtained from different source such as an IMU. Since we made the assumption of slow movement, we’ll add an identity value for this constraint.</p>
+
+<p>For debugging this project, we would recommend plotting the world tag corner locations and camera poses without factor graph optimization (by using the values which will be used to initialize) first. It should look sensible but not perfect.</p>
+
+<p>When these values are plotted, notice that the drift (deviation of corners  from their actual locations) accumulates over time (as frame number increases). This is sometimes the issue when such values are fed into GTSAM. One simple way (not optimal in any sense) to solve the problem is by first running GTSAM in small batches of frames and reusing these values for the final GTSAM graph.</p>
 
 <p>Hope you loved this assignment. As a parting thought, these methods are used in today’s self driving cars to make a map of the world in real-time. However, they are also fused with deep learning based methods to speed up the computation. Have a look at <a href="https://www.youtube.com/watch?v=0rc4RqYLtEU">this video</a> for a cool behind the scenes look of the NVIDIA’s self driving platform.</p>
 
