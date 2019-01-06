@@ -157,6 +157,8 @@ The data generation is exactly the same for this part (as we want to evaluate th
 
 Notice that, now we have two new parts (shown in light blue and yellow), namely, TensorDLT and Spatial Transformer Network. The TensorDLT part takes as input the predicted 4-point homography \\(\widetilde{H_{4Pt}}\\) and corners of patch \\(P_A\\) to estimate the full \\(3\times 3\\) estimated homgraphy matrix \\(\widetilde{\mathbf{H}}\\) which is used to warp the patch \\(P_A\\) using a differentiable warping layer (using bilinear interpolation) called the Spatial Transformer Network. To implement the TensorDLT layer, refer to [Section IV B in this paper](https://arxiv.org/abs/1709.03966). A generic Spatial Transformer Network is given to you with the starter code (you need to modify it as descibed in [Section IV C of this paper](https://arxiv.org/abs/1709.03966)). Finally, implement the photometric loss function we discussed earlier. 
 
+Note that, we didn't talk about the network architecture here, feel free to use the network you implemented for the supervised version here or be creative.
+
 <a name='testset'></a>
 ## Notes about Test Set
 Six hours before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in a report (more on this [later](#sub)). For the deep learning part, your algorithm will only run on the image size you chose during training, i.e., \\(M_P\times N_P\\). A simple way to deal with this is to resize the test image to \\(M_P\times N_P\\) to obtain the homography and then warp the original image or crop a central region of \\(M_P\times N_P\\) or obtain random crops of size \\(M_P\times N_P\\) and average all the predicted homography values. *Feel free to be creative here.*
