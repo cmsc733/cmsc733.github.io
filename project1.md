@@ -7,53 +7,36 @@ permalink: /2019/proj/p1/
 
 Table of Contents:
 - [Deadline](#due)
-- [Introduction](#intro)
-- [What you need to do](#problem)
-  - [Problem Statement](#pro)
+- [Problem Statement](#prob)
+- [Phase 1: Traditional Approach](#ph1)
+- [Phase 2: Deep Learning Approach](#ph2)
 - [Submission Guidelines](#sub)
 - [Collaboration Policy](#coll)
 
 <a name='due'></a>
 ## Deadline 
-10:59AM, Tuesday, September 18, 2018
-
-<a name='intro'></a>
-## Introduction
-
-Have you ever played with these adorable Nao robots? Click on the image to watch a cool demo.  
-
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=Gy_wbhQxd_0
-" target="_blank"><img src="http://img.youtube.com/vi/Gy_wbhQxd_0/0.jpg" 
-alt=" Nao robot demo " width="480" height="360" border="0" /></a>
+11:59 PM, Thursday, February 21, 2019
 
 
-Nao robots are star players in RoboCup, an annual autonomous robot soccer competitions. 
-We are planning to build the Maryland RoboCup team to compete in RoboCup 2019, we need your help. 
-Would you like to help us in Nao's soccer training? We need to train Nao to detect a soccer ball and estimate the depth of the ball to know how far to kick.
+<a name='prob'></a>
+## Problem Statement 
 
-Nao's training has two phases:
-- Color Segmentation using Gaussian Mixture Model (GMM)
-- Ball Distance Estimation
 
-<a name='problem'></a>
-## What you need to do
-To make logistics easier, we have collected camera data from Nao robot on behalf of you and saved the data in the form of color images. Click [here](https://drive.google.com/file/d/17XiM86JqHqko4JC00-E4w4sPKnzh2iMz/view?usp=sharing) to download. The image names represent the depth of the ball from Nao robot in centimeters. We will release the test dataset 24 hours before the deadline i.e. 10:59AM, Monday, September 17. **Test images are released. Click [here](https://drive.google.com/file/d/17tNn3YIVR-8kqoBgJNK58YY4UBnQmm4q/view?usp=sharing) to download**. 
 
-<a name='pro'></a>
-### Problem Statement 
-
-1. Write MATLAB code to cluster the orange ball using [Single Gaussian](https://cmsc426.github.io/colorseg/#gaussian) [30 points] 
-2. Write MATLAB code to cluster the orange ball using [Gaussian Mixture Model](https://cmsc426.github.io/colorseg/#gmm) [40 points] and estimate the [distance](https://cmsc426.github.io/colorseg/#distest) to the ball [20 points]. Also, plot all the GMM ellipsoids [10 points]. 
-
-You are **NOT** allowed to use any built-in MATLAB function(s) like `fitgmdist()` or `gmdistribution.fit()` for GMM. To help you with code implementation, we have given the pseudocode :-) 
-
+<a name='ph1'></a>
+## Traditional Approach
 
 <div class="fig fighighlight">
-  <img src="/assets/proj1/proj1_image.PNG" width="100%">
+  <img src="/assets/2019/p1/TraditionalOverview.PNG" width="100%">
   <div class="figcaption">
   </div>
   <div style="clear:both;"></div>
 </div>
+
+<a name='ph2'></a>
+## Deep Learning Approach
+
+
 
 <a name='sub'></a>
 ## Submission Guidelines
