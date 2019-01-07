@@ -65,21 +65,21 @@ The first step in the traditional approach is to find facial landmarks (importan
 Like we discussed before, we have now obtained facial landmarks, but what do we do with them? We need to ideally warp the faces in 3D, however we don't have 3D information. Hence can we make some assumption about the 2D image to approximate 3D information of the face. One simple way is to triangulate using the facial landmarks as corners and then make the assumption that in each triangle the content is planar (forms a plane in 3D). Triangulating or forming a triangular mesh over the 2D image is simple but we want to trinagulate such that it's fast and has an "efficient" triangulation. One such method is obtained by drawing the dual of the Voronoi diagram, i.e., connecting each two neighboring sites in the Voronoi diagram. This is called the **Delaunay Triangulation** and can be constructed in \\(\mathcal{O}(n\log{}n)\\) time. We want the triangulation to be consistent with the image boundary such that texture regions won't fae into the background while warping. Delaunay Triangulation tries the maximize the smallest angle in each triangle.
  
 <div class="fig fighighlight">
-  <img src="/assets/2019/p2/DT.png" width="100%">
+  <img src="/assets/2019/p2/DT.PNG" width="100%">
   <div class="figcaption">
     Fig 2: Triangulation on two faces we want to swap (a cat and a baby). 
   </div>
 </div>
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p2/DTAsDualOfVoronoi.png" width="70%">
+  <img src="/assets/2019/p2/DTAsDualOfVoronoi.PNG" width="70%">
   <div class="figcaption">
     Fig 3: Delaunay Triangulation is the dual of the Voronoi diagram. Black lines show the Voinoi diagram and colored lines show the Delaunay triangulation.
   </div>
 </div>
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p2/DTAsDualOfVoronoi.png" width="70%">
+  <img src="/assets/2019/p2/GoodAndBadTriangulation.PNG" width="100%">
   <div class="figcaption">
     Fig 4: Comparison of good and bad triangulation depending on choice of landmarks. 
   </div>
