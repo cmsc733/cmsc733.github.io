@@ -90,11 +90,11 @@ Since, Delaunay Triangulation tries the maximize the smallest angle in each tria
 
 1. For each triangle in the target/destination face \\(\mathcal{B}\\), compute the Barycentric coordinate.
 
-\\( \begin{bmatrix}
+$$ \begin{bmatrix}
  \mathcal{B}_{a,x} & \mathcal{B}_{b,x} & \mathcal{B}_{c,x}\\
  \mathcal{B}_{a,y} & \mathcal{B}_{b,y} & \mathcal{B}_{c,y}\\
  1 & 1 & 1\\
- \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\\end{bmatrix} = \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix} \\)
+ \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\\end{bmatrix} = \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix} $$
 
 
 1. For each pixel in the target/destination face \\(\mathcal{B}\\), determine which triangle it falls inside.
