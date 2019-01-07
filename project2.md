@@ -17,6 +17,8 @@ Table of Contents:
     - [Replace Face](#replace)
     - [Blending](#blending)
     - [Motion Filtering](#motfilt)
+- [Phase 2: Deep Learning Approach](#ph2)
+- [Notes about Test Set](#testset)
 - [Submission Guidelines](#sub)
 - [Collaboration Policy](#coll)
 
@@ -215,6 +217,41 @@ After you have detected, warped and blended the face your algorithm works really
 
 <iframe src="https://player.vimeo.com/video/257360045" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 <p><a href="https://vimeo.com/257360045">Jimmy Fallon interview his twin!</a> from <a href="https://vimeo.com/user16478660">ZeroCool22</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+
+<a name='ph2'></a>
+## Phase 2: Deep Learning Approach
+For this phase, we'll run an off-the-shelf model to obtain face fiducials using deep learning. We think that implementing this part is fairly trivial and is left as a fun excericse if you want some programming practice (you are not graded on this implementation). We'll use the code from [this paper](https://arxiv.org/abs/1803.07835), which implements a supervised encoder-decoder model to obtain the full 3D mesh of the face. We recommend you to read the paper for more details. The code from the paper can be found [here](https://github.com/YadiraF/PRNet). Your task is to setup the code and run to obtain face fiducials/full 3D mesh. Use this output to perform face replacement as before. Feel free to use as much code as you want from last part/phase. Present a detailed comparison of both the traditional methods (triangulation and TPS) along with the deep learning method.   
+
+<a name='testset'></a>
+## Notes about Test Set
+One day (24 hours) before the deadline, a test set will be released with details of what faces to replace. We'll grade on the completion of the project and visually appealing results.
+
+<a name='sub'></a>
+## Submission Guidelines
+
+<b> If your submission does not comply with the following guidelines, you'll be given ZERO credit </b>
+
+### File tree and naming
+
+Your submission on Canvas must be a zip file, following the naming convention **YourDirectoryID_proj1.zip**. **YourDirectoryID** is the name your username which is used to login to UMD resources such as Testudo or ELMS. For example, if you use "xyz" to login to Testyudo or ELMS then the zip file must be called "xyz_proj1.zip".  The file **must have the following directory structure**. 
+
+YourDirectoryID_proj1.zip.
+ - results/.
+ - GMM.m
+ - trainGMM.m
+ - testGMM.m
+ - measureDepth.m
+ - plotGMM.m
+ - report.pdf
+
+### Report
+For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
+
+
+<a name='coll'></a>
+## Collaboration Policy
+You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.
+
 
 
 ## Acknowledgements

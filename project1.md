@@ -281,7 +281,7 @@ Note that, we didn't talk about the network architecture here, feel free to use 
 
 <a name='testset'></a>
 ## Notes about Test Set
-Six hours before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in a report (more on this [later](#sub)). For the deep learning part, your algorithm will only run on the image size you chose during training, i.e., \\(M_P\times N_P\\). A simple way to deal with this is to resize the test image to \\(M_P\times N_P\\) to obtain the homography and then warp the original image or crop a central region of \\(M_P\times N_P\\) or obtain random crops of size \\(M_P\times N_P\\) and average all the predicted homography values. *Feel free to be creative here.*
+One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in a report (more on this [later](#sub)). For the deep learning part, your algorithm will only run on the image size you chose during training, i.e., \\(M_P\times N_P\\). A simple way to deal with this is to resize the test image to \\(M_P\times N_P\\) to obtain the homography and then warp the original image or crop a central region of \\(M_P\times N_P\\) or obtain random crops of size \\(M_P\times N_P\\) and average all the predicted homography values. *Feel free to be creative here.*
 
 <a name='extra'></a>
 ## Extra Credit
