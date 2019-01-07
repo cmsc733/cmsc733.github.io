@@ -16,6 +16,7 @@ Table of Contents:
     - [Face Warping using Thin Plate Spline](#tps)
     - [Replace Face](#replace)
     - [Blending](#blending)
+    - [Motion Filtering](#motfilt)
 - [Submission Guidelines](#sub)
 - [Collaboration Policy](#coll)
 
@@ -49,6 +50,16 @@ the two largest faces.
     Dlib tutorial for facial landmarks detection
 https://www.pyimagesearch.com/2017/04/03/facial-landmarks-dlib-opencv-python/)
 -->
+The overview of the system for face replacement is shown below.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p2/Overview.png" width="100%">
+  <div class="figcaption">
+    Fig 1: Overview of the face replacement pipeline.
+  </div>
+</div>
+
+
 <a name='landmarks'></a>
 ### Facial Landmarks detection
 The first step in the traditional approach is to find facial landmarks (important points on the face) so that we have one-to-one correspondence between the facial landmakrs. This is analogous to the detection of corners in the panorama project. One of the major reasons to use facial landmarks instead of using all the points on the face is to reduce computational complexity. Remember that better results can be obtained using all the points (dense flow) or using a meshgrid. For detecting facial landmarks we'll use dlib library built into OpenCV and python. A sample output of Dlib is shown below.
@@ -56,7 +67,7 @@ The first step in the traditional approach is to find facial landmarks (importan
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/dlib.jpg" width="80%">
   <div class="figcaption">
-    Fig 1: Output of dlib for facial landmarks detection. Green landmarks are overlayed on the input image.
+    Fig 2: Output of dlib for facial landmarks detection. Green landmarks are overlayed on the input image.
   </div>
 </div>
 
@@ -67,21 +78,21 @@ Like we discussed before, we have now obtained facial landmarks, but what do we 
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/DT.PNG" width="100%">
   <div class="figcaption">
-    Fig 2: Triangulation on two faces we want to swap (a cat and a baby). 
+    Fig 3: Triangulation on two faces we want to swap (a cat and a baby). 
   </div>
 </div>
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/DTAsDualOfVoronoi.PNG" width="70%">
   <div class="figcaption">
-    Fig 3: Delaunay Triangulation is the dual of the Voronoi diagram. Black lines show the Voinoi diagram and colored lines show the Delaunay triangulation.
+    Fig 4: Delaunay Triangulation is the dual of the Voronoi diagram. Black lines show the Voinoi diagram and colored lines show the Delaunay triangulation.
   </div>
 </div>
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/GoodAndBadTriangulation.PNG" width="100%">
   <div class="figcaption">
-    Fig 4: Comparison of good and bad triangulation depending on choice of landmarks. 
+    Fig 5: Comparison of good and bad triangulation depending on choice of landmarks. 
   </div>
 </div>
 
@@ -134,14 +145,14 @@ The warped images are shown below.
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/WarpOutput.png" width="70%">
   <div class="figcaption">
-    Fig 5: Top row: Original images, Bottom row (left to right): Cat warped to baby and baby warped to cat. 
+    Fig 6: Top row: Original images, Bottom row (left to right): Cat warped to baby and baby warped to cat. 
   </div>
 </div>
 
 <a name='tps'></a>
 ### Face Warping using Thin Plate Spline
 As we discussed before, triangulation assumes that we are doing affine transformation on each triangle. This might not be the best way to do warping since the human face has a very complex and smooth shape. A better way to do the transformation is by using Thin Plate Splines (TPS) which can model arbitrarily complex shapes. Now, we want to compute a TPS that maps from the feature points in $$\mathcal{B}$$ to the corresponding feature
-points in $$\mathcal{A}$$ . Recall we need two splines, one for the $$x$$ coordinate and one for the $$y$$. A thin
+points in $$\mathcal{A}$$ . Note that we need two splines, one for the $$x$$ coordinate and one for the $$y$$. A thin
 plate spline has the following form:
 
 $$
@@ -160,19 +171,46 @@ $$
   \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_p \\ 0 \\ 0 \\ 0 \end{bmatrix}  
 $$
 
-where \\( K_{ij} = U\left( \vert \vert (x_i,y_i)-(x_j,y_j) \vert \vert \right)\\). $$v_i = f(x_i,y_i)$$ and the i<sup>th<\sup> row of $$P$$ is $$(x_i, y_i, 1)$$. $$K$$ is a matrix of size size $$p \times p$$, and $$P$$ is a matrix of size $$p \times 3$$. In order to have a stable solution you need to compute the solution by:
+where \\( K_{ij} = U\left( \vert \vert (x_i,y_i)-(x_j,y_j) \vert \vert \right)\\). $$v_i = f(x_i,y_i)$$ and the i<sup>th</sup> row of $$P$$ is $$(x_i, y_i, 1)$$. $$K$$ is a matrix of size size $$p \times p$$, and $$P$$ is a matrix of size $$p \times 3$$. In order to have a stable solution you need to compute the solution by:
 
 $$ 
  \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_p \\ a_x \\ a_y \\ a_1  \end{bmatrix}  = 
   \left(\begin{bmatrix} K & P\\ P^T & 0\\ \end{bmatrix}  + \lambda I(p+3, p+3)\right)^{-1}
  \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_p \\ 0 \\ 0 \\ 0 \end{bmatrix} 
  $$
-where $$I(p+3,p+3)$$ is a $$p+3 \times p+3$$ identity matrix. $$\lambda \ge 0$$ but is generally very close to zero. Think about why we need this. Note that you need to do this step twice, once for $$x$$ co-ordinates and once for $$y$$ co-ordinates.  \\
+
+where $$I(p+3,p+3)$$ is a $$p+3 \times p+3$$ identity matrix. $$\lambda \ge 0$$ but is generally very close to zero. Think about why we need this. Note that you need to do this step twice, once for $$x$$ co-ordinates and once for $$y$$ co-ordinates. 
 
 2. In the second step, use the estimated parameters of the TPS models (both $$x$$ and $$y$$ directions), transform all pixels in image $$\mathcal{B}$$ by the TPS model. Now, read back the pixel value from image $$\mathcal{A}$$ directly. The position of the pixels in image $$\mathcal{A}$$ is generated by the TPS equation (first equation in this section).
 
+**Note that, both warping methods solve the same problem but with different formulations, you are required to implement both and compare the results.**
 
-Note that, both warping methods solve the same problem but with different formulations, you are required to implement both and compare the results. 
+
+<a name='replace'></a>
+### Replace Face
+This part is very simple, you have to take all the pixels from face $$\mathcal{A}$$, warp them to fit face $$\mathcal{B}$$ and replace the pixels. Note that simply replacing pixels will not look natural as the lighing and edges look different. A sample output of face replacement is shown below.
+
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p2/FaceReplacement.png" width="70%">
+  <div class="figcaption">
+    Fig 7: Output of sample face replacement. Notice the difference in color and edges. The output is not a seamless blend. 
+  </div>
+</div>
+
+<a name='blending'></a>
+### Blending
+We will follow a method called Poisson Blending to blend the warped face onto the target face. More details about this method can be found in [this paper](http://www.irisa.fr/vista/Papers/2003_siggraph_perez.pdf). Note that, you **DO NOT** have to implement this part from scratch, feel free to use any open-source implementation and cite your source in your report and your code. Your task in this part is to blend the face as seamlessly as possible. Feel free to reuse concepts you learnt from panorama stitching project's last part here. 
+
+<a name='motfilt'></a>
+### Motion Filtering
+After you have detected, warped and blended the face your algorithm works really well for individual frames. But when you want to do this for a video, you'll see flickering. Come up with your own solution to reduce the amount of 
+flickering. You can use a low-pass fillter or a fancy Kalman Filter to do this. Feel free to use any third party or built-in code to do this. If you use third party code, please do not forget to cite them. Look at this holy grail video of face replacement where Jimmy Fallon interviews his cousin.
+
+<iframe src="https://player.vimeo.com/video/257360045" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<p><a href="https://vimeo.com/257360045">Jimmy Fallon interview his twin!</a> from <a href="https://vimeo.com/user16478660">ZeroCool22</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+
+
 ## Acknowledgements
 This fun project was inspired by a similar project in UPenn's <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision & Computational Photography). 
 
