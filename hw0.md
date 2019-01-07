@@ -7,7 +7,9 @@ permalink: /2019/hw/hw0/
 
 Table of Contents:
 - [Due Date](#due)
-- [Introduction](#intro)
+- [Phase 1: Shake My Boundary](#pblite)
+	- [Introduction](#intro)
+	- [Overview](#overview)
 - [What you need to do](#problem)
   - [Problem Statement](#pro)
 - [Submission Guidelines](#sub)
@@ -17,14 +19,20 @@ Table of Contents:
 ## Due Date 
 11:59PM, Tuesday, February 26, 2019
 
+<a name='pblite'></a>
+## Phase 1: Shake My Boundary
+
 <a name='intro'></a>
-## Introduction
+### Introduction
 Boundary detection is an important, well-studied computer vision problem. Clearly it would be nice to have algorithms which know where one object stops and another starts. But boundary detection from a single image is fundamentally diffcult. Determining boundaries could require object-specific reasoning, arguably making the task hard.
 
 Classical edge detection algorithms, including the Canny and Sobel baselines we will compare against, look for intensity discontinuities. The more recent pb (probability of boundary) boundary detectors significantly outperform these classical methods by considering texture and color gradients in addition to intensity. Qualitatively, much of this performance jump comes from the ability of the pb algorithm to suppress false positives that the classical methods produce in textured regions.
 
 In this homework, you will develop a simplified version of pb, which finds boundaries by examining brightness, color, and texture information across multiple scales. The output of your algorithm will be a per-pixel probability of boundary. Several papers from Berkeley describe their algorithms and how their methods evolved over time. Their source code is also available for reference (don't use it). Here we investigate a simplified version of the recent
 work from [this paper](google.com). Our simplified boundary detector will still significantly outperform the well regarded Canny edge detector. Evaluation is carried out against human annotations (ground truth) from a subset of the Berkeley Segmentation Data Set 500 (BSDS500).
+
+<a name='overview'></a>
+### Overview
 
 
 <a name='problem'></a>
