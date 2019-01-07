@@ -10,6 +10,7 @@ Table of Contents:
 - [Phase 1: Shake My Boundary](#pblite)
 	- [Introduction](#intro)
 	- [Overview](#overview)
+	- [Filter Banks](#filters)
 - [What you need to do](#problem)
   - [Problem Statement](#pro)
 - [Submission Guidelines](#sub)
@@ -34,24 +35,19 @@ work from [this paper](google.com). Our simplified boundary detector will still 
 <a name='overview'></a>
 ### Overview
 
-
-<a name='problem'></a>
-## What you need to do
-
-The 2D points data is provided in the form of .mat file (click [here](https://drive.google.com/file/d/1B90tU1-HrR2YMjZC50APiNkQdLtVco6z/view?usp=sharing) to download). The visualization of data with different noise level is shown in the following figure.
+The overview of the algorithm is shown below.
 
 <div class="fig fighighlight">
-  <img src="/assets/hw1/data.jpg" width="100%">
+  <img src="/assets/2019/hw0/Overview.PNG" width="100%">
   <div class="figcaption">
+    Fig 1: Overview of the pb lite pipeline.
   </div>
-  <div style="clear:both;"></div>
 </div>
 
-<a name='pro'></a>
-### Problem Statement 
+<a name='filters'></a>
+### Filter Banks
 
-- Write matlab code to visualize geometric interpretation of eigenvalues/covariance matrix as discussed in this [link](http://www.visiondummy.com/2014/04/geometric-interpretation-covariance-matrix/) [40 points]  
-- Decide the best outlier rejection technique for each of these datasets and write matlab code to fit the line. Also, discuss why your choice of technique is optimal [60 points] 
+
 
 <a name='sub'></a>
 ## Submission Guidelines
