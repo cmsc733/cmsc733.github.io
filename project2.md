@@ -88,6 +88,16 @@ Like we discussed before, we have now obtained facial landmarks, but what do we 
 
 Since, Delaunay Triangulation tries the maximize the smallest angle in each triangle, we will obtain the same triangulation in both the images, i.e., cat and baby's face. Hence, if we have correspondences between the facial landmarks we also have correspondences between the triangles (this is awesome! and makes life simple). Because we are using dlib to obtain the facial landmarks (or click points manually if you want to warp a cat to a kid), we have correspondences between facial landmarks and hence correspondences between the triangles, i.e., we have the same mesh in both images. Use the ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV to implement Delaunay Triangulation. Refer to [this tutorial](https://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/) for an easy start. Now, we need to warp the destination face to the source face (we are using inverse warping so that we don't have any holes in the image, read up why inverse warping is better than forward warping) or to a mean face. Implement the following steps to warp one face (\\(\mathcal{A}\\) or source) to another (\\(\mathcal{B}\\) or destination). 
 
+1. For each triangle in the target/destination face \\(\mathcal{B}\\), compute the Barycentric coordinate.
+
+\\( \begin{bmatrix}
+ \mathcal{B}_{a,x} & \mathcal{B}_{b,x} & \mathcal{B}_{c,x}\\
+ \mathcal{B}_{a,y} & \mathcal{B}_{b,y} & \mathcal{B}_{c,y}\\
+ 1 & 1 & 1\\
+ \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\\end{bmatrix} = \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix} \\)
+
+
+1. For each pixel in the target/destination face \\(\mathcal{B}\\), determine which triangle it falls inside.
 
 ## Acknowledgements
 This fun project was inspired by a similar project in UPenn's <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision & Computational Photography). 
