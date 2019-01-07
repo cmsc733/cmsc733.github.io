@@ -200,12 +200,18 @@ This part is very simple, you have to take all the pixels from face $$\mathcal{A
 
 <a name='blending'></a>
 ### Blending
-We will follow a method called Poisson Blending to blend the warped face onto the target face. More details about this method can be found in [this paper](http://www.irisa.fr/vista/Papers/2003_siggraph_perez.pdf). Note that, you **DO NOT** have to implement this part from scratch, feel free to use any open-source implementation and cite your source in your report and your code. Your task in this part is to blend the face as seamlessly as possible. Feel free to reuse concepts you learnt from panorama stitching project's last part here. 
+We will follow a method called Poisson Blending to blend the warped face onto the target face. More details about this method can be found in [this paper](http://www.irisa.fr/vista/Papers/2003_siggraph_perez.pdf). Note that, you **DO NOT** have to implement this part from scratch, feel free to use any open-source implementation and cite your source in your report and your code. Your task in this part is to blend the face as seamlessly as possible. Feel free to reuse concepts you learnt from panorama stitching project's last part here. A good blending output is shown below.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p2/FaceSwap.png" width="70%">
+  <div class="figcaption">
+    Fig 8: Output of sample face replacement after blending.
+  </div>
+</div>
 
 <a name='motfilt'></a>
 ### Motion Filtering
-After you have detected, warped and blended the face your algorithm works really well for individual frames. But when you want to do this for a video, you'll see flickering. Come up with your own solution to reduce the amount of 
-flickering. You can use a low-pass fillter or a fancy Kalman Filter to do this. Feel free to use any third party or built-in code to do this. If you use third party code, please do not forget to cite them. Look at this holy grail video of face replacement where Jimmy Fallon interviews his cousin.
+After you have detected, warped and blended the face your algorithm works really well for individual frames. But when you want to do this for a video, you'll see flickering. Come up with your own solution to reduce the amount of flickering. You can use a low-pass fillter or a fancy Kalman Filter to do this. Feel free to use any third party or built-in code to do this. If you use third party code, please do not forget to cite them. Look at this holy grail video of face replacement where Jimmy Fallon interviews his cousin.
 
 <iframe src="https://player.vimeo.com/video/257360045" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 <p><a href="https://vimeo.com/257360045">Jimmy Fallon interview his twin!</a> from <a href="https://vimeo.com/user16478660">ZeroCool22</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
