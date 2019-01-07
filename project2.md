@@ -86,9 +86,9 @@ Like we discussed before, we have now obtained facial landmarks, but what do we 
 </div>
 
 
-Since, Delaunay Triangulation tries the maximize the smallest angle in each triangle, we will obtain the same triangulation in both the images, i.e., cat and baby's face. Hence, if we have correspondences between the facial landmarks we also have correspondences between the triangles (this is awesome! and makes life simple). Because we are using dlib to obtain the facial landmarks (or click points manually if you want to warp a cat to a kid), we have correspondences between facial landmarks and hence correspondences between the triangles, i.e., we have the same mesh in both images. Use the ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV to implement Delaunay Triangulation. Refer to [this tutorial](https://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/) for an easy start. Now, we need to warp the destination face to the source face (we are using inverse warping so that we don't have any holes in the image, read up why inverse warping is better than forward warping) or to a mean face (obtained by averaging the triangulations of two faces). Implement the following steps to warp one face (\\(\mathcal{A}\\) or source) to another (\\(\mathcal{B}\\) or destination). 
+Since, Delaunay Triangulation tries the maximize the smallest angle in each triangle, we will obtain the same triangulation in both the images, i.e., cat and baby's face. Hence, if we have correspondences between the facial landmarks we also have correspondences between the triangles (this is awesome! and makes life simple). Because we are using dlib to obtain the facial landmarks (or click points manually if you want to warp a cat to a kid), we have correspondences between facial landmarks and hence correspondences between the triangles, i.e., we have the same mesh in both images. Use the ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV to implement Delaunay Triangulation. Refer to [this tutorial](https://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/) for an easy start. Now, we need to warp the destination face to the source face (we are using inverse warping so that we don't have any holes in the image, read up why inverse warping is better than forward warping) or to a mean face (obtained by averaging the triangulations of two faces). Implement the following steps to warp one face ($$\mathcal{A}$$ or source) to another ($$\mathcal{B}$$ or destination). 
 
-1. For each triangle in the target/destination face \\(\mathcal{B}\\), compute the Barycentric coordinate. 
+1. For each triangle in the target/destination face $$\mathcal{B}$$, compute the Barycentric coordinate. 
 
 $$ \begin{bmatrix}
  \mathcal{B}_{a,x} & \mathcal{B}_{b,x} & \mathcal{B}_{c,x}\\
@@ -96,22 +96,22 @@ $$ \begin{bmatrix}
  1 & 1 & 1\\
  \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ \end{bmatrix} = \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix} $$
 
-Here, the Barycentric coordinate is given by \\( \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T \\). Note that, the matrix on the left hand size and it's inverse need to be computed only once per triangle. In this matrix, \( a, b, c \) represent the corners of the triangle and \(x,y\) represent the \\(x\\) and \\(y\\) coordinates of the particular triangle corner respectively. 
+Here, the Barycentric coordinate is given by $$ \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T $$. Note that, the matrix on the left hand size and it's inverse need to be computed only once per triangle. In this matrix, $$ a, b, c $$ represent the corners of the triangle and $$x,y$$ represent the $$x$$ and $$y$$ coordinates of the particular triangle corner respectively. 
 
-Now, given the values of the matrix on the left hand size we will call \\( \mathcal{B}_{\Delta} \\) and the value of \\( \begin{bmatrix} x & y & 1 \end{bmatrix}^T \\) we can compute the value of \\( \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T \\) as follows:
+Now, given the values of the matrix on the left hand size we will call $$ \mathcal{B}_{\Delta} $$ and the value of $$ \begin{bmatrix} x & y & 1 \end{bmatrix}^T $$ we can compute the value of $$\begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T $$ as follows:
 
 $$
  \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ \end{bmatrix} = \mathcal{B}_{\Delta}^{-1} \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix}
 $$
-Now, given the values of \\( \alpha, \beta, \gamma\\) we can say that a point \\(x\\) lies inside the triangle if \\( \alpha \in [0, 1] \\), \\( \beta \in [0, 1] \\) and \\(\alpha + \beta + \gamma \in [0,1]\\). **DO NOT USE any built-in function for this part**.
+Now, given the values of $$ \alpha, \beta, \gamma$$ we can say that a point $$x$$ lies inside the triangle if $$ \alpha \in [0, 1] $$, $$ \beta \in [0, 1] $$ and $$\alpha + \beta + \gamma \in [0,1]$$. **DO NOT USE any built-in function for this part**.
 
-2. Compute the corresponding pixel position in the source image \(\mathcal{A}\) using the barycentric equation shown in the last step but with a different triangle coordinates. This is computed as follows:
+2. Compute the corresponding pixel position in the source image $$\mathcal{A}$$ using the barycentric equation shown in the last step but with a different triangle coordinates. This is computed as follows:
 
 $$
  \begin{bmatrix} x_{\mathcal{A}} \\ y_{\mathcal{A}} \\ z_{\mathcal{A}} \\ \end{bmatrix} = \mathcal{A}_{\Delta} \begin{bmatrix} \alpha \\ \beta \\ \gamma\\ \end{bmatrix}
 $$
 
-Here, \\( \mathcal{A}_{\Delta} \\) is given as follows:
+Here, $$ \mathcal{A}_{\Delta} $$ is given as follows:
 
 $$
 \mathcal{A}_{\Delta} = \begin{bmatrix}
@@ -121,13 +121,13 @@ $$
  \end{bmatrix}
 $$
 
-Note that, after we obtain  \\(\begin{bmatrix} x_{\mathcal{A}} & y_{\mathcal{A}} & z_{\mathcal{A}} \end{bmatrix}^T\\), we need to convert the values to homogeneous coordinates as follows:
+Note that, after we obtain  $$\begin{bmatrix} x_{\mathcal{A}} & y_{\mathcal{A}} & z_{\mathcal{A}} \end{bmatrix}^T$$, we need to convert the values to homogeneous coordinates as follows:
 
 $$
 x_{\mathcal{A}} = \frac{x_{\mathcal{A}}}{z_{\mathcal{A}}} \text{ and } y_{\mathcal{A}} = \frac{y_{\mathcal{A}}}{z_{\mathcal{A}}}
 $$
 
-3. Now, copy back the value of the pixel at \\( (x_{\mathcal{A}}, y_{\mathcal{A}} ) \\) to the target location. Use ``scipy.interpolate.interp2d`` to perform this operation.
+3. Now, copy back the value of the pixel at $$ (x_{\mathcal{A}}, y_{\mathcal{A}} ) $$ to the target location. Use ``scipy.interpolate.interp2d`` to perform this operation.
 
 The warped images are shown below.
 
@@ -140,17 +140,17 @@ The warped images are shown below.
 
 <a name='tps'></a>
 ### Face Warping using Thin Plate Spline
-As we discussed before, triangulation assumes that we are doing affine transformation on each triangle. This might not be the best way to do warping since the human face has a very complex and smooth shape. A better way to do the transformation is by using Thin Plate Splines (TPS) which can model arbitrarily complex shapes. Now, we want to compute a TPS that maps from the feature points in \( \mathcal{B}\) to the corresponding feature
-points in \( \mathcal{A}\) . Recall we need two splines, one for the \(x\) coordinate and one for the \(y\). A thin
+As we discussed before, triangulation assumes that we are doing affine transformation on each triangle. This might not be the best way to do warping since the human face has a very complex and smooth shape. A better way to do the transformation is by using Thin Plate Splines (TPS) which can model arbitrarily complex shapes. Now, we want to compute a TPS that maps from the feature points in $$\mathcal{B}$$ to the corresponding feature
+points in $$\mathcal{A}$$ . Recall we need two splines, one for the $$x$$ coordinate and one for the $$y$$. A thin
 plate spline has the following form:
 
 $$
 f(x,y) = a_1 + (a_x)x + (a_y)y + \sum_{i=1}^p{w_i U\left( \vert \vert (x_i,y_i) - (x,y)\vert \vert\right)}
 $$
 
-Here, \\( U(r) = r^2\log (r^2 )\\).
+Here, $$ U(r) = r^2\log (r^2 )$$.
 
-Note that, again in this case we are performing inverse warping, i.e., finding parameters of a Thin Plate Spline which will map from \( \mathcal{B}\) to \( \mathcal{A}\). Warping using a TPS is performed in two steps. Let's look at the steps below.
+Note that, again in this case we are performing inverse warping, i.e., finding parameters of a Thin Plate Spline which will map from $$\mathcal{B}$$ to $$ \mathcal{A}$$. Warping using a TPS is performed in two steps. Let's look at the steps below.
 
 1. In the first step, we will estimate the parameters of the TPS. The solution of the TPS model requires solving the following equation:
 
@@ -169,8 +169,10 @@ $$
  $$
 where $$I(p+3,p+3)$$ is a $$p+3 \times p+3$$ identity matrix. $$\lambda \ge 0$$ but is generally very close to zero. Think about why we need this. Note that you need to do this step twice, once for $$x$$ co-ordinates and once for $$y$$ co-ordinates.  \\
 
+2. In the second step, use the estimated parameters of the TPS models (both $$x$$ and $$y$$ directions), transform all pixels in image $$\mathcal{B}$$ by the TPS model. Now, read back the pixel value from image $$\mathcal{A}$$ directly. The position of the pixels in image $$\mathcal{A}$$ is generated by the TPS equation (first equation in this section).
 
 
+Note that, both warping methods solve the same problem but with different formulations, you are required to implement both and compare the results. 
 ## Acknowledgements
 This fun project was inspired by a similar project in UPenn's <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision & Computational Photography). 
 
