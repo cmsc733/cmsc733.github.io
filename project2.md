@@ -96,14 +96,14 @@ $$ \begin{bmatrix}
  1 & 1 & 1\\
  \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ \end{bmatrix} = \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix} $$
 
-Here, the Barycentric coordinate is given by \( \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T \). Note that, the matrix on the left hand size and it's inverse need to be computed only once per triangle. In this matrix, \( a, b, c \) represent the corners of the triangle and \(x,y\) represent the \(x\) and \(y\) coordinates of the particular triangle corner respectively. 
+Here, the Barycentric coordinate is given by \\( \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T \\). Note that, the matrix on the left hand size and it's inverse need to be computed only once per triangle. In this matrix, \( a, b, c \) represent the corners of the triangle and \(x,y\) represent the \\(x\\) and \\(y\\) coordinates of the particular triangle corner respectively. 
 
-Now, given the values of the matrix on the left hand size we will call \( \mathcal{B}_{\Delta} \) and the value of \( \begin{bmatrix} x & y & 1 \end{bmatrix}^T \) we can compute the value of \( \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T \) as follows:
+Now, given the values of the matrix on the left hand size we will call \\( \mathcal{B}_{\Delta} \\) and the value of \\( \begin{bmatrix} x & y & 1 \end{bmatrix}^T \\) we can compute the value of \\( \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T \\) as follows:
 
 $$
  \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ \end{bmatrix} = \mathcal{B}_{\Delta}^{-1} \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix}
 $$
-Now, given the values of \( \alpha, \beta, \gamma\) we can say that a point \(x\) lies inside the triangle if \( \alpha \in [0, 1] \), \( \beta \in [0, 1] \) and \(\alpha + \beta + \gamma \in [0,1]\). **DO NOT USE any built-in function for this part**.
+Now, given the values of \\( \alpha, \beta, \gamma\\) we can say that a point \\(x\\) lies inside the triangle if \\( \alpha \in [0, 1] \\), \\( \beta \in [0, 1] \\) and \\(\alpha + \beta + \gamma \in [0,1]\\). **DO NOT USE any built-in function for this part**.
 
 2. Compute the corresponding pixel position in the source image \(\mathcal{A}\) using the barycentric equation shown in the last step but with a different triangle coordinates. This is computed as follows:
 
@@ -111,7 +111,7 @@ $$
  \begin{bmatrix} x_{\mathcal{A}} \\ y_{\mathcal{A}} \\ z_{\mathcal{A}} \\ \end{bmatrix} = \mathcal{A}_{\Delta} \begin{bmatrix} \alpha \\ \beta \\ \gamma\\ \end{bmatrix}
 $$
 
-Here, \( \mathcal{A}_{\Delta} \) is given as follows:
+Here, \\( \mathcal{A}_{\Delta} \\) is given as follows:
 
 $$
 \mathcal{A}_{\Delta} = \begin{bmatrix}
@@ -148,7 +148,28 @@ $$
 f(x,y) = a_1 + (a_x)x + (a_y)y + \sum_{i=1}^p{w_i U\left( \vert \vert (x_i,y_i) - (x,y)\vert \vert\right)}
 $$
 
-Here, \\( U(r) = r^2\log (r^2 )\\)
+Here, \\( U(r) = r^2\log (r^2 )\\).
+
+Note that, again in this case we are performing inverse warping, i.e., finding parameters of a Thin Plate Spline which will map from \( \mathcal{B}\) to \( \mathcal{A}\). Warping using a TPS is performed in two steps. Let's look at the steps below.
+
+1. In the first step, we will estimate the parameters of the TPS. The solution of the TPS model requires solving the following equation:
+
+$$
+ \begin{bmatrix} K & P\\ P^T & 0\\ \end{bmatrix} 
+  \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_p \\ a_x \\ a_y \\ a_1  \end{bmatrix}  =
+  \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_p \\ 0 \\ 0 \\ 0 \end{bmatrix}  
+$$
+
+where \\( K_{ij} = U\left( \vert \vert (x_i,y_i)-(x_j,y_j) \vert \vert \right)\\). $$v_i = f(x_i,y_i)$$ and the i<sup>th<\sup> row of $$P$$ is $$(x_i, y_i, 1)$$. $$K$$ is a matrix of size size $$p \times p$$, and $$P$$ is a matrix of size $$p \times 3$$. In order to have a stable solution you need to compute the solution by:
+
+$$ 
+ \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_p \\ a_x \\ a_y \\ a_1  \end{bmatrix}  = 
+  \left(\begin{bmatrix} K & P\\ P^T & 0\\ \end{bmatrix}  + \lambda I(p+3, p+3)\right)^{-1}
+ \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_p \\ 0 \\ 0 \\ 0 \end{bmatrix} 
+ $$
+where $$I(p+3,p+3)$$ is a $$p+3 \times p+3$$ identity matrix. $$\lambda \ge 0$$ but is generally very close to zero. Think about why we need this. Note that you need to do this step twice, once for $$x$$ co-ordinates and once for $$y$$ co-ordinates.  \\
+
+
 
 ## Acknowledgements
 This fun project was inspired by a similar project in UPenn's <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision & Computational Photography). 
