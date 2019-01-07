@@ -121,13 +121,13 @@ $$
  \end{bmatrix}
 $$
 
-Note that, after we obtain  \(\begin{bmatrix} x_{\mathcal{A}} & y_{\mathcal{A}} &z_{\mathcal{A}} \end{bmatrix}^T\), we need to convert the values to homogeneous coordinates as follows:
+Note that, after we obtain  \\(\begin{bmatrix} x_{\mathcal{A}} & y_{\mathcal{A}} & z_{\mathcal{A}} \end{bmatrix}^T\\), we need to convert the values to homogeneous coordinates as follows:
 
 $$
 x_{\mathcal{A}} = \frac{x_{\mathcal{A}}}{z_{\mathcal{A}}} \text{ and } y_{\mathcal{A}} = \frac{y_{\mathcal{A}}}{z_{\mathcal{A}}}
 $$
 
-3. Now, copy back the value of the pixel at \( (x_{\mathcal{A}}, y_{\mathcal{A}} ) \) to the target location. Use ``scipy.interpolate.interp2d`` to perform this operation.
+3. Now, copy back the value of the pixel at \\( (x_{\mathcal{A}}, y_{\mathcal{A}} ) \\) to the target location. Use ``scipy.interpolate.interp2d`` to perform this operation.
 
 The warped images are shown below.
 
@@ -148,7 +148,7 @@ $$
 f(x,y) = a_1 + (a_x)x + (a_y)y + \sum_{i=1}^p{w_i U\left( \vert \vert (x_i,y_i) - (x,y)\vert \vert\right)}
 $$
 
-Here, \( U(r) = r^2\log (r^2 )\)
+Here, \\( U(r) = r^2\log (r^2 )\\)
 
 ## Acknowledgements
 This fun project was inspired by a similar project in UPenn's <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision & Computational Photography). 
