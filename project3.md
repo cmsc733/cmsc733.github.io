@@ -6,39 +6,28 @@ permalink: /2019/proj/p3/
 ---
 
 
-<u>Table of Contents</u>:
-
-<b>Traditional Approach</b>
+Table of Contents:
 
 - [Introduction](#intro)
-- [Feature Matching](#featmatch)
-- [Estimating Fundamental Matrix](#estfundmatrix)  
-	- [Epipolar Geometry](#epipole)
-	- [Fundamental Matrix](#fundmatrix)
-	- [Match Outlier Rejection using RANSAC](#ransac)
-      
-- [Estimate Camera Pose from Essential Matrix](#essential)
-- [Check for Cheirality Condition using Triangulation](#tri)
-	- [Non-Linear Triangulation](#nonlintri)
-      
-- [Perspective-$$n$$-points](#pnp)
-   
-	- [Non-Linear PnP](#nonlinpnp)
-    
-- [Bundle Adjustment](#ba)
-
----
-
-<b>Deep Learning</b>
-
-- [SfMLearner](#sfmlearner)
-   - [View Synthesis](#view)
-   - [Differentiable Depth Image-based Rendering](#render)
-   - [Explainability Mask](#expl-mask)
-   - [Gradient Locality Issues](#gradlocal)
+- [Phase 1: Traditional Approach](#trad)
+	- [Feature Matching](#featmatch)
+	- [Estimating Fundamental Matrix](#estfundmatrix)  
+		- [Epipolar Geometry](#epipole)
+		- [Fundamental Matrix](#fundmatrix)
+		- [Match Outlier Rejection using RANSAC](#ransac)
+	- [Estimate Camera Pose from Essential Matrix](#essential)
+	- [Check for Cheirality Condition using Triangulation](#tri)
+		- [Non-Linear Triangulation](#nonlintri)
+	- [Perspective-$$n$$-points](#pnp)
+		- [Non-Linear PnP](#nonlinpnp)
+	- [Bundle Adjustment](#ba)
+- [Phase 1: Deep Learning Approach (SfMLearner)](#sfmlearner)
+   	- [View Synthesis](#view)
+   	- [Differentiable Depth Image-based Rendering](#render)
+   	- [Explainability Mask](#expl-mask)
+   	- [Gradient Locality Issues](#gradlocal)
 
 <a name='intro'></a>
-
 ## Introduction
 We have been playing with images for so long, mostly in 2D scene. Recall [project 1](/2019/proj/p1) where we stitched multiple images with about 30-50% common features between a couple of images. Now let's learn how to **reconstruct a 3D scene and simultaneously obtain the camera poses** of a monocular camera w.r.t. the given scene. This procedure is known as Structure from Motion (SfM). As the name suggests, you are creating the entire **rigid** structure from a set of images with different view points (or equivalently a camera in motion). A few years ago, Agarwal et. al published [Building Rome in a Day](http://grail.cs.washington.edu/rome/rome_paper.pdf) in which they reconstructed the entire city just by using a large collection of photos from the Internet. Ever heard of Microsoft [Photosynth?](https://en.wikipedia.org/wiki/Photosynth) _Facinating? isn't it!?_ There are a few open source SfM algorithm available online like [VisualSFM](http://ccwu.me/vsfm/). _Try them!_ 
 
@@ -56,7 +45,7 @@ Let's learn how to recreate such algorithm. There are a few steps that collectiv
 
 
 <a name='featmatch'></a>
-### 1. Feature Matching, Fundamental Matrix and RANSAC:
+### Feature Matching, Fundamental Matrix and RANSAC:
 We have already learned about keypoint matching using SIFT keypoints and descriptors (Recall Project 2: Panorama Stitching). It is important to refine the matches by rejecting outline correspondence.
 Before rejecting the correspondences, let us first understand what Fundamental matrix is!
 
@@ -70,13 +59,12 @@ Before rejecting the correspondences, let us first understand what Fundamental m
 
 
 <a name='estfundmatrix'></a>
-
-### 1.1. Estimating Fundamental Matrix: 
+#### Estimating Fundamental Matrix: 
 The fundamental matrix, denoted by $$F$$, is a $$3\times 3$$ (_rank 2_) matrix that relates the corresponding set of points in two images from different views (or stereo images). But in order to understand what fundamental matrix actually is, we need to understand what _epipolar geometry_ is! The epipolar geometry is the intrinsic projective geometry between two views. It only depends on the cameras' internal parameters ($$K$$ matrix) and the relative pose _i.e._ it is **independent of the scene structure**. 
 
 <a name='epipole'></a>
 
-### 1.2. Epipolar Geometry:
+#### Epipolar Geometry:
 Let's say a point $$\mathbf{X}$$ in the 3D-space (viewed in two images) is captured as $$\mathbf{x}$$ in the first image and $$\mathbf{x'}$$ in the second. _Can you think how to formulate the relation between the corresponding image points $$\mathbf{x}$$ and $$\mathbf{x'}$$?_ Consider Fig. 2. Let $$\mathbf{C}$$ and $$\mathbf{C'}$$ be the respective camera centers which forms the baseline for the stereo system. Clearly, the points $$\mathbf{x}$$, $$\mathbf{x'}$$ and $$\mathbf{X}$$ (or $$\mathbf{C}$$, $$\mathbf{C'}$$ and $$\mathbf{X}$$) are coplanar _i.e._  $$\mathbf{\overrightarrow{Cx}}\cdot \left(\mathbf{\overrightarrow{CC'}}\times\mathbf{\overrightarrow{C'x'}}\right)=0$$ 
 and the plane formed can be denoted by $$\pi$$. Since these points are coplanar, the rays back-projected from $$\mathbf{x}$$ and $$\mathbf{x'}$$ intersect at $$\mathbf{X}$$. This is the most significant property in searching for a correspondence. 
 
@@ -100,8 +88,7 @@ Now, let us say that only $$\mathbf{x}$$ is known, not $$\mathbf{x'}$$. We know 
 - **Epipolar line** is the intersection of an epipolar plane with the image plane. *All the epipolar lines intersect at the epipole.* 
 
 <a name='estfundmatrix'></a>
-
-### 1.3 The Fundamental Matrix $$\mathbf{F}$$:
+#### The Fundamental Matrix $$\mathbf{F}$$:
 The $$\mathbf{F}$$ matrix is only an algebraic representation of epipolar geometry and can both geometrically _(contructing the epipolar line)_ and arithematically. ([See derivation](http://cvrs.whu.edu.cn/downloads/ebooks/Multiple%20View%20Geometry%20in%20Computer%20Vision%20\(Second%20Edition\).pdf)) ([Fundamental Matrix Song](https://www.youtube.com/watch?v=DgGV3l82NTk))
 As a result, we obtain:
 $$\mathbf{x}_i'^{\ \mathbf{T}}\mathbf{F} \mathbf{x}_i = 0$$
@@ -149,8 +136,7 @@ F = reshape(x, [3,3])';
 
 
 <a name='ransac'></a>
-
-### 1.4. Match Outlier Rejection via RANSAC:
+#### Match Outlier Rejection via RANSAC:
 Since the point correspondences are computed using SIFT or some other feature descriptors, the data is bound to be noisy and (in general) contains several outliers. Thus, to remove these outliers, we use RANSAC algorithm _(Yes! The same as used in Panorama stitching!)_ to obtain a better estimate of the fundamental matrix. So, out of all possibilities, the $$\mathbf{F}$$ matrix with maximum number of inliers is chosen.
 Below is the pseduo-code that returns the $$\mathbf{F}$$ matrix for a set of matching corresponding points (computed using SIFT) which maximizes the number of inliers.
 
@@ -168,7 +154,7 @@ Below is the pseduo-code that returns the $$\mathbf{F}$$ matrix for a set of mat
   <div style="clear:both;"></div>
 </div>
 
-### 2. Estimate *Essential Matrix* from Fundamental Matrix: 
+### Estimate *Essential Matrix* from Fundamental Matrix
 Since we have computed the $$\mathbf{F}$$ using epipolar constrains, we can find the relative camera poses between the two images. This can be computed using the *Essential Matrix*, $$\mathbf{E}$$. Essential matrix is another $$3\times3$$ matrix, but with some additional properties that relates the corresponding points assuming that the cameras obeys the pinhole model (unlike $$\mathbf{F}$$). More specifically, 
 $$\mathbf{E}$$ = $$\mathbf{K^TFK}$$
 where $$\mathbf{K}$$ is the camera calibration matrix or camera intrinsic matrix. Clearly, the essential matrix can be extracted from $$\mathbf{F}$$ and $$\mathbf{K}$$. As in the case of $$\mathbf{F}$$ matrix computation, the singular values of $$\mathbf{E}$$ are not necessarily $$(1,1,0)$$ due to the noise in $$\mathbf{K}$$. This can be corrected by reconstructing it with $$(1,1,0)$$ singular values, _i.e._
@@ -178,7 +164,7 @@ _It is important to note that the $$\mathbf{F}$$ is defined in the original imag
 
 <a name='essential'></a>
 
-### 3. Estimate **Camera Pose** from Essential Matrix
+### Estimate **Camera Pose** from Essential Matrix
 The camera pose consists of 6 degrees-of-freedom (DOF) Rotation (Roll, Pitch, Yaw) and Translation (X, Y, Z) of the camera with respect to the world. Since the $$\mathbf{E}$$ matrix is identified, the four camera pose configurations: $$(C_1, R_1), (C_2, R_2), (C_3, R_3)$$ and $$(C_4, R4)$$ where $$\ C\in\mathbb{R}^3$$ is the camera center and $$R\in SO(3)$$ is the rotation matrix, can be computed. Thus, the camera pose can be written as:
 $$P = KR\begin{bmatrix}I_{3\times3} & -C\end{bmatrix}$$
 These four pose configurations can be computed from $$\mathbf{E}$$ matrix. Let $$\mathbf{E}=UDV^T$$ and $$W=\begin{bmatrix}0 & -1 & 0\\ 1 & 0 & 0\\ 0 & 0 & 1\end{bmatrix}$$. The four configurations can be written as: 
@@ -191,7 +177,7 @@ These four pose configurations can be computed from $$\mathbf{E}$$ matrix. Let $
 
 <a name='tri'></a>
 
-### 4. Check for **Cheirality Condition** using **Triangulation**:
+### Check for **Cheirality Condition** using **Triangulation**
 In the previous section, we computed four different possible camera poses for a pair of images using essential matrix. Though, in order to find the _correct_ unique camera pose, we need to remove the disambiguity. This can be accomplish by checking the **cheirality condition** _i.e._ *the reconstructed points must be in front of the cameras*. 
 To check the cheirality condition, triangulate the 3D points (given two camera poses) using **linear least squares** to check the sign of the depth $$Z$$ in the camera coordinate system w.r.t. camera center. A 3D point $$X$$ is in front of the camera iff:
 $$r_3\mathbf{(X-C)} > 0$$
@@ -208,8 +194,7 @@ where $$r_3$$ is the third row of the rotation matrix (z-axis of the camera). No
 
 
 <a name='nonlintri'></a>
-
-### 4.1 Non-Linear Triangulation:
+### Non-Linear Triangulation:
 Given two camera poses and linearly triangulated points, $$X$$, the locations of the 3D points that minimizes the reprojection error (Recall [Project 2](https://cmsc426.github.io/pano/#reproj)) can be refined. The linear triangulation minimizes the algebraic error. Though, the reprojection error is geometrically meaningful error and can be computed by measuring error between measurement and projected 3D point:<br>
 $$\underset{x}{\operatorname{min}}$$ $$\sum_{j=1,2}\left(u^j - \frac{P_1^{jT}\widetilde{\phi}}{P_3^{jT}{X}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{\phi}}{P_3^{jT}{X}}\right)^2$$
 
@@ -225,8 +210,8 @@ Here, $$j$$ is the index of each camera, $$\widetilde{X}$$ is the hoomogeneous r
 
 
 <a name='pnp'></a>
+### Perspective-$$n$$-Points
 
-### 5. Perspective-$$n$$-Points:
 Now, since we have a set of $$n$$ 3D points in the world, their $$2D$$ projections in the image and the intrinsic parameter; the 6 DOF camera pose can be estimated using linear least squares. This fundamental problem, in general is known as _Persepective_-$$n$$-_Point_ (PnP). For there to exist a solution, $$n\geq 3$$. There are multiple methods to solve the P$$n$$P problem and have an assumptions in most of them that the camera is calibrated. Methods such as [Unified P$$n$$P](https://pdfs.semanticscholar.org/f1d6/2775d4a51161663ff9453b37bb21a1263f25.pdf) (or UPnP) do not abide with the said assumption as they estimate both intrinsic and extrinsic parameters.
 
 P$$n$$P is prone to error as there are outliers in the given set of point correspondences. To overcome this error, we can use RANSAC (yes, again!) to make our camera pose more robust to outliers. The alogrithm below depicts the solution with RANSAC.
@@ -252,7 +237,7 @@ $$\underset{C,R}{\operatorname{min}} \sum_{i=1,J} \left(u^j - \frac{P_1^{jT}\wid
 
 <a name='ba'></a>
 
-### 6. Bundle Adjustment:
+### Bundle Adjustment
 Once you have computed all the camera poses and 3D points, we need to refine the poses and 3D points together, initialized by previous reconstruction by minimizing reporjection error.
 <div class="fig fighighlight">
   <img src="/assets/sfm/BA.png"  width="80%">
@@ -272,10 +257,7 @@ where $$V_{ij}$$ is the visibility matrix.
 Clearly, solving such a method to compute the structure from motion is complex and slow _(can take from several minutes for only 8-10 images)_. The above steps collectively is the traditional way of solving the problem of SfM. However, the solution to the problem of structure from motion can be made more robust with deep learning. 
 
 
----
-
 ## Deep Learning (SfMLearner)
-
 To achieve more robust results, we are going to implement an unsupervised deep learning framework ([SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf)) to estimate monocular depth and camera motion from continuous set of frames. This is an end-to-end learning approach that will basically replace all the steps from feature matching to non linear PnP.   
 
 One of the trivial ways to do it is to learn rotation and translation from a sequence of data. Although, learning such parameters directly is weakly constrained. Thus, methods like SfMLearner, jointly train a single view depth CNN and a camera pose estimation CNN from unlabeled video sequence. 
@@ -284,8 +266,7 @@ Assumption: The scene is fairly rigid <i>i.e.</i> the scene appearance change ac
 
 <b> You are required to read [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) paper before reading further. </b>
 
-### 1. View Synthesis
-
+### View Synthesis
 The key supervision signal for our depth and pose prediction CNNs comes from the task of novel view synthesis: given one input view of a scene, synthesize a new image of the scene seen from a different camera pose. We can synthesize a target view given a per-pixel depth in that image, plus the pose and visibility in a nearby view. Thus, synthesizing the target view works as a supervision for training. The view synthesis objective can be formulated as:
 
 $$ L_{vs} = \sum_s \sum_p |I_t(p) - \hat{I_s}(p)|$$ 
@@ -300,7 +281,7 @@ where $$p$$ indexes over pixel coordinates and $$\hat{I_s}$$ is the source view 
 </div>
 
 
-### 2. Differentiable Depth Image-based Rendering
+### Differentiable Depth Image-based Rendering
 A key component of this framework is a differentiable depth image-based renderer (Refer section 3.1 of the paper) that reconstructs the target view $$I_t$$ by sampling pixels from a source view $$I_s$$ based on the predicted depth map $$\hat{D_t}$$ and the relative pose $$\hat{T}_{t\rightarrow s}$$
 
 Fig. xx is an illustration of the differentiable image warping process. 
@@ -315,7 +296,7 @@ Fig. xx is an illustration of the differentiable image warping process.
 To obtain $$I_s(p_s)$$ for populating the value of $$\hat{I}_s(p_t)$$, we use the differentiable bilinear sampling mechanism proposed in the spatial transformer networks(STN) that linearly interpolates the values of the 4-pixel neighboring pixels of $$p_s$$ to approximate $$I_s(p_s)$$. For this project, you may 'use' STN rather than writing your own. A sample tensorflow implementation of STN can be found [here](https://github.com/kevinzakka/spatial-transformer-network). Feel free to use any other implementation.
 
 
-### 3. Explainability Mask
+### Explainability Mask
 
 <b>Note</b>: Till now, we assume the scene is static; there are no occlusions between the target and source views; the surface is Lambertian so that the photo-consistency error is meaningful. With any of the these assumptions voilated in the training sequence, the gradients could be corrupted. To improve the robustness of our training process, we separately train a <i>explainability prediction</i> network that outputs a per-pixel soft mask $$\hat{E}_s$$ for each  target-source pair. 
 
@@ -324,7 +305,7 @@ Thus, the view synthesis objective is updated as:
 $$ L_{vs} = \sum_s \sum_p \hat{E}_s(p)\ |I_t(p) - \hat{I_s}(p)|$$ 
 
 
-### 4. Gradient Locality Issues
+### Gradient Locality Issues
 
 There is still another problem that needs to be dealt with. The gradients in the framework are mainly derived from the pixel intensity difference between the center pixel and its neighbours which will cause problems in training if the correct $$p_s$$ (neighbour pixel) is located in a low-texture region. This is a common issue in motion estimation. To overcome this problem, we can use a encoder-decoder CNN with a small bottleneck for the depth network that implicitly constrains the output to be globally smooth and facilitates gradients to propogate from meaningful regions to nearby regions. 
 Thus, for smoothness, we minimize the $$L_1$$ norm of second-order gradients for the predicted depth maps:
