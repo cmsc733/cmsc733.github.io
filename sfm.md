@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Structure from Motion
-permalink: /sfm/
+permalink: /2019/proj/p3
 ---
 
 <u>Table of Contents</u>:
