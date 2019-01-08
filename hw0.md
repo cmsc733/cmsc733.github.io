@@ -15,6 +15,7 @@ Table of Contents:
 		- [Leung-Malik Filters](#lmfilters)
 		- [Gabor Filters](#gaborfilters)
 	- [Texton Map $$\mathcal{T}$$](#texton)
+	- [Brightness Map $$\mathcal{B}$$](#brightness)
 - [What you need to do](#problem)
   - [Problem Statement](#pro)
 - [Submission Guidelines](#sub)
@@ -68,7 +69,7 @@ A simple but effective filter bank is a collection of oriented Derivative of Gau
 
 <a name='lmfilters'></a>
 #### Leung-Malik Filters
-The Leung-Malik filters or LM filters are a set of multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. We consider two versions of the LM filter bank. In LM Small (LMS), the filters occur at basic scales $$\sigma=\left{ 1, \sqrt{2}, 2, 2\sqrt{2}\right}$$. The first and second derivative filters occur at the first three scales with an elongation factor of 3, i.e., ($$\sigma_x = \sigma $$ and $$\sigma_y = 3\sigma_x$$). The Gaussians occur at the four basic scales while the 8 LOG filters occur at $$\sigma$$ and $$3\sigma$$. For LM Large (LML), the filters occur at the basic scales $$ \sigma=\left{\sqrt{2}, 2, 2\sqrt{2}, 4 \right} $$. You need to implement both LMS and LML filter banks and **DO NOT use any built-in or third party code for this**. The filter bank is shown below. More details about these filters can be [found here](http://www.robots.ox.ac.uk/~vgg/research/texclass/filters.html). I
+The Leung-Malik filters or LM filters are a set of multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. We consider two versions of the LM filter bank. In LM Small (LMS), the filters occur at basic scales $$\sigma=\{ 1, \sqrt{2}, 2, 2\sqrt{2}\}$$. The first and second derivative filters occur at the first three scales with an elongation factor of 3, i.e., ($$\sigma_x = \sigma $$ and $$\sigma_y = 3\sigma_x$$). The Gaussians occur at the four basic scales while the 8 LOG filters occur at $$\sigma$$ and $$3\sigma$$. For LM Large (LML), the filters occur at the basic scales $$ \sigma=\{\sqrt{2}, 2, 2\sqrt{2}, 4 \} $$. You need to implement both LMS and LML filter banks and **DO NOT use any built-in or third party code for this**. The filter bank is shown below. More details about these filters can be [found here](http://www.robots.ox.ac.uk/~vgg/research/texclass/filters.html). 
 
 <div class="fig fighighlight">
   <img src="/assets/2019/hw0/LMFilters.jpg" width="100%">
@@ -96,6 +97,12 @@ representation by replacing each $$N$$-dimensional vector with a discrete texton
 (feel free to use Scikit learn's ``sklearn.cluster.KMeans`` function or implement your own). Each pixel is then represented by a one dimensional,
 discrete cluster id instead of a vector of high-dimensional, real-valued filter responses (this process of dimensionality reduction from $$N$$ to 1 is called "Vector Quantization"). This can be represented with a single channel image with values in the range of $$[1, 2, 3, \cdots , K]$$. $$K =
 64$$ seems to work well but feel free to experiment. To visualize the a texton map, you can try the ``matplotlib.pyplot.imshow`` command with proper scaling arguments.
+
+
+<a name='brightness'></a>
+### Brightness Map $$\mathcal{B}$$
+
+
 
 <a name='sub'></a>
 ## Submission Guidelines
