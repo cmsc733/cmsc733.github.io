@@ -175,29 +175,4 @@ You can discuss the ideas with any number of people. But the code you turn-in sh
 
 We would like to thank [Aleksandrs Ecins](http://users.umiacs.umd.edu/~aecins/) for the dataset. This fun project was inspired from Nitin’s research and a course project at University of Pennsylvania, [GRASP ARCHE](http://www.grasparche.com/).
 
-<div class="fig fighighlight">
-  <img src="/assets/sfm/featmatch.png" width="100%">
-  <div class="figcaption">
-    Figure 1: Feature matching between two images from different views.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-
-<div class="fig fighighlight">
-  <img src="/assets/sfm/epipole1.png"  width="120%">
-  <div class="figcaption">
- 	Figure 2(a): Caption goes here.
-  </div>
-<br><br>
-  <img src="/assets/sfm/epipole2.png"  width="120%">
-  <div class="figcaption">
-  	Figure 2(b): Caption goes here.
-  </div>
-</div>
-
-$$\mathbf{x}_i'^{\ \mathbf{T}}\mathbf{F} \mathbf{x}_i = 0$$
-$$\begin{bmatrix} x'_i & y'_i & 1 \end{bmatrix}
-\begin{bmatrix}f_{11} & f_{12} & f_{13} \\ f_{21} & f_{22} & f_{23} \\ f_{31} & f_{32} & f_{33} \end{bmatrix}
-\begin{bmatrix} x_i \\ y_i \\ 1 \end{bmatrix} = 0$$ 
-
+---
