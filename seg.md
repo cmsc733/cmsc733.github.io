@@ -4,12 +4,13 @@ mathjax: true
 title: Structure from Motion
 permalink: /seg/
 ---
-**This article is written by [Chahat Deep Singh](http://chahatdeep.github.io/).**<br>
-
+<!--**This article is written by [Chahat Deep Singh](http://chahatdeep.github.io/).**<br>
+-->
 Table of Contents:
 
 - [Introduction](#intro)
 - [Extract object of interest from Table-Top Images](#table-top)
+  - [Create a Point Cloud from RGB-D images](#create-pcl)  
   - [Build 3D model of object from RGB-D Images](#build-3D-model)  
   - [Extract the ‘Collection of Objects’ from a given scene](#extract)
 	    
@@ -23,22 +24,92 @@ Table of Contents:
 
 ## 1. Introduction
 
-The aim of this project is to build semantic map of a 3D scene. This project gives you a peek into the world of robotics perception <i>i.e.</i> how robots understand and build the model of the world. <i>Excited?</i>
+The aim of this project is to build semantic map of a 3D scene (See Fig. 1). This project gives you a peek into the world of robotics perception <i>i.e.</i> how robots understand and build the model of the world. <i>Excited?</i>
 
-In the next few sections, we will detail how this can be done along with the specifications of the functions for each part. 
-<b>Just like the previous projects, this project is to be done in groups of two and only one submission is required per group.</b>
+<div class="fig fighighlight"><center>
+  <img src="/assets/2019/p4/seg.png" width="60%"></center>
+  <div class="figcaption">
+    Figure 1: (a) Reconstruction from a samples of RGBD images. (b) Segmentation of a 3D scene.
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+
+In the next few sections, we will detail how this can be done along with the specifications of the functions for each part. <b>Just like the previous projects, this project is to be done in groups of two and only one submission is required per group.</b>
 
 <a name='table-top'></a>
 
 ## 2. Extract object of interest from Table-Top Images
 
-You are given a set of RGB-D (RGB-Depth) frames of table top images and you need to extract the 'object of interest' from each frame and build a 3D model of the filtered object. When we say 'extract object of interest', you need to remove the table, walls of the room (if any) and any such irrelevant data from the scene. You also might need to filter stray points during the extraction process.
+You are given a set of RGB-D (RGB-Depth) frames of table top images and you need to extract the 'object of interest' from each frame and build a 3D model of the filtered object. When we say 'extract object of interest', you need to remove the table, walls of the room (if any) and any such irrelevant data from the scene. You also might need to filter stray points during the extraction process. But before that we need to align the data from RGB camera and the depth sensor from the Kinect. See Fig xx. Clearly, the RGB image and Depth images are not aligned. 
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p4/rgb.png" width="49%">
+  <img src="/assets/2019/p4/depth.png" width="49%">
+  <div class="figcaption">
+  Figure 3 (a): RGB and Depth images from Kinect.
+  </div>
+  <br><center>
+  <img src="/assets/2019/p4/rgbd.png" width="75%"></center>
+  <div class="figcaption">
+  Figure 3 (b): Uncalibrated RGB-D images. Thus we need calibration parameters in order to align the two images.
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<a name='create-pcl'></a>
+
+### 2.1 Create a Point Cloud from RGB-D images
+
+
+So, in order to align them we would need calibration parameters <i>i.e.</i> the rotation and translation between the camera centers of RGB camera and the depth sensor as $$(u,v)$$ does not represents $$(u',v')$$, see fig. xx. 
+
+<div class="fig fighighlight"><center>
+  <img src="/assets/2019/p4/RotAndTrans1.png" width="90%"></center>
+  <div class="figcaption">
+    Figure 2: .
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+To formulate: Given all camera parameters $$(R,t,f)$$ (rotation, translation and focal lengths of both sensors), find the corresponding points of a RGB and a depth image. Thus, we need to generate a point cloud that can be represented as $$(x,y,z,r,g,b)$$. (See Fig. xx)
+<div class="fig fighighlight"><center>
+  <img src="/assets/2019/p4/RotAndTrans2.png" width="60%"></center>
+  <div class="figcaption">
+    Figure 2: .
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+
+In order to solve this problem, first recall: $$\cfrac{u}{f_u} = \cfrac{x}{z}$$
+
+Now, to generate a point cloud from RGB-D data, follow these steps:
+1. Compute 3D coordinate $$X^{IR}$$ in the $$IR$$ camera frame. (IR: Infrared or depth sensor frame)
+$$x^{IR} = \cfrac{uz}{f^{IR}}$$; $$\ \ y^{IR} = \cfrac{vz}{f^{IR}}$$; $$\ \ X^{IR} = [x^{IR} \ y^{IR} \ z^{IR}]$$
+2. Transform into RGB frame
+$$X^{RGB} = RX^{IR} + t$$
+3. Reproject them into the image plane
+$$u^{RGB} = f^{RGB}\cfrac{x^{RGB}}{z^{RGB}} = f^{RGB}\cfrac{y^{RGB}}{z^{RGB}}$$
+4. Read $$(r,g,b)$$ at $$(u,v)^{RGB}$$
+$$(r,g,b)$$ is the color of $$X^{IR}$$ point.
+
+Now, once the point clouds are generated from a single view, let us learn how to build 3D model of the scene from multiple views.
 
 <a name='build-3D-model'></a>
 
-### 2.1 Build 3D model of object from RGB-D Images
+### 2.2 Build 3D model of object from RGB-D Images
 
 The RGB-D data provided is recorded from an Asus Xtion Pro sensor. Using the method in the previous stage, you get the 3D view of the object from one single camera view point, use many such views from different frames of the same object to iteratively build a 3D model of the object.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p4/data-collect.png" width="100%">
+  <div class="figcaption">
+    Figure 2: .
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
 
 The idea here is you need to find out 3D translation and rotation parameters between two 3D point clouds of the same object from different frames, use these parameters to back project 3D point cloud from second frame on to the first and now you have little more information of the 3D model of the object as compared to the 3D point cloud from a single frame. You do it iteratively until you build a complete (or more or less complete) 3D model of the object.
 
@@ -46,7 +117,7 @@ You will need to implement any variant of the Iterative Closest Point (ICP) algo
 
 <a name='extract'></a>
 
-### 2.2 Extract the ‘Collection of Objects’ from a given scene
+### 2.3 Extract the ‘Collection of Objects’ from a given scene
 
 Here you will pretty much redo the same thing from previous sections, only difference being the set of table top images now have a collection of objects. And you need to extract just the objects without any irrelevant data from the scene.
 
@@ -66,7 +137,7 @@ Now try to see if you can derive relationships between the segmented objects, li
 
 ### 5. Stuff given to you
 
-The Starter code along with the calibration parameters and the function to convert images to point clouds is in the Code folder. Note that you are allowed to use third party code for basic stuff but not for the whole algorithm. You are only allowed to use pcread, pcshow from the Matlab’s point cloud library. Functions like KDTreeSearcher and knnsearch can be used for point to point correspondence search. You are also allowed to use any other basic functions built into the computer vision or image processing toolbox in Matlab.
+Calibration parameters and uncalibrated RGB-D data. Note that you are allowed to use third party code for basic stuff but not for the whole algorithm. You are only allowed to use `pcread`, `pcshow` from the Matlab’s point cloud library. Functions like `KDTreeSearcher` and `knnsearch` can be used for point to point correspondence search. You are also allowed to use any other basic functions built into the computer vision or image processing toolbox in Matlab.
 
 Make sure to check Reference Papers folders for papers regarding ICP (Standard ICP paper is the easiest but the worst performing) and Object Segmentation. Dataset folder contains the data of various scenes containing individual objects and multiple objects.
 
