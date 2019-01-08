@@ -122,6 +122,36 @@ Let us first implement these Half-disc masks. Here's an image of how these Half-
   </div>
 </div>
 
+The half-disc masks are simply (pairs of) binary images of half-discs. This is very important because it will allow us to compute the chi-square distances (finally obtain values of $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$) using a filtering operation, which is much faster than looping over each pixel neighborhood and aggregating counts for histograms. Forming these masks is quite be trivial. A sample set of masks (8 orientations, 3 scales) is shown in Fig. 4. *The filter banks and masks only need to be defined once and then they will be used on all images.*
+
+$$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$ encode how much the texture, brightness and color distributions are changing at a pixel. We compute $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$ by comparing the distributions in left/right half-disc pairs (opposing directions of filters at same scale, in Fig. 4, theleft/right pairs are shown one after another, these are easy to create as you have control over the angle) centered at a pixel. If the distributions are the similar, the gradient should be small. If the distributions are dissimilar, the gradient should be large. Because our half-discs span multiple scales and orientations, we will end up with a series of local gradient measurements encoding how quickly the texture or brightness
+distributions are changing at different scales and angles.
+
+We will compare texton, brightness and color distributions with the chi-square measure. The chi-square distance is a frequently used metric for comparing two histograms. $$\chi^2$$ distance between two histograms $$g$$ and $$h$$ with the same binning scheme is defined as follows
+
+$$
+\chi^2(g,h) = \frac{1}{2} \sum_{i=1}^K {\frac{g_i - h_i}^2{g_i + h_i}}
+$$
+
+here, $$K$$ indexes though the bins. Note that the numerator of this expression is simply the sum of squared difference between histogram
+elements. The denominator adds a "soft" normalization to each bin so that less frequent elements still contribute to the overall distance.
+
+To effciently compute $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$, filtering can used to avoid nested loops over pixels. In
+addition, the linear nature of the formula above can be exploited. At a single orientation and scale, we can use a particular pair of masks to aggregate the counts in a histogram via a filtering operation, and compute the chi-square distance (gradient) in one loop over the bins according to the following outline:
+
+```
+chi_sqr_dist = img*0
+for i = 1:num_bins
+	tmp = 1 where img is in bin i and 0 elsewhere
+	g_i = convolve tmp with left_mask
+	h_i convolve tmp with right_mask
+	updare chi_sqr_dist
+end
+```
+
+The above procedure should generate a 2D matrix of gradient values. Simply repeat this for all orientations and scales, you should end up with a 3D matrix of size $$m \times n \times N$$,
+where $$(m,n)$$ are dimensions of the image and $$N$$ is the number of filters.
+
 <a name='sub'></a>
 ## Submission Guidelines
 
