@@ -1,8 +1,8 @@
 ---
 layout: page
 mathjax: true
-title: Rotobrush
-permalink: /2018/proj/p3/
+title: Buildings built in minutes - An SfM Approach
+permalink: /2019/proj/p2/
 ---
 
 Table of Contents:
