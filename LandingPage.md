@@ -24,15 +24,14 @@ Course Structure
 
 This is a hands-on course, centered around four projects. There are also three homeworks and an in-class midterm exam, to reinforce your understanding of underlying concepts. This is a qualifying course for Computer Science PhD students in the area Vision and Graphics. The grading breakdown is as follows:
 
-Project 1: 13.75%
-Project 2: 13.75%
-Project 3: 13.75%
-Project 4: 13.75%
+Project 1: 18%
+Project 2: 12%
+Project 3: 18%
+Project 4: 15%
 Midterm Exam: 25%
 Homework 0: 5%
-Homework 1: 5%
-Homework 2: 5%
-Homework 3: 5%
+Homework 1: 4%
+Homework 2: 3%
 
 
 Assignments
