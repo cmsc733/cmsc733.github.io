@@ -18,6 +18,8 @@ Table of Contents:
 	- [Brightness Map $$\mathcal{B}$$](#brightness)
 	- [Color Map $$\mathcal{C}$$](#color)
 	- [Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$](#grad)
+	- [Sobel and Canny baselines](#sobelcanny)
+	- [Pb-lite Output](#pbliteout)
 - [What you need to do](#problem)
   - [Problem Statement](#pro)
 - [Submission Guidelines](#sub)
@@ -151,6 +153,23 @@ end
 
 The above procedure should generate a 2D matrix of gradient values. Simply repeat this for all orientations and scales, you should end up with a 3D matrix of size $$m \times n \times N$$,
 where $$(m,n)$$ are dimensions of the image and $$N$$ is the number of filters.
+
+<a name='sobelcanny'></a>
+### Sobel and Canny baselines
+Run the ``canny_pb`` and ``sobel_pb`` functions to generate canny and sobel baseline edges which we will use to generate pb edges.
+
+<a name='pbliteout'></a>
+### Pb-lite Output
+The final step is to combine information from the features with a baseline method (based on Sobel or Canny edge detection or an average of both) using a simple equation 
+
+$$
+PbEdges = \frac{(\mathcal{T}_g + \mathcal{B}_g +\mathcal{C}_g)}{3}\otimes (w_1*cannyPb + w_2*sobelPb)
+$$
+
+Here, $$\otimes$$ is the Hadamard product operator. A simple choice for $$w_1$$ and $$w_2$$ would be 0.5 (they have to sum to 1). However, one could make these wights dynamic.
+
+The magnitude of the features represents the strength of boundaries, hence, a simple mean of the feature vector at location $$i$$ should be somewhat proportional to pb. Of course, fancier ways to combine the features can be explored for better performance. As a starting point, you can simply use an element-wise product of the baseline output and the
+mean feature strength to form the final pb value, this should work reasonably well.
 
 <a name='sub'></a>
 ## Submission Guidelines
