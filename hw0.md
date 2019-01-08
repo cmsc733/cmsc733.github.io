@@ -20,8 +20,7 @@ Table of Contents:
 	- [Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$](#grad)
 	- [Sobel and Canny baselines](#sobelcanny)
 	- [Pb-lite Output](#pbliteout)
-- [What you need to do](#problem)
-  - [Problem Statement](#pro)
+- [Phase 2: Deep Dive on Deep Learning](#dl)
 - [Submission Guidelines](#sub)
 - [Collaboration Policy](#coll)
 
@@ -132,7 +131,7 @@ distributions are changing at different scales and angles.
 We will compare texton, brightness and color distributions with the chi-square measure. The chi-square distance is a frequently used metric for comparing two histograms. $$\chi^2$$ distance between two histograms $$g$$ and $$h$$ with the same binning scheme is defined as follows
 
 $$
-\chi^2(g,h) = \frac{1}{2} \sum_{i=1}^K {\frac{g_i - h_i}^2{g_i + h_i}}
+\chi^2(g,h) = \frac{1}{2} \sum_{i=1}^K {\frac{(g_i - h_i)^2}{g_i + h_i}}
 $$
 
 here, $$K$$ indexes though the bins. Note that the numerator of this expression is simply the sum of squared difference between histogram
