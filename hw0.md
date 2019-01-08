@@ -11,6 +11,10 @@ Table of Contents:
 	- [Introduction](#intro)
 	- [Overview](#overview)
 	- [Filter Banks](#filters)
+		- [Oriented DoG filters](#dogfilters) 
+		- [Leung-Malik Filters](#lmfilters)
+		- [Gabor Filters](#gaborfilters)
+	- [Texton Map $$\mathcal{T}$$](#texton)
 - [What you need to do](#problem)
   - [Problem Statement](#pro)
 - [Submission Guidelines](#sub)
@@ -46,7 +50,47 @@ The overview of the algorithm is shown below.
 
 <a name='filters'></a>
 ### Filter Banks
+The first step of the pb lite boundary detection pipeline is to filter the image with a set of filter banks. We will create three different sets of filter banks for this purpose. Once we filter the image with these filters, we'll generate a texton map which depicts the texture in the image by clustering the filter responses. Let us denote each filter as $$\mathcal{F}_i$$ and texton map as $$\mathcal{T}$$. 
 
+Let's talk a little more about filter banks now. Filtering is at the heart of building the low level features we are interested in. We will use filtering both to measure texture properties and to aggregate regional texture and brightness distributions. As we mentioned earlier, we'll implement three different sets of filters. Let's talk about each one of them next.
+
+<a name='dogfilters'></a>
+#### Oriented DoG filters
+A simple but effective filter bank is a collection of oriented Derivative of Gaussian (DoG) filters. These filters can be created by convolving a simple Sobel filter and a Gaussian kernel and then rotating the result. Suppose we want $$o$$ orientations (from 0 to 360$$^\circ$$) and $$s$$ scales, we should end up with a total of $$ s \times o $$ filters. A sample filter bank of size $$2 \times 16$$ with 2 scales and 16 orientations is shown below. We expect you to read up on how these filter banks and generated and implement them. **DO NOT use any built-in or third party code for this.**
+
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/DoGFilters.png" width="100%">
+  <div class="figcaption">
+    Fig 2: Oriented DoG filter bank.
+  </div>
+</div>
+
+<a name='lmfilters'></a>
+#### Leung-Malik Filters
+The Leung-Malik filters or LM filters are a set of multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. We consider two versions of the LM filter bank. In LM Small (LMS), the filters occur at basic scales $$\sigma=\left{ 1, \sqrt{2}, 2, 2\sqrt{2}\right}$$. The first and second derivative filters occur at the first three scales with an elongation factor of 3, i.e., ($$\sigma_x = \sigma $$ and $$\sigma_y = 3\sigma_x$$). The Gaussians occur at the four basic scales while the 8 LOG filters occur at $$\sigma$$ and $$3\sigma$$. For LM Large (LML), the filters occur at the basic scales $$ \sigma=\left{\sqrt{2}, 2, 2\sqrt{2}, 4 \right} $$. You need to implement both LMS and LML filter banks and **DO NOT use any built-in or third party code for this**. The filter bank is shown below. More details about these filters can be [found here](http://www.robots.ox.ac.uk/~vgg/research/texclass/filters.html). I
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/LMFilters.jpg" width="100%">
+  <div class="figcaption">
+    Fig 3: Leung-Malik filter bank.
+  </div>
+</div>
+
+<a name='gaborfilters'></a>
+#### Gabor Filters
+Gabor Filters are designed based on the filters in the human visual system. A gabor filter is a gaussian kernel function modulated by a sinusoidal plane wave. More details can be found on the [Wikipedia page](https://en.wikipedia.org/wiki/Gabor_filter). Implement any number of Gabor filters and **DO NOT use any built-in or third party code for this.** A sample of gabor filters is shown below.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/GaborFilters.jpg" width="100%">
+  <div class="figcaption">
+    Fig 3: Gabor filter bank.
+  </div>
+</div>
+
+
+<a name='texton'></a>
+### Texton Map $$\mathcal{T}$$
 
 
 <a name='sub'></a>
