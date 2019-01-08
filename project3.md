@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Buildings built in minutes - An SfM Approach
-permalink: /2019/proj/p2/
+permalink: /2019/proj/p3/
 ---
 
 Table of Contents:
