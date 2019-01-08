@@ -91,7 +91,11 @@ Gabor Filters are designed based on the filters in the human visual system. A ga
 
 <a name='texton'></a>
 ### Texton Map $$\mathcal{T}$$
-
+Filtering an input image with each element of your filter bank (you can have a lot of them from all the three filter banks you implemented) results in a vector of fillter responses centered on each pixel. For instance, if your filter bank has $$N$$ filters, you'll have $$N$$ filter responses at each pixel. A distribution of these $$N$$-dimensional filter responses could be thought of as encoding texture properties. We will simplify this
+representation by replacing each $$N$$-dimensional vector with a discrete texton id. We will do this by clustering the filter responses at all pixels in the image in to $$K$$ textons using kmeans
+(feel free to use Scikit learn's ``sklearn.cluster.KMeans`` function or implement your own). Each pixel is then represented by a one dimensional,
+discrete cluster id instead of a vector of high-dimensional, real-valued filter responses (this process of dimensionality reduction from $$N$$ to 1 is called "Vector Quantization"). This can be represented with a single channel image with values in the range of $$[1, 2, 3, \cdots , K]$$. $$K =
+64$$ seems to work well but feel free to experiment. To visualize the a texton map, you can try the ``matplotlib.pyplot.imshow`` command with proper scaling arguments.
 
 <a name='sub'></a>
 ## Submission Guidelines
