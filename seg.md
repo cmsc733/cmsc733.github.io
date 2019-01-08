@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Structure from Motion
-permalink: /seg/
+permalink: /2019/proj/p4/
 ---
 <!--**This article is written by [Chahat Deep Singh](http://chahatdeep.github.io/).**<br>
 -->
