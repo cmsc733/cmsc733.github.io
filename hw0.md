@@ -162,10 +162,10 @@ Run the ``canny_pb`` and ``sobel_pb`` functions to generate canny and sobel base
 The final step is to combine information from the features with a baseline method (based on Sobel or Canny edge detection or an average of both) using a simple equation 
 
 $$
-PbEdges = \frac{(\mathcal{T}_g + \mathcal{B}_g +\mathcal{C}_g)}{3}\otimes (w_1*cannyPb + w_2*sobelPb)
+PbEdges = \frac{(\mathcal{T}_g + \mathcal{B}_g +\mathcal{C}_g)}{3}\odot (w_1*cannyPb + w_2*sobelPb)
 $$
 
-Here, $$\otimes$$ is the Hadamard product operator. A simple choice for $$w_1$$ and $$w_2$$ would be 0.5 (they have to sum to 1). However, one could make these wights dynamic.
+Here, $$\odot$$ is the Hadamard product operator. A simple choice for $$w_1$$ and $$w_2$$ would be 0.5 (they have to sum to 1). However, one could make these wights dynamic.
 
 The magnitude of the features represents the strength of boundaries, hence, a simple mean of the feature vector at location $$i$$ should be somewhat proportional to pb. Of course, fancier ways to combine the features can be explored for better performance. As a starting point, you can simply use an element-wise product of the baseline output and the mean feature strength to form the final pb value, this should work reasonably well.
 
