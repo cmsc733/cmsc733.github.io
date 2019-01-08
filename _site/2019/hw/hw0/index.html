@@ -56,8 +56,21 @@
 	- <a href="#intro">Introduction</a><br />
 	- <a href="#overview">Overview</a><br />
 	- <a href="#filters">Filter Banks</a><br />
-- <a href="#problem">What you need to do</a><br />
-  - <a href="#pro">Problem Statement</a><br />
+		- <a href="#dogfilters">Oriented DoG filters</a> <br />
+		- <a href="#lmfilters">Leung-Malik Filters</a><br />
+		- <a href="#gaborfilters">Gabor Filters</a><br />
+	- <a href="#texton">Texton Map <script type="math/tex">\mathcal{T}</script></a><br />
+	- <a href="#brightness">Brightness Map <script type="math/tex">\mathcal{B}</script></a><br />
+	- <a href="#color">Color Map <script type="math/tex">\mathcal{C}</script></a><br />
+	- <a href="#grad">Texture, Brightness and Color Gradients <script type="math/tex">\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g</script></a><br />
+	- <a href="#sobelcanny">Sobel and Canny baselines</a><br />
+	- <a href="#pbliteout">Pb-lite Output</a><br />
+- <a href="#dl">Phase 2: Deep Dive on Deep Learning</a><br />
+  - <a href="#prob">Problem Statement</a><br />
+  - <a href="#cifar10">Dataset</a><br />
+  - <a href="#firstnn">Train your first neural network</a><br />
+  - <a href="#improveacc">Improving Accuracy of your neural network</a><br />
+  - <a href="#otherarch">ResNet, ResNeXt, DenseNet</a><br />
 - <a href="#sub">Submission Guidelines</a><br />
 - <a href="#coll">Collaboration Policy</a></p>
 
@@ -90,7 +103,160 @@ work from <a href="google.com">this paper</a>. Our simplified boundary detector 
 </div>
 
 <p><a name="filters"></a><br />
-### Filter Banks</p>
+### Filter Banks<br />
+The first step of the pb lite boundary detection pipeline is to filter the image with a set of filter banks. We will create three different sets of filter banks for this purpose. Once we filter the image with these filters, we’ll generate a texton map which depicts the texture in the image by clustering the filter responses. Let us denote each filter as <script type="math/tex">\mathcal{F}_i</script> and texton map as <script type="math/tex">\mathcal{T}</script>.</p>
+
+<p>Let’s talk a little more about filter banks now. Filtering is at the heart of building the low level features we are interested in. We will use filtering both to measure texture properties and to aggregate regional texture and brightness distributions. As we mentioned earlier, we’ll implement three different sets of filters. Let’s talk about each one of them next.</p>
+
+<p><a name="dogfilters"></a><br />
+#### Oriented DoG filters<br />
+A simple but effective filter bank is a collection of oriented Derivative of Gaussian (DoG) filters. These filters can be created by convolving a simple Sobel filter and a Gaussian kernel and then rotating the result. Suppose we want <script type="math/tex">o</script> orientations (from 0 to 360<script type="math/tex">^\circ</script>) and <script type="math/tex">s</script> scales, we should end up with a total of <script type="math/tex">s \times o</script> filters. A sample filter bank of size <script type="math/tex">2 \times 16</script> with 2 scales and 16 orientations is shown below. We expect you to read up on how these filter banks and generated and implement them. <strong>DO NOT use any built-in or third party code for this.</strong></p>
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/DoGFilters.png" width="100%" />
+  <div class="figcaption">
+    Fig 2: Oriented DoG filter bank.
+  </div>
+</div>
+
+<p><a name="lmfilters"></a><br />
+#### Leung-Malik Filters<br />
+The Leung-Malik filters or LM filters are a set of multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. We consider two versions of the LM filter bank. In LM Small (LMS), the filters occur at basic scales <script type="math/tex">\sigma=\{ 1, \sqrt{2}, 2, 2\sqrt{2}\}</script>. The first and second derivative filters occur at the first three scales with an elongation factor of 3, i.e., (<script type="math/tex">\sigma_x = \sigma</script> and <script type="math/tex">\sigma_y = 3\sigma_x</script>). The Gaussians occur at the four basic scales while the 8 LOG filters occur at <script type="math/tex">\sigma</script> and <script type="math/tex">3\sigma</script>. For LM Large (LML), the filters occur at the basic scales <script type="math/tex">\sigma=\{\sqrt{2}, 2, 2\sqrt{2}, 4 \}</script>. You need to implement both LMS and LML filter banks and <strong>DO NOT use any built-in or third party code for this</strong>. The filter bank is shown below. More details about these filters can be <a href="http://www.robots.ox.ac.uk/~vgg/research/texclass/filters.html">found here</a>.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/LMFilters.jpg" width="100%" />
+  <div class="figcaption">
+    Fig 3: Leung-Malik filter bank.
+  </div>
+</div>
+
+<p><a name="gaborfilters"></a><br />
+#### Gabor Filters<br />
+Gabor Filters are designed based on the filters in the human visual system. A gabor filter is a gaussian kernel function modulated by a sinusoidal plane wave. More details can be found on the <a href="https://en.wikipedia.org/wiki/Gabor_filter">Wikipedia page</a>. Implement any number of Gabor filters and <strong>DO NOT use any built-in or third party code for this.</strong> A sample of gabor filters is shown below.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/GaborFilters.jpg" width="100%" />
+  <div class="figcaption">
+    Fig 3: Gabor filter bank.
+  </div>
+</div>
+
+<p><a name="texton"></a><br />
+### Texton Map <script type="math/tex">\mathcal{T}</script><br />
+Filtering an input image with each element of your filter bank (you can have a lot of them from all the three filter banks you implemented) results in a vector of fillter responses centered on each pixel. For instance, if your filter bank has <script type="math/tex">N</script> filters, you’ll have <script type="math/tex">N</script> filter responses at each pixel. A distribution of these <script type="math/tex">N</script>-dimensional filter responses could be thought of as encoding texture properties. We will simplify this<br />
+representation by replacing each <script type="math/tex">N</script>-dimensional vector with a discrete texton id. We will do this by clustering the filter responses at all pixels in the image in to <script type="math/tex">K</script> textons using kmeans<br />
+(feel free to use Scikit learn’s <code class="highlighter-rouge">sklearn.cluster.KMeans</code> function or implement your own). Each pixel is then represented by a one dimensional,<br />
+discrete cluster id instead of a vector of high-dimensional, real-valued filter responses (this process of dimensionality reduction from <script type="math/tex">N</script> to 1 is called “Vector Quantization”). This can be represented with a single channel image with values in the range of <script type="math/tex">[1, 2, 3, \cdots , K]</script>. <script type="math/tex">K =
+64</script> seems to work well but feel free to experiment. To visualize the a texton map, you can try the <code class="highlighter-rouge">matplotlib.pyplot.imshow</code> command with proper scaling arguments.</p>
+
+<p><a name="brightness"></a><br />
+### Brightness Map <script type="math/tex">\mathcal{B}</script><br />
+The concept of the brightness map is simple, to capture the brightness changes in the image. Here, again we cluster the brightness values using kmeans clustering (grayscale equivalent of the color image) into a chosen number of clusters (16 clusters seems to work well, feel free to experiment). We call the clustered output as the brightness map <script type="math/tex">\mathcal{B}</script>.</p>
+
+<p><a name="color"></a><br />
+### Color Map <script type="math/tex">\mathcal{C}</script><br />
+The concept of the color map is to capture the color changes or chrominance content in the image. Here, again we cluster the color values (you have 3 values per pixel if you have RGB color channels) using kmeans clustering (feel free to use alternative color spaces like YCbCr, HSV or Lab) into a chosen number of clusters (16 clusters seems to work well, feel free to experiment). We call the clustered output as the color map <script type="math/tex">\mathcal{C}</script>. Note that you can also cluster each color channel seprarately here. Feel free to experiment with different methods.</p>
+
+<p><a name="grad"></a><br />
+### Texture, Brightness and Color Gradients <script type="math/tex">\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g</script><br />
+To obtain <script type="math/tex">\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g</script>, we need to compute differences of values across different shapes and sizes. This can be achieved very efficiently by the use of Half-disc masks.</p>
+
+<p>Let us first implement these Half-disc masks. Here’s an image of how these Half-disc masks look.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/HalfDiskMasks.png" width="100%" />
+  <div class="figcaption">
+    Fig 4: Half disc masks.
+  </div>
+</div>
+
+<p>The half-disc masks are simply (pairs of) binary images of half-discs. This is very important because it will allow us to compute the chi-square distances (finally obtain values of <script type="math/tex">\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g</script>) using a filtering operation, which is much faster than looping over each pixel neighborhood and aggregating counts for histograms. Forming these masks is quite be trivial. A sample set of masks (8 orientations, 3 scales) is shown in Fig. 4. <em>The filter banks and masks only need to be defined once and then they will be used on all images.</em></p>
+
+<p><script type="math/tex">\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g</script> encode how much the texture, brightness and color distributions are changing at a pixel. We compute <script type="math/tex">\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g</script> by comparing the distributions in left/right half-disc pairs (opposing directions of filters at same scale, in Fig. 4, theleft/right pairs are shown one after another, these are easy to create as you have control over the angle) centered at a pixel. If the distributions are the similar, the gradient should be small. If the distributions are dissimilar, the gradient should be large. Because our half-discs span multiple scales and orientations, we will end up with a series of local gradient measurements encoding how quickly the texture or brightness<br />
+distributions are changing at different scales and angles.</p>
+
+<p>We will compare texton, brightness and color distributions with the chi-square measure. The chi-square distance is a frequently used metric for comparing two histograms. <script type="math/tex">\chi^2</script> distance between two histograms <script type="math/tex">g</script> and <script type="math/tex">h</script> with the same binning scheme is defined as follows</p>
+
+<script type="math/tex; mode=display">\chi^2(g,h) = \frac{1}{2} \sum_{i=1}^K {\frac{(g_i - h_i)^2}{g_i + h_i}}</script>
+
+<p>here, <script type="math/tex">K</script> indexes though the bins. Note that the numerator of this expression is simply the sum of squared difference between histogram<br />
+elements. The denominator adds a “soft” normalization to each bin so that less frequent elements still contribute to the overall distance.</p>
+
+<p>To effciently compute <script type="math/tex">\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g</script>, filtering can used to avoid nested loops over pixels. In<br />
+addition, the linear nature of the formula above can be exploited. At a single orientation and scale, we can use a particular pair of masks to aggregate the counts in a histogram via a filtering operation, and compute the chi-square distance (gradient) in one loop over the bins according to the following outline:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>chi_sqr_dist = img*0
+for i = 1:num_bins
+	tmp = 1 where img is in bin i and 0 elsewhere
+	g_i = convolve tmp with left_mask
+	h_i convolve tmp with right_mask
+	updare chi_sqr_dist
+end
+</code></pre>
+</div>
+
+<p>The above procedure should generate a 2D matrix of gradient values. Simply repeat this for all orientations and scales, you should end up with a 3D matrix of size <script type="math/tex">m \times n \times N</script>,<br />
+where <script type="math/tex">(m,n)</script> are dimensions of the image and <script type="math/tex">N</script> is the number of filters.</p>
+
+<p><a name="sobelcanny"></a><br />
+### Sobel and Canny baselines<br />
+Run the <code class="highlighter-rouge">canny_pb</code> and <code class="highlighter-rouge">sobel_pb</code> functions to generate canny and sobel baseline edges which we will use to generate pb edges.</p>
+
+<p><a name="pbliteout"></a><br />
+### Pb-lite Output<br />
+The final step is to combine information from the features with a baseline method (based on Sobel or Canny edge detection or an average of both) using a simple equation</p>
+
+<script type="math/tex; mode=display">PbEdges = \frac{(\mathcal{T}_g + \mathcal{B}_g +\mathcal{C}_g)}{3}\odot (w_1*cannyPb + w_2*sobelPb)</script>
+
+<p>Here, <script type="math/tex">\odot</script> is the Hadamard product operator. A simple choice for <script type="math/tex">w_1</script> and <script type="math/tex">w_2</script> would be 0.5 (they have to sum to 1). However, one could make these wights dynamic.</p>
+
+<p>The magnitude of the features represents the strength of boundaries, hence, a simple mean of the feature vector at location <script type="math/tex">i</script> should be somewhat proportional to pb. Of course, fancier ways to combine the features can be explored for better performance. As a starting point, you can simply use an element-wise product of the baseline output and the mean feature strength to form the final pb value, this should work reasonably well.</p>
+
+<p><a name="dl"></a><br />
+## Phase 2: Deep Dive on Deep Learning</p>
+
+<p><a name="prob"></a><br />
+### Problem Statement<br />
+For phase 2 of this homework, you’ll be implementing multiple neural network architectures and comparing them on various criterion like number of parameters, train and test set accuracies and provide detailed analysis of why one architecture works better than another one.</p>
+
+<p><a name="cifar10"></a><br />
+### Dataset<br />
+CIFAR-10 is a dataset consisting of 60000 <script type="math/tex">32\times 32</script> colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. More details about the datset can be found <a href="http://www.cs.toronto.edu/~kriz/cifar.html">here</a>.</p>
+
+<p>Download the dataset nd use th training images (50000 images) to train your neural network and report the test set accuracy on the test set provided (10000). <strong>DO NOT use the test set to train your networks.</strong></p>
+
+<p><a name="firstnn"></a><br />
+### Train your first neural network<br />
+The task in this part is to train a neural network (preferably convolutional neural network) on Tensorflow for the task of classification. The input is a single CIFAR-10 image and the output is the probabilities of 10 classes. There are a lot of resources online to learn how to program a simple neural network, tune hyperparameters for CIFAR-10. A good starting point is the <a href="https://www.tensorflow.org/tutorials/images/deep_cnn">official Tensorflow tutorial</a> and this great tutorial by <a href="https://github.com/Hvass-Labs/TensorFlow-Tutorials">Hvass Labs</a>. If you are new to deep learning, we recommend reading up basics from <a href="http://cs231n.github.io/">CS231n from Stanford University here</a>.</p>
+
+<p>Here are some more concrete details. Feel free to use any architecture and optimizer for this part. You’ll be using cross entropy loss for training. Choose the number of epochs, batch size appropriately. We recommend using the <code class="highlighter-rouge">tf.layers</code> and <code class="highlighter-rouge">tf.nn</code> API for implementing layers. Report the train accuracy over epochs, test accuracy over epochs, number of parameters in your model (details on this later), your architecture, other hyperparameters chosen such as optimizer, learning rate and batch size.</p>
+
+<p>You can use the following snippet of code to obtain the bumber of parameters in your model. This loads a model from the <code class="highlighter-rouge">ModelPath</code> and prints out the number of parameters.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>with tf.Session() as sess:
+        Saver.restore(sess, ModelPath)
+        print('Number of parameters in this model are %d ' % np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]))
+</code></pre>
+</div>
+
+<p>Congrats you’ve just successfully trained your first neural network.</p>
+
+<p><a name="improveacc"></a><br />
+### Improving Accuracy of your neural network<br />
+Now that we have a baseline neural network working, let’s try to improve the accuracy by doing simple tricks.<br />
+1. Standardize your data input if you haven’t already. There are a lot of ways to do this. Feel free to search for different methods. A simple way is to scale data from [0,255] to [-1,1]. <br />
+2. Decay your learning rate as you train or Increase your batch size as you train. Refer to <a href="https://arxiv.org/abs/1711.00489">this paper</a> for more details.<br />
+3. Augment your data to artificially make your dataset larger. Refer to <code class="highlighter-rouge">tf.image</code> API for nice data augmentation functions.<br />
+4. Add Batch Normalization between layers. <br />
+5. Change the hyperparameters in your architecture such as number of layers, number of neurons.</p>
+
+<p>Now, feel free to implement as many of these as possible and present a detailed analysis of your findings as before.</p>
+
+<p><a name="otherarch"></a><br />
+### ResNet, ResNeXt, DenseNet<br />
+Now, let’s make the architectures more efficient in-terms of memory usage (number of parameters), computation (number of operations) and accuracy. Read up the concepts from <a href="https://arxiv.org/abs/1512.03385">ResNet</a>, <a href="https://arxiv.org/abs/1611.05431">ResNeXt</a> and <a href="https://arxiv.org/abs/1608.06993">DenseNet</a> and implement all of these architectures with the parameters of your choice. <strong>DO NOT use any built-in or third party code for this</strong> apart from the API functions mentioned before.</p>
+
+<p>Present a detailed analysis of all these architectures with your earlier findings.</p>
 
 <p><a name="sub"></a><br />
 ## Submission Guidelines</p>
@@ -120,7 +286,10 @@ work from <a href="google.com">this paper</a>. Our simplified boundary detector 
 
 <p><a name="coll"></a><br />
 ## Collaboration Policy<br />
-You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else’s code in writing your project, you must properly cite it in your code (in comments) and your writeup.  For the full honor code refer to the CMSC426 Fall 2018 website</p>
+You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else’s code in writing your project, you must properly cite it in your code (in comments) and your writeup.  For the full honor code refer to the CMSC733 Fall 2019 website</p>
+
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>This fun homework was inspired by a similar project in  Brown University’s <a href="http://cs.brown.edu/courses/cs143/2011/proj2/">CS 143</a> (CIntroduction to Computer Vision).</p>
 
   </article>
 
