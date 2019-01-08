@@ -16,6 +16,8 @@ Table of Contents:
 		- [Gabor Filters](#gaborfilters)
 	- [Texton Map $$\mathcal{T}$$](#texton)
 	- [Brightness Map $$\mathcal{B}$$](#brightness)
+	- [Color Map $$\mathcal{C}$$](#color)
+	- [Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$](#grad)
 - [What you need to do](#problem)
   - [Problem Statement](#pro)
 - [Submission Guidelines](#sub)
@@ -101,8 +103,24 @@ discrete cluster id instead of a vector of high-dimensional, real-valued filter 
 
 <a name='brightness'></a>
 ### Brightness Map $$\mathcal{B}$$
+The concept of the brightness map is simple, to capture the brightness changes in the image. Here, again we cluster the brightness values using kmeans clustering (grayscale equivalent of the color image) into a chosen number of clusters (16 clusters seems to work well, feel free to experiment). We call the clustered output as the brightness map $$\mathcal{B}$$. 
 
+<a name='color'></a>
+### Color Map $$\mathcal{C}$$
+The concept of the color map is to capture the color changes or chrominance content in the image. Here, again we cluster the color values (you have 3 values per pixel if you have RGB color channels) using kmeans clustering (feel free to use alternative color spaces like YCbCr, HSV or Lab) into a chosen number of clusters (16 clusters seems to work well, feel free to experiment). We call the clustered output as the color map $$\mathcal{C}$$. Note that you can also cluster each color channel seprarately here. Feel free to experiment with different methods.
 
+<a name='grad'></a>
+### Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$
+To obtain $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$, we need to compute differences of values across different shapes and sizes. This can be achieved very efficiently by the use of Half-disc masks. 
+
+Let us first implement these Half-disc masks. Here's an image of how these Half-disc masks look.
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/HalfDiskMasks.png" width="100%">
+  <div class="figcaption">
+    Fig 4: Half disc masks.
+  </div>
+</div>
 
 <a name='sub'></a>
 ## Submission Guidelines
