@@ -1,7 +1,7 @@
 ---
 layout: page
 mathjax: true
-title: Structure from Motion
+title: Buildings built in minutes: An SfM Approach
 permalink: /2019/proj/p3
 ---
 
