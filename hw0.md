@@ -35,7 +35,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Due Date 
-11:59PM, Tuesday, February 26, 2019
+**11:59PM, Tuesday, February 26, 2019.**
 
 <a name='pblite'></a>
 ## 2. Phase 1: Shake My Boundary
@@ -240,7 +240,7 @@ Your submission on ELMS/Canvas must be a ``zip`` file, following the naming conv
 YourDirectoryID_hw0.zip
 │   README.md
 |   Your Code files 
-		├── Any subfolders you want along with files
+|		├── Any subfolders you want along with files
 |   Wrapper1.py 
 |	Wrapper2.py
 └──	Report.pdf
