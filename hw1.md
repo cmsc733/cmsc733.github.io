@@ -97,6 +97,12 @@ YourDirectoryID_hw1.zip
 <a name='report'></a>
 ### 6.2. Report
 
+For each section of the homework, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
+
+- Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
+- Present images of checkerboard after rectification and reprojection of corners on rectified image.
+- Present the value of re-projection error. 
+
 
 <a name='coll'></a>
 ## 7. Collaboration Policy
