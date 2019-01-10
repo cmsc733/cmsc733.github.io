@@ -298,7 +298,7 @@ Implementing the extra credit can give you upto 25% on the bonus score. As we di
 Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_p1.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_p1.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``Wrapper.py``. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. Please **DO NOT** include data in your submission.
 
 ```
-YourDirectoryID_hw1.zip
+YourDirectoryID_p1.zip
 │   README.md
 |   Your Code files 
 |   ├── Any subfolders you want along with files
