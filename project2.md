@@ -8,28 +8,28 @@ permalink: /2019/proj/p2/
 Table of Contents:
 - [1. Deadline](#due)
 - [2. Introduction](#intro)
-- [3. Problem Statement](#prob)
-- [4. Data Collection](#data)
-- [5. Phase 1: Traditional Approach](#ph1)
-    - [5.1. Facial Landmarks detection](#landmarks)
-    - [5.2. Face Warping using Triangulation](#tri)
-    - [5.3. Face Warping using Thin Plate Spline](#tps)
-    - [5.4. Replace Face](#replace)
-    - [5.5. Blending](#blending)
-    - [5.6. Motion Filtering](#motfilt)
-- [6. Phase 2: Deep Learning Approach](#ph2)
-- [7. Notes about Test Set](#testset)
-  - [7.1. File tree and naming](#files)
-  - [7.2. Report](#report)
-- [8. Submission Guidelines](#sub)
-- [9. Collaboration Policy](#coll)
+- [3. Data Collection](#data)
+- [4. Phase 1: Traditional Approach](#ph1)
+    - [4.1. Facial Landmarks detection](#landmarks)
+    - [4.2. Face Warping using Triangulation](#tri)
+    - [4.3. Face Warping using Thin Plate Spline](#tps)
+    - [4.4. Replace Face](#replace)
+    - [4.5. Blending](#blending)
+    - [4.6. Motion Filtering](#motfilt)
+- [5. Phase 2: Deep Learning Approach](#ph2)
+- [6. Notes about Test Set](#testset)
+  - [6.1. File tree and naming](#files)
+  - [6.2. Report](#report)
+- [7. Submission Guidelines](#sub)
+- [8. Collaboration Policy](#coll)
+- [9. Acknowledgements](#ack)
 
 <a name='due'></a>
 ## 1. Deadline 
 **11:59PM, Sunday, March 17, 2019.**
 
-<a name='prob'></a>
-## 2. Problem Statement
+<a name='intro'></a>
+## 2. Introduction
 The aim of this project is to implement an end-to-end pipeline to swap faces in a
 video just like [Snapchat's face swap filter](https://www.snapchat.com/) or [this face swap website](
 http://faceswaplive.com/). It's a fairly complicated procedure and variants of these have
@@ -271,6 +271,7 @@ For each section of the project, explain briefly what you did, and describe any 
 ## 8. Collaboration Policy
 You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.
 
+<a name='ack'></a>
 ## 9. Acknowledgements
 This fun project was inspired by a similar project in UPenn's <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision & Computational Photography). 
 
