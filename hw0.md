@@ -29,8 +29,9 @@ Table of Contents:
 - [4. Submission Guidelines](#sub)
     - [4.1. File tree and naming](#files)
     - [4.2. Report](#report)
-- [5. Collaboration Policy](#coll)
-- [6. Acknowledgements](#ack)
+- [5. Allowed and Disallowed functions](#funcs) 
+- [6. Collaboration Policy](#coll)
+- [7. Acknowledgements](#ack)
 
 <a name='due'></a>
 ## 1. Due Date 
@@ -258,10 +259,14 @@ For each section of the homework, explain briefly what you did, and describe any
 - Finally, present a comparison of number of parameters, train and test accuracy, run-time and other competences of your choice in a tabluar form for Sections 3.3, 3.4 and 3.5.
 
 
+<a name='funcs'></a>
+## 5. Allowed and Disallowed functions
+**Details coming soon.**
+
 <a name='coll'></a>
-## 5. Collaboration Policy
+## 6. Collaboration Policy
 You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup.  For the full honor code refer to the CMSC733 Fall 2019 website.
 
 <a name='ack'></a>
-## 6. Acknowledgements
+## 7. Acknowledgements
 This fun homework was inspired by a similar project in  Brown University's <a href="http://cs.brown.edu/courses/cs143/2011/proj2/">CS 143</a> (CIntroduction to Computer Vision).
