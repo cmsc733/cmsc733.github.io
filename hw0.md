@@ -6,38 +6,41 @@ permalink: /2019/hw/hw0/
 ---
 
 Table of Contents:
-- [Due Date](#due)
-- [Phase 1: Shake My Boundary](#pblite)
-	- [Introduction](#intro)
-	- [Overview](#overview)
-	- [Filter Banks](#filters)
-		- [Oriented DoG filters](#dogfilters) 
-		- [Leung-Malik Filters](#lmfilters)
-		- [Gabor Filters](#gaborfilters)
-	- [Texton Map $$\mathcal{T}$$](#texton)
-	- [Brightness Map $$\mathcal{B}$$](#brightness)
-	- [Color Map $$\mathcal{C}$$](#color)
-	- [Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$](#grad)
-	- [Sobel and Canny baselines](#sobelcanny)
-	- [Pb-lite Output](#pbliteout)
-- [Phase 2: Deep Dive on Deep Learning](#dl)
-  - [Problem Statement](#prob)
-  - [Dataset](#cifar10)
-  - [Train your first neural network](#firstnn)
-  - [Improving Accuracy of your neural network](#improveacc)
-  - [ResNet, ResNeXt, DenseNet](#otherarch)
-- [Submission Guidelines](#sub)
-- [Collaboration Policy](#coll)
+- [1. Due Date](#due)
+- [2. Phase 1: Shake My Boundary](#pblite)
+	- [2.1. Introduction](#intro)
+	- [2.2. Overview](#overview)
+	- [2.3. Filter Banks](#filters)
+		- [2.3.1. Oriented DoG filters](#dogfilters) 
+		- [2.3.2. Leung-Malik Filters](#lmfilters)
+		- [2.3.3. Gabor Filters](#gaborfilters)
+	- [2.4. Texton Map $$\mathcal{T}$$](#texton)
+	- [2.5. Brightness Map $$\mathcal{B}$$](#brightness)
+	- [2.6. Color Map $$\mathcal{C}$$](#color)
+	- [2.7. Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$](#grad)
+	- [2.8. Sobel and Canny baselines](#sobelcanny)
+	- [2.9. Pb-lite Output](#pbliteout)
+- [3. Phase 2: Deep Dive on Deep Learning](#dl)
+    - [3.1. Problem Statement](#prob)
+    - [3.2. Dataset](#cifar10)
+    - [3.3. Train your first neural network](#firstnn)
+    - [3.4. Improving Accuracy of your neural network](#improveacc)
+    - [3.5. ResNet, ResNeXt, DenseNet](#otherarch)
+- [4. Submission Guidelines](#sub)
+    - [4.1. File tree and naming](#files)
+    - [4.2. Report](#report)
+- [5. Collaboration Policy](#coll)
+- [6. Acknowledgements](#ack)
 
 <a name='due'></a>
-## Due Date 
+## 1. Due Date 
 11:59PM, Tuesday, February 26, 2019
 
 <a name='pblite'></a>
-## Phase 1: Shake My Boundary
+## 2. Phase 1: Shake My Boundary
 
 <a name='intro'></a>
-### Introduction
+### 2.1. Introduction
 Boundary detection is an important, well-studied computer vision problem. Clearly it would be nice to have algorithms which know where one object stops and another starts. But boundary detection from a single image is fundamentally diffcult. Determining boundaries could require object-specific reasoning, arguably making the task hard.
 
 Classical edge detection algorithms, including the Canny and Sobel baselines we will compare against, look for intensity discontinuities. The more recent pb (probability of boundary) boundary detectors significantly outperform these classical methods by considering texture and color gradients in addition to intensity. Qualitatively, much of this performance jump comes from the ability of the pb algorithm to suppress false positives that the classical methods produce in textured regions.
@@ -46,7 +49,7 @@ In this homework, you will develop a simplified version of pb, which finds bound
 work from [this paper](google.com). Our simplified boundary detector will still significantly outperform the well regarded Canny edge detector. Evaluation is carried out against human annotations (ground truth) from a subset of the Berkeley Segmentation Data Set 500 (BSDS500).
 
 <a name='overview'></a>
-### Overview
+### 2.2. Overview
 
 The overview of the algorithm is shown below.
 
@@ -58,13 +61,13 @@ The overview of the algorithm is shown below.
 </div>
 
 <a name='filters'></a>
-### Filter Banks
+### 2.3. Filter Banks
 The first step of the pb lite boundary detection pipeline is to filter the image with a set of filter banks. We will create three different sets of filter banks for this purpose. Once we filter the image with these filters, we'll generate a texton map which depicts the texture in the image by clustering the filter responses. Let us denote each filter as $$\mathcal{F}_i$$ and texton map as $$\mathcal{T}$$. 
 
 Let's talk a little more about filter banks now. Filtering is at the heart of building the low level features we are interested in. We will use filtering both to measure texture properties and to aggregate regional texture and brightness distributions. As we mentioned earlier, we'll implement three different sets of filters. Let's talk about each one of them next.
 
 <a name='dogfilters'></a>
-#### Oriented DoG filters
+#### 2.3.1. Oriented DoG filters
 A simple but effective filter bank is a collection of oriented Derivative of Gaussian (DoG) filters. These filters can be created by convolving a simple Sobel filter and a Gaussian kernel and then rotating the result. Suppose we want $$o$$ orientations (from 0 to 360$$^\circ$$) and $$s$$ scales, we should end up with a total of $$ s \times o $$ filters. A sample filter bank of size $$2 \times 16$$ with 2 scales and 16 orientations is shown below. We expect you to read up on how these filter banks and generated and implement them. **DO NOT use any built-in or third party code for this.**
 
 
@@ -76,7 +79,7 @@ A simple but effective filter bank is a collection of oriented Derivative of Gau
 </div>
 
 <a name='lmfilters'></a>
-#### Leung-Malik Filters
+#### 2.3.2. Leung-Malik Filters
 The Leung-Malik filters or LM filters are a set of multi scale, multi orientation filter bank with 48 filters. It consists of first and second derivatives of Gaussians at 6 orientations and 3 scales making a total of 36; 8 Laplacian of Gaussian (LOG) filters; and 4 Gaussians. We consider two versions of the LM filter bank. In LM Small (LMS), the filters occur at basic scales $$\sigma=\{ 1, \sqrt{2}, 2, 2\sqrt{2}\}$$. The first and second derivative filters occur at the first three scales with an elongation factor of 3, i.e., ($$\sigma_x = \sigma $$ and $$\sigma_y = 3\sigma_x$$). The Gaussians occur at the four basic scales while the 8 LOG filters occur at $$\sigma$$ and $$3\sigma$$. For LM Large (LML), the filters occur at the basic scales $$ \sigma=\{\sqrt{2}, 2, 2\sqrt{2}, 4 \} $$. You need to implement both LMS and LML filter banks and **DO NOT use any built-in or third party code for this**. The filter bank is shown below. More details about these filters can be [found here](http://www.robots.ox.ac.uk/~vgg/research/texclass/filters.html). 
 
 <div class="fig fighighlight">
@@ -87,7 +90,7 @@ The Leung-Malik filters or LM filters are a set of multi scale, multi orientatio
 </div>
 
 <a name='gaborfilters'></a>
-#### Gabor Filters
+#### 2.3.3. Gabor Filters
 Gabor Filters are designed based on the filters in the human visual system. A gabor filter is a gaussian kernel function modulated by a sinusoidal plane wave. More details can be found on the [Wikipedia page](https://en.wikipedia.org/wiki/Gabor_filter). Implement any number of Gabor filters and **DO NOT use any built-in or third party code for this.** A sample of gabor filters is shown below.
 
 <div class="fig fighighlight">
@@ -99,7 +102,7 @@ Gabor Filters are designed based on the filters in the human visual system. A ga
 
 
 <a name='texton'></a>
-### Texton Map $$\mathcal{T}$$
+### 2.4. Texton Map $$\mathcal{T}$$
 Filtering an input image with each element of your filter bank (you can have a lot of them from all the three filter banks you implemented) results in a vector of fillter responses centered on each pixel. For instance, if your filter bank has $$N$$ filters, you'll have $$N$$ filter responses at each pixel. A distribution of these $$N$$-dimensional filter responses could be thought of as encoding texture properties. We will simplify this
 representation by replacing each $$N$$-dimensional vector with a discrete texton id. We will do this by clustering the filter responses at all pixels in the image in to $$K$$ textons using kmeans
 (feel free to use Scikit learn's ``sklearn.cluster.KMeans`` function or implement your own). Each pixel is then represented by a one dimensional,
@@ -108,15 +111,15 @@ discrete cluster id instead of a vector of high-dimensional, real-valued filter 
 
 
 <a name='brightness'></a>
-### Brightness Map $$\mathcal{B}$$
+### 2.5. Brightness Map $$\mathcal{B}$$
 The concept of the brightness map is simple, to capture the brightness changes in the image. Here, again we cluster the brightness values using kmeans clustering (grayscale equivalent of the color image) into a chosen number of clusters (16 clusters seems to work well, feel free to experiment). We call the clustered output as the brightness map $$\mathcal{B}$$. 
 
 <a name='color'></a>
-### Color Map $$\mathcal{C}$$
+### 2.6. Color Map $$\mathcal{C}$$
 The concept of the color map is to capture the color changes or chrominance content in the image. Here, again we cluster the color values (you have 3 values per pixel if you have RGB color channels) using kmeans clustering (feel free to use alternative color spaces like YCbCr, HSV or Lab) into a chosen number of clusters (16 clusters seems to work well, feel free to experiment). We call the clustered output as the color map $$\mathcal{C}$$. Note that you can also cluster each color channel seprarately here. Feel free to experiment with different methods.
 
 <a name='grad'></a>
-### Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$
+### 2.7. Texture, Brightness and Color Gradients $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$
 To obtain $$\mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$, we need to compute differences of values across different shapes and sizes. This can be achieved very efficiently by the use of Half-disc masks. 
 
 Let us first implement these Half-disc masks. Here's an image of how these Half-disc masks look.
@@ -159,11 +162,11 @@ The above procedure should generate a 2D matrix of gradient values. Simply repea
 where $$(m,n)$$ are dimensions of the image and $$N$$ is the number of filters.
 
 <a name='sobelcanny'></a>
-### Sobel and Canny baselines
+### 2.8. Sobel and Canny baselines
 Run the ``canny_pb`` and ``sobel_pb`` functions to generate canny and sobel baseline edges which we will use to generate pb edges.
 
 <a name='pbliteout'></a>
-### Pb-lite Output
+### 2.9. Pb-lite Output
 The final step is to combine information from the features with a baseline method (based on Sobel or Canny edge detection or an average of both) using a simple equation 
 
 $$
@@ -176,20 +179,20 @@ The magnitude of the features represents the strength of boundaries, hence, a si
 
 
 <a name='dl'></a>
-## Phase 2: Deep Dive on Deep Learning
+## 3. Phase 2: Deep Dive on Deep Learning
 
 <a name='prob'></a>
-### Problem Statement
+### 3.1. Problem Statement
 For phase 2 of this homework, you'll be implementing multiple neural network architectures and comparing them on various criterion like number of parameters, train and test set accuracies and provide detailed analysis of why one architecture works better than another one.
 
 <a name='cifar10'></a>
-### Dataset
+### 3.2. Dataset
 CIFAR-10 is a dataset consisting of 60000 $$32\times 32$$ colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. More details about the datset can be found [here](http://www.cs.toronto.edu/~kriz/cifar.html).
 
 Download the dataset nd use th training images (50000 images) to train your neural network and report the test set accuracy on the test set provided (10000). **DO NOT use the test set to train your networks.**
 
 <a name='firstnn'></a>
-### Train your first neural network
+### 3.3. Train your first neural network
 The task in this part is to train a neural network (preferably convolutional neural network) on Tensorflow for the task of classification. The input is a single CIFAR-10 image and the output is the probabilities of 10 classes. There are a lot of resources online to learn how to program a simple neural network, tune hyperparameters for CIFAR-10. A good starting point is the [official Tensorflow tutorial](https://www.tensorflow.org/tutorials/images/deep_cnn) and this great tutorial by [Hvass Labs](https://github.com/Hvass-Labs/TensorFlow-Tutorials). If you are new to deep learning, we recommend reading up basics from [CS231n from Stanford University here](http://cs231n.github.io/). 
 
 Here are some more concrete details. Feel free to use any architecture and optimizer for this part. You'll be using cross entropy loss for training. Choose the number of epochs, batch size appropriately. We recommend using the ``tf.layers`` and ``tf.nn`` API for implementing layers. Report the train accuracy over epochs, test accuracy over epochs, number of parameters in your model (details on this later), your architecture, other hyperparameters chosen such as optimizer, learning rate and batch size.
@@ -205,7 +208,7 @@ with tf.Session() as sess:
 Congrats you've just successfully trained your first neural network.
 
 <a name='improveacc'></a>
-### Improving Accuracy of your neural network
+### 3.4. Improving Accuracy of your neural network
 Now that we have a baseline neural network working, let's try to improve the accuracy by doing simple tricks.
 1. Standardize your data input if you haven't already. There are a lot of ways to do this. Feel free to search for different methods. A simple way is to scale data from [0,255] to [-1,1]. 
 2. Decay your learning rate as you train or Increase your batch size as you train. Refer to [this paper](https://arxiv.org/abs/1711.00489) for more details.
@@ -216,42 +219,49 @@ Now that we have a baseline neural network working, let's try to improve the acc
 Now, feel free to implement as many of these as possible and present a detailed analysis of your findings as before.
 
 <a name='otherarch'></a>
-### ResNet, ResNeXt, DenseNet
+### 3.5. ResNet, ResNeXt, DenseNet
 Now, let's make the architectures more efficient in-terms of memory usage (number of parameters), computation (number of operations) and accuracy. Read up the concepts from [ResNet](https://arxiv.org/abs/1512.03385), [ResNeXt](https://arxiv.org/abs/1611.05431) and [DenseNet](https://arxiv.org/abs/1608.06993) and implement all of these architectures with the parameters of your choice. **DO NOT use any built-in or third party code for this** apart from the API functions mentioned before. 
 
 Present a detailed analysis of all these architectures with your earlier findings. 
 
 
 <a name='sub'></a>
-## Submission Guidelines
+## 4. Submission Guidelines
 
 <b> If your submission does not comply with the following guidelines, you'll be given ZERO credit </b>
 
-### File tree and naming
+<a name='files'></a>
+### 4.1. File tree and naming
 
-Your submission on Canvas must be a zip file, following the naming convention **YourDirectoryID_hw1.zip**.  For example, xyz123_hw1.zip.  The file **must have the following directory structure**, based on the starter files
+Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_hw0.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_hw0.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``Wrapper1.py`` and ``Wrapper2.py`` for Phase 1 and 2 respectively. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. Please **DO NOT** include data in your submission.
 
-YourDirectoryID_hw1.zip.
- - data/. 
- - plot_eigen.m.
- - least_square.m.
- - report.pdf
+```
+YourDirectoryID_hw0.zip
+│   README.md
+|   Your Code files 
+		├── Any subfolders you want along with files
+|   Wrapper1.py 
+|	Wrapper2.py
+└──	Report.pdf
 
+```
 
-### Report
+<a name='report'></a>
+### 4.2. Report
 For each section of the homework, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
 
-- Your understanding of eigenvectors and eigenvalues
-- Your choice of outlier rejection technique for each dataset
-- Limitation of each outliers rejection technique
+- Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
+- Present a detailed block diagram for Phase 1 along with outputs images of the filter banks (all of them with appropriate labels), $$\mathcal{T}, \mathcal{B}, \mathcal{C}, \mathcal{T}_g, \mathcal{B}_g, \mathcal{C}_g$$, sobel and canny baselines and the final pb-lite output for all the images provided. Provide a detailed analysis of the approach and why you think it's better than the sobel and canny baselines.
+- Present the network architecture details for Phase 2, specifically Section 3.3, also present details like number of parameters in your model, run-time and so on. Provide plots of train and test accuracy versus epochs. Present details about hyperparameters used like learning rate, choice of optimizer and so on.
+- Present architecture details for Section 3.4, all the tricks you employed to imrpove accuracy. Also present details like number of parameters in your model, run-time and so on. Provide plots of train and test accuracy versus epochs. Present details about hyperparameters used like learning rate, choice of optimizer and so on.
+- Present architecture details for Section 3.5 (all three architectures). Also present details like number of parameters in your model, run-time and so on. Provide plots of train and test accuracy versus epochs. Present details about hyperparameters used like learning rate, choice of optimizer and so on.
+- Finally, present a comparison of number of parameters, train and test accuracy, run-time and other competences of your choice in a tabluar form for Sections 3.3, 3.4 and 3.5.
 
-
-As usual, your report must be full English sentences,**not** commented code. There is a word limit of 750 words and no minimum length requirement
 
 <a name='coll'></a>
-## Collaboration Policy
-You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup.  For the full honor code refer to the CMSC733 Fall 2019 website
+## 5. Collaboration Policy
+You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup.  For the full honor code refer to the CMSC733 Fall 2019 website.
 
-
-## Acknowledgements
+<a name='ack'></a>
+## 6. Acknowledgements
 This fun homework was inspired by a similar project in  Brown University's <a href="http://cs.brown.edu/courses/cs143/2011/proj2/">CS 143</a> (CIntroduction to Computer Vision).
