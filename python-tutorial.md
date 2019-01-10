@@ -1,5 +1,5 @@
 ---
 layout: page
-title: Math Tutorial
+title: Python Tutorial
 permalink: /python-tutorial/
 ---

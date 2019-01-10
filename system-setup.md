@@ -1,6 +1,6 @@
 ---
 layout: page
-title: System Setup and Matlab Resources
+title: System Setup
 permalink: /system-setup/
 ---
 
