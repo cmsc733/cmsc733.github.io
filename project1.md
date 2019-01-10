@@ -171,8 +171,9 @@ Now that you've downloaded the dataset, we need to generate synthetic data, i.e.
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/ActiveRegion.png" width="100%">
   <div class="figcaption">
-  	Fig. 9: Patch is shown as dashed blue box. Active region is shown as a blue highlight -- this is the region where the top left corner of the patch can lie such that all the pixels in the patch will lie within the image after warping the random extracted patch. Red line shows the maximum perturbation $$\rho$$. 
+  	Fig. 9: Patch is shown as dashed blue box. Active region is shown as a blue highlight -- this is the region where the top left corner of the patch can lie such that all the pixels in the patch will lie within the image after warping the random extracted patch. Red line shows the maximum perturbation \(\rho\). 
   </div>
+  <div style="clear:both;"></div>
 </div>
 
 Let's go through the steps of generating data now. 
