@@ -308,7 +308,7 @@ YourDirectoryID_hw1.zip
 <a name='report'></a>
 ### 7.2. Report
 
-For each section of the homework, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
+For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
 
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
 - For Phase 1, present input and output images after each section (corner detection, ANMS, feature extraction, feature matching, feature matches after RANSAC) and final panorama. 
