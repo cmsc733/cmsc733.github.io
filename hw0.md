@@ -1,7 +1,7 @@
 ---
 layout: page
 mathjax: true
-title: Shake My Boundary
+title: Alohomora!
 permalink: /2019/hw/hw0/
 ---
 
