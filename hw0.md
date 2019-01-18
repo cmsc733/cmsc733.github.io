@@ -35,7 +35,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Due Date 
-**11:59PM, Tuesday, February 26, 2019.**
+**11:59PM, Tuesday, January 29, 2019.**
 
 <a name='pblite'></a>
 ## 2. Phase 1: Shake My Boundary
@@ -190,13 +190,20 @@ For phase 2 of this homework, you'll be implementing multiple neural network arc
 ### 3.2. Dataset
 CIFAR-10 is a dataset consisting of 60000 $$32\times 32$$ colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. More details about the datset can be found [here](http://www.cs.toronto.edu/~kriz/cifar.html).
 
-Download the dataset nd use th training images (50000 images) to train your neural network and report the test set accuracy on the test set provided (10000). **DO NOT use the test set to train your networks.**
+A randomized version of the CIFAR-10 dataset with 50000 training images and 10000 test images is given to you in the ``CIFAR10`` folder of your ``hw0.zip`` file. ``CIFAR10`` has two subfolders ``Train`` and ``Test`` for training and testing images respectively stored in ``.png`` format for ease of viewing and loading.
 
 <a name='firstnn'></a>
 ### 3.3. Train your first neural network
-The task in this part is to train a neural network (preferably convolutional neural network) on Tensorflow for the task of classification. The input is a single CIFAR-10 image and the output is the probabilities of 10 classes. There are a lot of resources online to learn how to program a simple neural network, tune hyperparameters for CIFAR-10. A good starting point is the [official Tensorflow tutorial](https://www.tensorflow.org/tutorials/images/deep_cnn) and this great tutorial by [Hvass Labs](https://github.com/Hvass-Labs/TensorFlow-Tutorials). If you are new to deep learning, we recommend reading up basics from [CS231n from Stanford University here](http://cs231n.github.io/). 
+The task in this part is to train a neural network (preferably convolutional neural network) on TensorFlow for the task of classification. The input is a single CIFAR-10 image and the output is the probabilities of 10 classes. The starter code given to you has ``Train.py`` file for training and ``Test.py`` for testing. Fill in the following files with respective details.
+- ``Optimizer`` value with various parameters in ``TrainOperation`` function in ``Train.py`` file (Feel free to use any architecture and optimizer for this part)
+- ``loss function`` in ``TrainOperation`` function in ``Train.py`` file (You'll be using cross entropy loss for training)
+- Network architecture in ``CIFAR10Model`` function in ``Network/Network.py`` file (We recommend using the ``tf.layers`` and ``tf.nn`` API for implementing layers)
 
-Here are some more concrete details. Feel free to use any architecture and optimizer for this part. You'll be using cross entropy loss for training. Choose the number of epochs, batch size appropriately. We recommend using the ``tf.layers`` and ``tf.nn`` API for implementing layers. Report the train accuracy over epochs, test accuracy over epochs, number of parameters in your model (details on this later), your architecture, other hyperparameters chosen such as optimizer, learning rate and batch size.
+If you are super new to machine learning and deep learning, there are a lot of resources online to learn how to program a simple neural network, tune hyperparameters for CIFAR-10. A good starting point is the [official Tensorflow tutorial](https://www.tensorflow.org/tutorials/images/deep_cnn) and this great tutorial by [Hvass Labs](https://github.com/Hvass-Labs/TensorFlow-Tutorials). If you are new to deep learning, we recommend reading up basics from [CS231n from Stanford University here](http://cs231n.github.io/). 
+
+The code given to you has Tensorboard support and displays training accuracy per batch and the loss value. You can run TensorBoard using the following command ``tensorboard --logdir=path/to/log-directory``.
+
+Report the train accuracy over epochs (training accuracy over the whole train dataset not just minibatches as given to you!, you need to implement this), test accuracy over epochs (test accuracy over the whole test dataset!, you need to implement this), number of parameters in your model (code for this can be found in ``Test.py`` and snippet is also given next), plot of loss value over epochs (not obver minibatches as given to you!, you need to sum up loss values for all iterations of an epoch to achieve this), your architecture, other hyperparameters chosen such as optimizer, learning rate and batch size. Also present a confusion matrix for both training and testing data (code in ``Test.py``).
 
 You can use the following snippet of code to obtain the bumber of parameters in your model. This loads a model from the ``ModelPath`` and prints out the number of parameters.
 
@@ -211,19 +218,19 @@ Congrats you've just successfully trained your first neural network.
 <a name='improveacc'></a>
 ### 3.4. Improving Accuracy of your neural network
 Now that we have a baseline neural network working, let's try to improve the accuracy by doing simple tricks.
-1. Standardize your data input if you haven't already. There are a lot of ways to do this. Feel free to search for different methods. A simple way is to scale data from [0,255] to [-1,1]. 
+1. Standardize your data input if you haven't already. There are a lot of ways to do this. Feel free to search for different methods. A simple way is to scale data from [0,255] to [-1,1]. Fill in this code in the ``GenerateBatch`` function of ``Train.py`` file.
 2. Decay your learning rate as you train or Increase your batch size as you train. Refer to [this paper](https://arxiv.org/abs/1711.00489) for more details.
 3. Augment your data to artificially make your dataset larger. Refer to ``tf.image`` API for nice data augmentation functions.
 4. Add Batch Normalization between layers. 
 5. Change the hyperparameters in your architecture such as number of layers, number of neurons.
 
-Now, feel free to implement as many of these as possible and present a detailed analysis of your findings as before.
+Now, feel free to implement as many of these as possible and present a detailed analysis of your findings as before. Present the same details as before, train and test accuracy over epochs, number of parameters in your model, loss value over epochs, your architecture and details of other tricks you employed. Also present a confusion matrix for both training and testing data (code in ``Test.py``).
 
 <a name='otherarch'></a>
 ### 3.5. ResNet, ResNeXt, DenseNet
-Now, let's make the architectures more efficient in-terms of memory usage (number of parameters), computation (number of operations) and accuracy. Read up the concepts from [ResNet](https://arxiv.org/abs/1512.03385), [ResNeXt](https://arxiv.org/abs/1611.05431) and [DenseNet](https://arxiv.org/abs/1608.06993) and implement all of these architectures with the parameters of your choice. **DO NOT use any built-in or third party code for this** apart from the API functions mentioned before. 
+Now, let's make the architectures more efficient in-terms of memory usage (number of parameters), computation (number of operations) and accuracy. Read up the concepts from [ResNet](https://arxiv.org/abs/1512.03385), [ResNeXt](https://arxiv.org/abs/1611.05431) and [DenseNet](https://arxiv.org/abs/1608.06993) and implement all of these architectures with the parameters of your choice. **DO NOT use any built-in or third party code for this** apart from the API functions mentioned before.  Fill in the code in ``Network/Network.py`` as different functions.
 
-Present a detailed analysis of all these architectures with your earlier findings. 
+Present a detailed analysis of all these architectures with your earlier findings. Present the same details as before, train and test accuracy over epochs, number of parameters in your model, loss value over epochs, your architecture and details of other tricks you employed. Also present a confusion matrix for both training and testing data (code in ``Test.py``).
 
 
 <a name='sub'></a>
