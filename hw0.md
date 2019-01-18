@@ -190,20 +190,30 @@ For phase 2 of this homework, you'll be implementing multiple neural network arc
 ### 3.2. Dataset
 CIFAR-10 is a dataset consisting of 60000 $$32\times 32$$ colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. More details about the datset can be found [here](http://www.cs.toronto.edu/~kriz/cifar.html).
 
+Sample images from each class of the CIFAR-10 dataset is shown below:
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/hw0/cifar10.png" width="100%">
+  <div class="figcaption">
+    Fig 5: Sample images from CIFAR-10 dataset.
+  </div>
+</div>
+
+
 A randomized version of the CIFAR-10 dataset with 50000 training images and 10000 test images is given to you in the ``CIFAR10`` folder of your ``hw0.zip`` file. ``CIFAR10`` has two subfolders ``Train`` and ``Test`` for training and testing images respectively stored in ``.png`` format for ease of viewing and loading.
 
 <a name='firstnn'></a>
 ### 3.3. Train your first neural network
-The task in this part is to train a neural network (preferably convolutional neural network) on TensorFlow for the task of classification. The input is a single CIFAR-10 image and the output is the probabilities of 10 classes. The starter code given to you has ``Train.py`` file for training and ``Test.py`` for testing. Fill in the following files with respective details.
+The task in this part is to train a convolutional neural network on TensorFlow for the task of classification. The input is a single CIFAR-10 image and the output is the probabilities of 10 classes. The starter code given to you has ``Train.py`` file for training and ``Test.py`` for testing. Fill in the following files with respective details.
 - ``Optimizer`` value with various parameters in ``TrainOperation`` function in ``Train.py`` file (Feel free to use any architecture and optimizer for this part)
 - ``loss function`` in ``TrainOperation`` function in ``Train.py`` file (You'll be using cross entropy loss for training)
 - Network architecture in ``CIFAR10Model`` function in ``Network/Network.py`` file (We recommend using the ``tf.layers`` and ``tf.nn`` API for implementing layers)
 
-If you are super new to machine learning and deep learning, there are a lot of resources online to learn how to program a simple neural network, tune hyperparameters for CIFAR-10. A good starting point is the [official Tensorflow tutorial](https://www.tensorflow.org/tutorials/images/deep_cnn) and this great tutorial by [Hvass Labs](https://github.com/Hvass-Labs/TensorFlow-Tutorials). If you are new to deep learning, we recommend reading up basics from [CS231n from Stanford University here](http://cs231n.github.io/). 
+If you are super new to machine learning and deep learning, there are a lot of resources online to learn how to program a simple neural network, tune hyperparameters for CIFAR-10. A good starting point is the [official Tensorflow tutorial](https://www.tensorflow.org/tutorials/images/deep_cnn) and [this great tutorial by Hvass Labs](https://github.com/Hvass-Labs/TensorFlow-Tutorials). If you are new to deep learning, we recommend reading up basics from [CS231n course offered by Stanford University here](http://cs231n.github.io/). 
 
-The code given to you has Tensorboard support and displays training accuracy per batch and the loss value. You can run TensorBoard using the following command ``tensorboard --logdir=path/to/log-directory``.
+The starter code given to you has Tensorboard code snippets built-in and displays training accuracy per batch and the loss value. You can run TensorBoard using the following command ``tensorboard --logdir=path/to/log-directory``.
 
-Report the train accuracy over epochs (training accuracy over the whole train dataset not just minibatches as given to you!, you need to implement this), test accuracy over epochs (test accuracy over the whole test dataset!, you need to implement this), number of parameters in your model (code for this can be found in ``Test.py`` and snippet is also given next), plot of loss value over epochs (not obver minibatches as given to you!, you need to sum up loss values for all iterations of an epoch to achieve this), your architecture, other hyperparameters chosen such as optimizer, learning rate and batch size. Also present a confusion matrix for both training and testing data (code in ``Test.py``).
+Report the train accuracy over epochs (training accuracy over the whole train dataset not just minibatches as given to you!, you need to implement this), test accuracy over epochs (test accuracy over the whole test dataset!, you need to implement this), number of parameters in your model (code for this can be found in ``Test.py`` and snippet is also given next), plot of loss value over epochs (not over minibatches as given to you!, you need to sum up loss values for all iterations of an epoch to achieve this), your architecture, other hyperparameters chosen such as optimizer, learning rate and batch size. Also present a confusion matrix for both training and testing data (code in ``Test.py``).
 
 You can use the following snippet of code to obtain the bumber of parameters in your model. This loads a model from the ``ModelPath`` and prints out the number of parameters.
 
@@ -236,7 +246,7 @@ Present a detailed analysis of all these architectures with your earlier finding
 <a name='sub'></a>
 ## 4. Submission Guidelines
 
-<b> If your submission does not comply with the following guidelines, you'll be given ZERO credit </b>
+**If your submission does not comply with the following guidelines, you'll be given ZERO credit.**
 
 <a name='files'></a>
 ### 4.1. File tree and naming
