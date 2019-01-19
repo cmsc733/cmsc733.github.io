@@ -28,8 +28,9 @@ Table of Contents:
     - [3.4. Improving Accuracy of your neural network](#improveacc)
     - [3.5. ResNet, ResNeXt, DenseNet](#otherarch)
 - [4. Submission Guidelines](#sub)
-    - [4.1. File tree and naming](#files)
-    - [4.2. Report](#report)
+    - [4.1. Starter Code](#starter)
+    - [4.2. File tree and naming](#files)
+    - [4.3. Report](#report)
 - [5. Allowed and Disallowed functions](#funcs) 
 - [6. Collaboration Policy](#coll)
 - [7. Acknowledgements](#ack)
@@ -284,9 +285,14 @@ Present a detailed analysis of all these architectures with your earlier finding
 
 **If your submission does not comply with the following guidelines, you'll be given ZERO credit.**
 
+<a name='starter'></a>
+
+### 4.1. Starter Code
+Download the Starter Code for both Phase 1 and Phase 2 from [here](https://drive.google.com/file/d/1vA3FdBt7qrq591AgYgfmTR6cjtADSO6s/view?usp=sharing).
+
 <a name='files'></a>
 
-### 4.1. File tree and naming
+### 4.2. File tree and naming
 
 Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_hw0.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_hw0.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``YourDirectoryID_hw0/Phase1/Code/Wrapper.py`` for Phase 1; ``YourDirectoryID_hw0/Phase2/Code/Train.py`` and ``YourDirectoryID_hw0/Phase2/Code/Test.py`` for Phase 2. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. 
 
@@ -315,7 +321,7 @@ YourDirectoryID_hw0.zip
 
 <a name='report'></a>
 
-### 4.2. Report
+### 4.3. Report
 
 For each section of the homework, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
 
