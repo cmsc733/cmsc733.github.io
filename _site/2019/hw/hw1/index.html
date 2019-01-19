@@ -51,22 +51,25 @@
 
   <article class="post-content">
   <p>Table of Contents:<br />
-- <a href="#due">Due Date</a><br />
-- <a href="#data">Data</a><br />
-- <a href="#init">Initial Parameter Estimation</a><br />
-  - <a href="#solveK">Solving for approximate <script type="math/tex">K</script> or camera intrinsic matrix</a><br />
-  - <a href="#solveRT">Estimate approximate <script type="math/tex">R</script> and <script type="math/tex">t</script> or camera extrinsics</a><br />
-  - <a href="#solvedist">Approximate Distortion <script type="math/tex">k_c</script></a><br />
-- <a href="#nonlinmin">Non-linear Geometric Error Minimization</a><br />
-- <a href="#sub">Submission Guidelines</a><br />
-- <a href="#coll">Collaboration Policy</a></p>
+- <a href="#due">1. Due Date</a><br />
+- <a href="#intro">2. Introduction</a><br />
+- <a href="#data">3. Data</a><br />
+- <a href="#init">4. Initial Parameter Estimation</a><br />
+  - <a href="#solveK">4.1. Solving for approximate <script type="math/tex">K</script> or camera intrinsic matrix</a><br />
+  - <a href="#solveRT">4.2. Estimate approximate <script type="math/tex">R</script> and <script type="math/tex">t</script> or camera extrinsics</a><br />
+  - <a href="#solvedist">4.3. Approximate Distortion <script type="math/tex">k_c</script></a><br />
+- <a href="#nonlinmin">5. Non-linear Geometric Error Minimization</a><br />
+- <a href="#sub">6. Submission Guidelines</a><br />
+  - <a href="#files">6.1. File tree and naming</a><br />
+  - <a href="#report">6.2. Report</a><br />
+- <a href="#coll">7. Collaboration Policy</a></p>
 
 <p><a name="due"></a><br />
-## Due Date <br />
-10:59AM, Thursday, September 6, 2018</p>
+## 1. Due Date <br />
+<strong>10:59AM, Thursday, September 6, 2018.</strong></p>
 
 <p><a name="intro"></a><br />
-## Introduction</p>
+## 2. Introduction</p>
 
 <p>Estimating parameters of the camera like the focal length, distortion coefficients and principle point is called <strong>Camera Calibration</strong>. It is one of the most time consuming and important part of any computer vision research involving 3D geometry. An automatic way to perform efficient and robust camera calibration would be wonderful. One such method was presented Zhengyou Zhang of Microsoft in <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr98-71.pdf">this paper</a> and is regarded as one of the hallmark papers in camera calibration. Recall that the camera calibration matrix <script type="math/tex">K</script> is given as follows</p>
 
@@ -80,31 +83,31 @@ f_x & 0 & c_x\\
 <p>and radial distortion parameters are denoted by <script type="math/tex">k_1</script> and <script type="math/tex">k_2</script> respectively. Your task is to estimate <script type="math/tex">f_x, f_y, c_x, c_y, k_1, k_2</script>.</p>
 
 <p><a name="data"></a><br />
-## Data<br />
+## 3. Data<br />
 The Zhang’s paper relies on a calibration target (checkerboard in our case) to estimate camera intrinsic parameters. The calibration target used can be found in the file <code class="highlighter-rouge">checkerboardPattern.pdf</code>. This was<br />
 printed on an A4 paper and the size of each square was 21.5mm. Note that the <script type="math/tex">Y</script> axis has odd number of squares and <script type="math/tex">X</script> axis has even number of squares. It is a general practice to neglect<br />
 the outer squares (extreme square on each side and in both directions). Thirteen images taken from a Google Pixel XL phone with focus locked are given in the folder <code class="highlighter-rouge">./Code/Imgs</code> which you will use to calibrate.</p>
 
 <p><a name="init"></a><br />
-## Initial Parameter Estimation<br />
+## 4. Initial Parameter Estimation<br />
 We are trying to get a good initial estimate of the parameters so that we can feed it into the non-linear optimizer. We will define the parameters we are using in the code next.</p>
 
 <p><script type="math/tex">x</script> denotes the image points, <script type="math/tex">X</script> denotes the world points (points on the checkerboard), <script type="math/tex">k_s</script> denotes the radial distortion parameters, <script type="math/tex">K</script> denotes the camera calibration matrix, <script type="math/tex">R</script> and <script type="math/tex">t</script> represent the rotation matrix and the translation of the camera in the world frame.</p>
 
 <p><a name="solveK"></a><br />
-### Solving for approximate <script type="math/tex">K</script> or camera intrinsic matrix<br />
+### 4.1. Solving for approximate <script type="math/tex">K</script> or camera intrinsic matrix<br />
 Refer to Section 3.1 in <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr98-71.pdf">this paper</a> for a solution of parameters in <script type="math/tex">K</script>. Use <code class="highlighter-rouge">cv2.findChessboardCorners</code> function in OpenCV to find the corners of the Checker board with appropriate parameters here.</p>
 
 <p><a name="solveRT"></a><br />
-### Estimate approximate <script type="math/tex">R</script> and <script type="math/tex">t</script> or camera extrinsics<br />
+### 4.2. Estimate approximate <script type="math/tex">R</script> and <script type="math/tex">t</script> or camera extrinsics<br />
 Refer to Section 3.1 in <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr98-71.pdf">this paper</a>  for details on how to estimate <script type="math/tex">R</script> and <script type="math/tex">t</script>. Note that the author mentions a method to convert a normal matrix to a rotation matrix in Appendix C, this can be neglected most of the times.</p>
 
 <p><a name="solvedist"></a><br />
-### Approximate Distortion <script type="math/tex">k_c</script><br />
+### 4.3. Approximate Distortion <script type="math/tex">k_c</script><br />
 Because we assumed that the camera has minimal distortion we can assume that <script type="math/tex">k_c = [0, 0]^T</script> for a good initial estimate.</p>
 
 <p><a name="nonlinmin"></a><br />
-## Non-linear Geometric Error Minimization<br />
+## 5. Non-linear Geometric Error Minimization<br />
 We have the initial estimates of <script type="math/tex">K, R, t, k_s</script>, now we want to minimize the geometric error defined as given below</p>
 
 <script type="math/tex; mode=display">\sum_{i=1}^N \sum_{j=1}^M \vert \vert x_{i,j} - \hat x_{i,j}\left(K, R_i, t_i, X_j, k_s \right)\vert \vert</script>
@@ -112,34 +115,37 @@ We have the initial estimates of <script type="math/tex">K, R, t, k_s</script>, 
 <p>Here <script type="math/tex">x_{i,j}</script> and <script type="math/tex">\hat x_{i,j}</script> are an inhomogeneous representation. Feel free to use <code class="highlighter-rouge">scipy.optimize</code> to minimize the loss function described above. Refer to Section 3.3 in <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr98-71.pdf">this paper</a> for a detailed explanation of the distortion model, you’ll need this part for the minimization function.</p>
 
 <p><a name="sub"></a><br />
-## Submission Guidelines</p>
+## 6. Submission Guidelines</p>
 
 <p><b> If your submission does not comply with the following guidelines, you’ll be given ZERO credit </b></p>
 
-<h3 id="file-tree-and-naming">File tree and naming</h3>
+<p><a name="files"></a><br />
+### 6.1. File tree and naming</p>
 
-<p>Your submission on Canvas must be a zip file, following the naming convention <strong>YourDirectoryID_hw1.zip</strong>.  For example, xyz123_hw1.zip.  The file <strong>must have the following directory structure</strong>, based on the starter files</p>
+<p>Your submission on ELMS/Canvas must be a <code class="highlighter-rouge">zip</code> file, following the naming convention <code class="highlighter-rouge">YourDirectoryID_hw1.zip</code>. If you email ID is <code class="highlighter-rouge">abc@umd.edu</code> or <code class="highlighter-rouge">abc@terpmail.umd.edu</code>, then your <code class="highlighter-rouge">DirectoryID</code> is <code class="highlighter-rouge">abc</code>. For our example, the submission file should be named <code class="highlighter-rouge">abc_hw1.zip</code>. The file <strong>must have the following directory structure</strong> because we’ll be autograding assignments. The file to run for your project should be called <code class="highlighter-rouge">Wrapper.py</code>. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in <code class="highlighter-rouge">README.md</code> file. Please <strong>DO NOT</strong> include data in your submission.</p>
 
-<p>YourDirectoryID_hw1.zip.<br />
- - data/. <br />
- - plot_eigen.m.<br />
- - least_square.m.<br />
- - report.pdf</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>YourDirectoryID_hw1.zip
+│   README.md
+|   Your Code files 
+|		├── Any subfolders you want along with files
+|   Wrapper.py 
+└──	Report.pdf
+</code></pre>
+</div>
+<p><a name="report"></a><br />
+### 6.2. Report</p>
 
-<h3 id="report">Report</h3>
 <p>For each section of the homework, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:</p>
 
 <ul>
-  <li>Your understanding of eigenvectors and eigenvalues</li>
-  <li>Your choice of outlier rejection technique for each dataset</li>
-  <li>Limitation of each outliers rejection technique</li>
+  <li>Your report <strong>MUST</strong> be typeset in LaTeX in the IEEE Tran format provided to you in the <code class="highlighter-rouge">Draft</code> folder and should of a conference quality paper.</li>
+  <li>Present images of checkerboard after rectification and reprojection of corners on rectified image.</li>
+  <li>Present the value of re-projection error.</li>
 </ul>
 
-<p>As usual, your report must be full English sentences,<strong>not</strong> commented code. There is a word limit of 750 words and no minimum length requirement</p>
-
 <p><a name="coll"></a><br />
-## Collaboration Policy<br />
-You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else’s code in writing your project, you must properly cite it in your code (in comments) and your writeup.  For the full honor code refer to the CMSC426 Fall 2018 website</p>
+## 7. Collaboration Policy<br />
+You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else’s code in writing your project, you must properly cite it in your code (in comments) and your writeup.  For the full honor code refer to the CMSC733 Fall 2019 website.</p>
 
   </article>
 

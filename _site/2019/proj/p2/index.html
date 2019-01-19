@@ -51,28 +51,30 @@
 
   <article class="post-content">
   <p>Table of Contents:<br />
-- <a href="#due">Deadline</a><br />
-- <a href="#intro">Introduction</a><br />
-- <a href="#prob">Problem Statement</a><br />
-- <a href="#data">Data Collection</a><br />
-- <a href="#ph1">Phase 1: Traditional Approach</a><br />
-    - <a href="#landmarks">Facial Landmarks detection</a><br />
-    - <a href="#tri">Face Warping using Triangulation</a><br />
-    - <a href="#tps">Face Warping using Thin Plate Spline</a><br />
-    - <a href="#replace">Replace Face</a><br />
-    - <a href="#blending">Blending</a><br />
-    - <a href="#motfilt">Motion Filtering</a><br />
-- <a href="#ph2">Phase 2: Deep Learning Approach</a><br />
-- <a href="#testset">Notes about Test Set</a><br />
-- <a href="#sub">Submission Guidelines</a><br />
-- <a href="#coll">Collaboration Policy</a></p>
+- <a href="#due">1. Deadline</a><br />
+- <a href="#intro">2. Introduction</a><br />
+- <a href="#data">3. Data Collection</a><br />
+- <a href="#ph1">4. Phase 1: Traditional Approach</a><br />
+    - <a href="#landmarks">4.1. Facial Landmarks detection</a><br />
+    - <a href="#tri">4.2. Face Warping using Triangulation</a><br />
+    - <a href="#tps">4.3. Face Warping using Thin Plate Spline</a><br />
+    - <a href="#replace">4.4. Replace Face</a><br />
+    - <a href="#blending">4.5. Blending</a><br />
+    - <a href="#motfilt">4.6. Motion Filtering</a><br />
+- <a href="#ph2">5. Phase 2: Deep Learning Approach</a><br />
+- <a href="#testset">6. Notes about Test Set</a><br />
+  - <a href="#files">6.1. File tree and naming</a><br />
+  - <a href="#report">6.2. Report</a><br />
+- <a href="#sub">7. Submission Guidelines</a><br />
+- <a href="#coll">8. Collaboration Policy</a><br />
+- <a href="#ack">9. Acknowledgements</a></p>
 
 <p><a name="due"></a><br />
-## Deadline <br />
-11:59PM, Sunday, March 17, 2019</p>
+## 1. Deadline <br />
+<strong>11:59PM, Sunday, March 17, 2019.</strong></p>
 
-<p><a name="prob"></a><br />
-## Problem Statement<br />
+<p><a name="intro"></a><br />
+## 2. Introduction<br />
 The aim of this project is to implement an end-to-end pipeline to swap faces in a<br />
 video just like <a href="https://www.snapchat.com/">Snapchat’s face swap filter</a> or <a href="http://faceswaplive.com/">this face swap website</a>. It’s a fairly complicated procedure and variants of these have<br />
 been used in many movies. One of the most successful examples has been using these method<br />
@@ -81,7 +83,7 @@ after the sudden death of Paul Walker in a car crash during shooting. And the et
 see how this can be done.</p>
 
 <p><a name="data"></a><br />
-## Data Collection<br />
+## 3. Data Collection<br />
 Record two videos. One of yourself with just your face and the other with<br />
 your face and your friend’s face in all the frames. Convert them to .avi or .mp4 format.<br />
 Save them to the Data folder. Feel free to play around with more videos. In the first video,<br />
@@ -90,7 +92,7 @@ second video we’ll swap the two faces. If there are more than two faces in the
 the two largest faces.</p>
 
 <p><a name="ph1"></a><br />
-## Phase 1: Traditional Approach<br />
+## 4. Phase 1: Traditional Approach<br />
 <!---
     Dlib tutorial for facial landmarks detection
 https://www.pyimagesearch.com/2017/04/03/facial-landmarks-dlib-opencv-python/)
@@ -105,7 +107,7 @@ The overview of the system for face replacement is shown below.</p>
 </div>
 
 <p><a name="landmarks"></a><br />
-### Facial Landmarks detection<br />
+### 4.1. Facial Landmarks detection<br />
 The first step in the traditional approach is to find facial landmarks (important points on the face) so that we have one-to-one correspondence between the facial landmakrs. This is analogous to the detection of corners in the panorama project. One of the major reasons to use facial landmarks instead of using all the points on the face is to reduce computational complexity. Remember that better results can be obtained using all the points (dense flow) or using a meshgrid. For detecting facial landmarks we’ll use dlib library built into OpenCV and python. A sample output of Dlib is shown below.</p>
 
 <div class="fig fighighlight">
@@ -116,7 +118,7 @@ The first step in the traditional approach is to find facial landmarks (importan
 </div>
 
 <p><a name="tri"></a><br />
-### Face Warping using Triangulation<br />
+### 4.2. Face Warping using Triangulation<br />
 Like we discussed before, we have now obtained facial landmarks, but what do we do with them? We need to ideally warp the faces in 3D, however we don’t have 3D information. Hence can we make some assumption about the 2D image to approximate 3D information of the face. One simple way is to triangulate using the facial landmarks as corners and then make the assumption that in each triangle the content is planar (forms a plane in 3D) and hence the warping between the the triangles in two images is affine. Triangulating or forming a triangular mesh over the 2D image is simple but we want to trinagulate such that it’s fast and has an “efficient” triangulation. One such method is obtained by drawing the dual of the Voronoi diagram, i.e., connecting each two neighboring sites in the Voronoi diagram. This is called the <strong>Delaunay Triangulation</strong> and can be constructed in \(\mathcal{O}(n\log{}n)\) time. We want the triangulation to be consistent with the image boundary such that texture regions won’t fae into the background while warping. Delaunay Triangulation tries the maximize the smallest angle in each triangle.</p>
 
 <div class="fig fighighlight">
@@ -197,7 +199,7 @@ Now, given the values of <script type="math/tex">\alpha, \beta, \gamma</script> 
 </div>
 
 <p><a name="tps"></a><br />
-### Face Warping using Thin Plate Spline<br />
+### 4.3. Face Warping using Thin Plate Spline<br />
 As we discussed before, triangulation assumes that we are doing affine transformation on each triangle. This might not be the best way to do warping since the human face has a very complex and smooth shape. A better way to do the transformation is by using Thin Plate Splines (TPS) which can model arbitrarily complex shapes. Now, we want to compute a TPS that maps from the feature points in <script type="math/tex">\mathcal{B}</script> to the corresponding feature<br />
 points in <script type="math/tex">\mathcal{A}</script> . Note that we need two splines, one for the <script type="math/tex">x</script> coordinate and one for the <script type="math/tex">y</script>. A thin<br />
 plate spline has the following form:</p>
@@ -233,7 +235,7 @@ plate spline has the following form:</p>
 <p><strong>Note that, both warping methods solve the same problem but with different formulations, you are required to implement both and compare the results.</strong></p>
 
 <p><a name="replace"></a><br />
-### Replace Face<br />
+### 4.4. Replace Face<br />
 This part is very simple, you have to take all the pixels from face <script type="math/tex">\mathcal{A}</script>, warp them to fit face <script type="math/tex">\mathcal{B}</script> and replace the pixels. Note that simply replacing pixels will not look natural as the lighing and edges look different. A sample output of face replacement is shown below.</p>
 
 <div class="fig fighighlight">
@@ -244,7 +246,7 @@ This part is very simple, you have to take all the pixels from face <script type
 </div>
 
 <p><a name="blending"></a><br />
-### Blending<br />
+### 4.5. Blending<br />
 We will follow a method called Poisson Blending to blend the warped face onto the target face. More details about this method can be found in <a href="http://www.irisa.fr/vista/Papers/2003_siggraph_perez.pdf">this paper</a>. Note that, you <strong>DO NOT</strong> have to implement this part from scratch, feel free to use any open-source implementation and cite your source in your report and your code. Your task in this part is to blend the face as seamlessly as possible. Feel free to reuse concepts you learnt from panorama stitching project’s last part here. A good blending output is shown below.</p>
 
 <div class="fig fighighlight">
@@ -255,47 +257,68 @@ We will follow a method called Poisson Blending to blend the warped face onto th
 </div>
 
 <p><a name="motfilt"></a><br />
-### Motion Filtering<br />
+### 4.6. Motion Filtering<br />
 After you have detected, warped and blended the face your algorithm works really well for individual frames. But when you want to do this for a video, you’ll see flickering. Come up with your own solution to reduce the amount of flickering. You can use a low-pass fillter or a fancy Kalman Filter to do this. Feel free to use any third party or built-in code to do this. If you use third party code, please do not forget to cite them. Look at this holy grail video of face replacement where Jimmy Fallon interviews his cousin.</p>
 
 <iframe src="https://player.vimeo.com/video/257360045" width="640" height="360" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
 <p><a href="https://vimeo.com/257360045">Jimmy Fallon interview his twin!</a> from <a href="https://vimeo.com/user16478660">ZeroCool22</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
 
 <p><a name="ph2"></a><br />
-## Phase 2: Deep Learning Approach<br />
+## 5. Phase 2: Deep Learning Approach<br />
 For this phase, we’ll run an off-the-shelf model to obtain face fiducials using deep learning. We think that implementing this part is fairly trivial and is left as a fun excericse if you want some programming practice (you are not graded on this implementation). We’ll use the code from <a href="https://arxiv.org/abs/1803.07835">this paper</a>, which implements a supervised encoder-decoder model to obtain the full 3D mesh of the face. We recommend you to read the paper for more details. The code from the paper can be found <a href="https://github.com/YadiraF/PRNet">here</a>. Your task is to setup the code and run to obtain face fiducials/full 3D mesh. Use this output to perform face replacement as before. Feel free to use as much code as you want from last part/phase. Present a detailed comparison of both the traditional methods (triangulation and TPS) along with the deep learning method.</p>
 
 <p><a name="testset"></a><br />
-## Notes about Test Set<br />
+## 6. Notes about Test Set<br />
 One day (24 hours) before the deadline, a test set will be released with details of what faces to replace. We’ll grade on the completion of the project and visually appealing results.</p>
 
 <p><a name="sub"></a><br />
-## Submission Guidelines</p>
+## 7. Submission Guidelines</p>
 
 <p><b> If your submission does not comply with the following guidelines, you’ll be given ZERO credit </b></p>
 
-<h3 id="file-tree-and-naming">File tree and naming</h3>
+<p><a name="files"></a><br />
+### 7.1. File tree and naming</p>
 
-<p>Your submission on Canvas must be a zip file, following the naming convention <strong>YourDirectoryID_proj1.zip</strong>. <strong>YourDirectoryID</strong> is the name your username which is used to login to UMD resources such as Testudo or ELMS. For example, if you use “xyz” to login to Testyudo or ELMS then the zip file must be called “xyz_proj1.zip”.  The file <strong>must have the following directory structure</strong>.</p>
+<p>Your submission on ELMS/Canvas must be a <code class="highlighter-rouge">zip</code> file, following the naming convention <code class="highlighter-rouge">YourDirectoryID_p2.zip</code>. If you email ID is <code class="highlighter-rouge">abc@umd.edu</code> or <code class="highlighter-rouge">abc@terpmail.umd.edu</code>, then your <code class="highlighter-rouge">DirectoryID</code> is <code class="highlighter-rouge">abc</code>. For our example, the submission file should be named <code class="highlighter-rouge">abc_p1.zip</code>. The file <strong>must have the following directory structure</strong> because we’ll be autograding assignments. The file to run for your project should be called <code class="highlighter-rouge">Wrapper.py</code>. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in <code class="highlighter-rouge">README.md</code> file. Please <strong>DO NOT</strong> include data in your submission.</p>
 
-<p>YourDirectoryID_proj1.zip.<br />
- - results/.<br />
- - GMM.m<br />
- - trainGMM.m<br />
- - testGMM.m<br />
- - measureDepth.m<br />
- - plotGMM.m<br />
- - report.pdf</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>YourDirectoryID_p2.zip
+│   README.md
+|   Your Code files 
+|   ├── Any subfolders you want along with files
+|   Wrapper.py 
+|   Data
+|   ├── Data1.mp4
+|   ├── Data2.mp4
+|   ├── Data1OutputTri.mp4
+|   ├── Data1OutputTPS.mp4
+|   ├── Data1OutputPRNet.mp4
+|   ├── Data2OutputTri.mp4
+|   ├── Data2OutputTPS.mp4
+|   ├── Data2OutputPRNet.mp4
+└── Report.pdf
+</code></pre>
+</div>
+<p><a name="report"></a><br />
+### 7.2. Report</p>
 
-<h3 id="report">Report</h3>
 <p>For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:</p>
 
+<ul>
+  <li>Your report <strong>MUST</strong> be typeset in LaTeX in the IEEE Tran format provided to you in the <code class="highlighter-rouge">Draft</code> folder and should of a conference quality paper.</li>
+  <li>Present the Data you collected in <code class="highlighter-rouge">Data</code> folder with names <code class="highlighter-rouge">Data1.mp4</code> and <code class="highlighter-rouge">Data2.mp4</code> (Be sure to have the format as <code class="highlighter-rouge">.mp4</code> <strong>ONLY</strong>).</li>
+  <li>Present the output videos for Triangulation, TPS and PRNet as <code class="highlighter-rouge">Data1OutputTri.mp4</code>, <code class="highlighter-rouge">Data1OutputTPS.mp4</code> and <code class="highlighter-rouge">Data1OutputPRNet.mp4</code> for Data 1 respectively in the <code class="highlighter-rouge">Data</code> folder. Also, present outputs videos for Triangulation, TPS and PRNet as <code class="highlighter-rouge">Data2OutputTri.mp4</code>, <code class="highlighter-rouge">Data2OutputTPS.mp4</code> and <code class="highlighter-rouge">Data2OutputPRNet.mp4</code> for Data 2 respectively in the <code class="highlighter-rouge">Data</code> folder. (Be sure to have the format as <code class="highlighter-rouge">.mp4</code> <strong>ONLY</strong>).</li>
+  <li>For Phase 1, present input and output images for two frames from each of the videos using both Triangulation and TPS approach.</li>
+  <li>For Phase 2, present input and output images for two frames from each of the videos using PRNet approach.</li>
+  <li>Present failure cases for both Phase 1 and 2 and present your thoughts on why the failure occurred.</li>
+</ul>
+
 <p><a name="coll"></a><br />
-## Collaboration Policy<br />
+## 8. Collaboration Policy<br />
 You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else’s code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.</p>
 
-<h2 id="acknowledgements">Acknowledgements</h2>
-<p>This fun project was inspired by a similar project in UPenn’s <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision &amp; Computational Photography).</p>
+<p><a name="ack"></a><br />
+## 9. Acknowledgements<br />
+This fun project was inspired by a similar project in UPenn’s <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision &amp; Computational Photography).</p>
 
 
   </article>
