@@ -40,7 +40,8 @@ Table of Contents:
 ## 1. Due Date 
 
 **11:59PM, Tuesday, January 29, 2019.**
-This homework is to be submitted individually. 
+This homework is to be submitted individually. Download starter Code from [here](#starter).
+
 
 <a name='pblite'></a>
 
