@@ -50,9 +50,122 @@
   </header>
 
   <article class="post-content">
-  <h2 id="system-setup">System Setup</h2>
+  <h2 id="system-setup-for-local-machines">System Setup for local machines:</h2>
 
-<h2 id="system-requirements">System Requirements</h2>
+<p>This is the system setup instructions for CMSC733 class for local machines. We <b>ONLY</b> support Ubuntu-16.04. Feel free to use a Virtual Machine on your system if you don’t an Ubuntu machine. We <b>STRONGLY</b> recommend <a href="https://www.virtualbox.org/wiki/Downloads">Virtual Box</a> as a virtual machine monitor.</p>
+
+<h3 id="install-opencv-33">1. Install OpenCV-3.3:</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt update
+sudo apt upgrade
+sudo apt install python-pip
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt install libopencv
+</code></pre>
+</div>
+
+<p>Check the OpenCV version by opening <code class="highlighter-rouge">python</code> console and do the following:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import cv2
+cv2.__version__
+</code></pre>
+</div>
+
+<p>It must be <code class="highlighter-rouge">3.3.1</code> or later.</p>
+
+<h3 id="python-dependencies">2. Python Dependencies:</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt install python-numpy python-scipy python-scikits-learn python-matplotlib python-skimage python-pil
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo -H pip install termcolor tqdm
+</code></pre>
+</div>
+
+<h3 id="tensorflow-cpu-version">3. TensorFlow (CPU version)</h3>
+
+<p>If you have GPU’s that don’t support NVIDIA <code class="highlighter-rouge">CUDA</code>, install the CPU version for tensorflow</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo -H pip install tensorflow
+</code></pre>
+</div>
+
+<h3 id="tensorflow-gpu-version">4. TensorFlow (GPU version)</h3>
+
+<p>If you have NVIDIA 970 or later, using gpu version of tensorflow is recommended.</p>
+
+<h4 id="bab-install-nvidia-drivers-if-you-dont-have-one"><b>A.</b> Install NVIDIA drivers, if you don’t have one.</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt install nvidia-smi nvidia-384
+</code></pre>
+</div>
+<p>— or —</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt install nvidia-smi nvidia-396
+</code></pre>
+</div>
+<p><br /></p>
+
+<h4 id="bbb-download-and-install-cuda-90--file-size-is-11gb"><b>B.</b> Download and install <code class="highlighter-rouge">CUDA-9.0</code> : (File size is 1.1GB)</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cd ~/Downloads/
+wget https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64-deb
+mv -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64-deb cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64.deb 
+sudo apt-key add /var/cuda-repo-9-0-local/7fa2af80.pub
+sudo dpkg -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64.deb 
+sudo apt-get update
+sudo apt-get install cuda
+sudo apt install nvidia-cuda-toolkit
+nvcc --version
+</code></pre>
+</div>
+
+<ul>
+  <li>If you see Cuda compilation tools version (<code class="highlighter-rouge">nvcc --version</code>) as <code class="highlighter-rouge">7.5</code> instead of <code class="highlighter-rouge">cuda-9.0</code>, do:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo 'export PATH=/usr/local/cuda-9.0/bin${PATH:+:${PATH}}' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+</div>
+
+<ul>
+  <li>Check <code class="highlighter-rouge">nvcc --version</code> again. It should show you <code class="highlighter-rouge">cuda-9.0</code>.<br />
+<br /><br /></li>
+</ul>
+
+<h4 id="bcb-cudnn-installation"><b>C.</b> CuDNN Installation:</h4>
+
+<ul>
+  <li>Download <code class="highlighter-rouge">cudnn-7.4</code> (for <code class="highlighter-rouge">cuda-9.0</code> ) <a href="https://drive.google.com/open?id=1xWPfS8xaxdUHeiZQbdMGr0R3sPfOdNfp">here</a>. The file is 347 MB.</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># install cuDNN v7.4
+CUDNN_TAR_FILE="cudnn-9.0-linux-x64-v7.4.1.5.tgz"
+tar -xzvf ${CUDNN_TAR_FILE}
+sudo cp -P cuda/include/cudnn.h /usr/local/cuda-9.0/include
+sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda-9.0/lib64/
+sudo chmod a+r /usr/local/cuda-9.0/lib64/libcudnn*
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code># set environment variables
+export PATH=/usr/local/cuda-9.0/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+</code></pre>
+</div>
+
+<h4 id="bdb-tensorflow-gpu-package-installation"><b>D.</b> TensorFlow GPU package installation:</h4>
+<p><code class="highlighter-rouge">sudo -H pip install tensorflow-gpu</code></p>
+
+<hr />
+
+<h2 id="google-cloud-platform-setup">Google Cloud Platform Setup</h2>
+<p>(Coming Soon)</p>
+
 
   </article>
 
