@@ -29,7 +29,7 @@ import cv2
 cv2.__version__
 ```
 
-It must be `4.0` or later.
+It must be `4.0` or later. If we experience instability with OpenCV 4.0 we'll revert back to OpenCV 3.3.1 and you'll have to build it from source. Details regarding this will be posed later if instability with OpenCV 4.0 is encountered.
 
 ### 2. Python Dependencies:
 
