@@ -19,7 +19,7 @@ sudo apt install python-pip
 
 ```
 sudo apt install libopencv-dev python-opencv
-python -m pip install opencv-contrib-python
+sudo python -m pip install opencv-contrib-python
 ```
 
 Check the OpenCV version by opening `python` console and do the following:
