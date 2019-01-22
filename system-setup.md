@@ -8,7 +8,7 @@ permalink: /system-setup/
 
 This is the system setup instructions for CMSC733 class for local machines. We <b>ONLY</b> support Ubuntu-16.04. Feel free to use a Virtual Machine on your system if you don't an Ubuntu machine. We <b>STRONGLY</b> recommend [Virtual Box](https://www.virtualbox.org/wiki/Downloads) as a virtual machine monitor.
 
-### 1. Install OpenCV-3.3:
+### 1. Install OpenCV-4.0:
 
 ```
 sudo apt update
@@ -19,6 +19,7 @@ sudo apt install python-pip
 
 ```
 sudo apt install libopencv-dev python-opencv
+python -m pip install opencv-contrib-python
 ```
 
 Check the OpenCV version by opening `python` console and do the following:
@@ -28,7 +29,7 @@ import cv2
 cv2.__version__
 ```
 
-It must be `3.3.1` or later.
+It must be `4.0` or later.
 
 ### 2. Python Dependencies:
 
