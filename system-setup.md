@@ -8,9 +8,9 @@ permalink: /system-setup/
 
 This is the system setup instructions for CMSC733 class for local machines. We <b>ONLY</b> support Ubuntu-16.04. Feel free to use a Virtual Machine on your system if you don't an Ubuntu machine. We <b>STRONGLY</b> recommend [Virtual Box](https://www.virtualbox.org/wiki/Downloads) as a virtual machine monitor.
 
-### 1. Install OpenCV-3.3:
+### 1. Install OpenCV-3.4:
 
-Due to certain issues in `opencv-4`, we have decided to revert back to `opencv3` for this course. After the latest release, the 'right' way to install `opencv-3` is to `build` from source. Feel free to follow the official documentation for version `3.3.1` if you want or follow the given steps:
+Due to certain issues in `opencv-4`, we have decided to revert back to `opencv3` for this course. After the latest release, the 'right' way to install `opencv-3` is to `build` from source. Feel free to follow the official documentation for version `3.4.0` if you want or follow the given steps:
 
 ```
 sudo apt update
@@ -41,7 +41,7 @@ import cv2
 cv2.__version__
 ```
 
-It must be `3.3.1`.
+It must be `3.4.0`.
 
 Please feel free to use any other sources for installation and try to avoid `virtualenv` and `conda` if possible. 
 
