@@ -8,28 +8,44 @@ permalink: /system-setup/
 
 This is the system setup instructions for CMSC733 class for local machines. We <b>ONLY</b> support Ubuntu-16.04. Feel free to use a Virtual Machine on your system if you don't an Ubuntu machine. We <b>STRONGLY</b> recommend [Virtual Box](https://www.virtualbox.org/wiki/Downloads) as a virtual machine monitor.
 
-### 1. Install OpenCV-4.0:
+### 1. Install OpenCV-3.3:
+
+Due to certain issues in `opencv-4`, we have decided to revert back to `opencv3` for this course. After the latest release, the 'right' way to install `opencv-3` is to `build` from source. Feel free to follow the official documentation for version `3.3.1` if you want or follow the given steps:
 
 ```
 sudo apt update
 sudo apt upgrade
-sudo apt install python-pip
+```
+
+Go to [this github page](https://github.com/chahatdeep/ubuntu-for-robotics/tree/master/CMSC733) and download the two shell scripts:
+- [install_opencv3-Part1.sh](https://github.com/chahatdeep/ubuntu-for-robotics/blob/master/CMSC733/install_opencv3-Part1.sh)
+- [install_opencv3-Part2.sh](https://github.com/chahatdeep/ubuntu-for-robotics/blob/master/CMSC733/install_opencv3-Part2.sh)
+
+Do: 
+```
+sudo chmod u+x install_opencv3-Part1.sh install_opencv3-Part2.sh
+./install_opencv3-Part1.sh
+```
+
+If it outputs an error, please read the lines `33-36` from `install_opencv3-Part1.sh` to tackle the problem (hopefully).
+If it works, perfectly fine, do:
+```
+install_opencv3-Part2.sh
 ```
 
 
-```
-sudo apt install libopencv-dev python-opencv
-sudo python -m pip install opencv-contrib-python
-```
-
-Check the OpenCV version by opening `python` console and do the following:
+Now, check the OpenCV version by opening `python` console and do the following:
 
 ```
 import cv2
 cv2.__version__
 ```
 
-It must be `4.0` or later. If we experience instability with OpenCV 4.0 we'll revert back to OpenCV 3.3.1 and you'll have to build it from source. Details regarding this will be posed later if instability with OpenCV 4.0 is encountered.
+It must be `3.3.1`.
+
+Please feel free to use any other sources for installation and try to avoid `virtualenv` and `conda` if possible. 
+
+***
 
 ### 2. Python Dependencies:
 
