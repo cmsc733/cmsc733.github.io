@@ -36,7 +36,7 @@ Table of Contents:
 
 <a name='prob'></a>
 ## 2. Problem Statement 
-The purpose of this project is to stitch two or more images in order to create one seamless panorama image. Each image should have few repeated local features ($$\sim$$ 30-50\% or more, emperically chosen). In this project, you need to capture multiple such images. The following method of stitching images should work for most image sets but you'll need to be creative for working on harder image sets. 
+The purpose of this project is to stitch two or more images in order to create one seamless panorama image. Each image should have few repeated local features ($$\sim$$ 30-50% or more, emperically chosen). In this project, you need to capture multiple such images. The following method of stitching images should work for most image sets but you'll need to be creative for working on harder image sets. 
 
 <a name='ph1'></a>
 ## 3. Phase 1: Traditional Approach
@@ -289,15 +289,6 @@ One day (24 hours) before the deadline, a test set will be released on which we 
 <a name='extra'></a>
 ## 6. Extra Credit
 Implementing the extra credit can give you upto 25% on the bonus score. As we discussed [earlier](#testset), there is no optimal way to obtain the best homography between two images as we trained our networks on a small patch size. A good way would be to obtain homographies from a lot of patches and then use RANSAC to obtain the best method. We want you to implement this method using deep learning and present a high quality analysis. Refer to the [DSAC paper](https://arxiv.org/abs/1611.05705) which presents ideas on how to implement RANSAC in a differentiable way for a neural network. You are free to use the DSAC [code from the authors](https://hci.iwr.uni-heidelberg.de/vislearn/research/scene-understanding/pose-estimation/#DSAC) to implement this part. 
-
-
-
-
-
-
-
-
-
 
 
 
