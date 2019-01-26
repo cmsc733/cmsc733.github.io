@@ -22,9 +22,12 @@ Table of Contents:
 - [5. Notes about Test Set](#testset)
 - [6. Extra Credit](#extra)
 - [7. Submission Guidelines](#sub)
-  - [7.1. File tree and naming](#files)
-  - [7.2. Report](#report)
-- [8. Collaboration Policy](#coll)
+  - [7.1. Starter Code](#starter)
+  - [7.2. File tree and naming](#files)
+  - [7.3. Report](#report)
+- [8. Allowed and Disallowed functions](#funcs)
+- [9. Collaboration Policy](#coll)
+- [10. Acknowledgements](#ack)
 
 <a name='due'></a>
 ## 1. Deadline 
@@ -138,7 +141,7 @@ Panorama can be produced by overlaying the pairwise aligned images to create the
 
 
 <div class="fig figcenter fighighlight">
-  <img src="/assets/pano/pano-output.png" width="80%">
+  <img src="/assets/2019/p1/Output1.png" width="50%">
   <div class="figcaption"> Fig 7: Final Panorama output for images shown in Fig. 6. </div>
 </div>
 
@@ -287,37 +290,116 @@ One day (24 hours) before the deadline, a test set will be released on which we 
 ## 6. Extra Credit
 Implementing the extra credit can give you upto 25% on the bonus score. As we discussed [earlier](#testset), there is no optimal way to obtain the best homography between two images as we trained our networks on a small patch size. A good way would be to obtain homographies from a lot of patches and then use RANSAC to obtain the best method. We want you to implement this method using deep learning and present a high quality analysis. Refer to the [DSAC paper](https://arxiv.org/abs/1611.05705) which presents ideas on how to implement RANSAC in a differentiable way for a neural network. You are free to use the DSAC [code from the authors](https://hci.iwr.uni-heidelberg.de/vislearn/research/scene-understanding/pose-estimation/#DSAC) to implement this part. 
 
+
+
+
+
+
+
+
+
+
+
+
 <a name='sub'></a>
+
 ## 7. Submission Guidelines
 
-<b> If your submission does not comply with the following guidelines, you'll be given ZERO credit </b>
+**If your submission does not comply with the following guidelines, you'll be given ZERO credit.**
+
+<a name='starter'></a>
+
+### 7.1. Starter Code
+Download the Starter Code for both Phase 1 and Phase 2 from [here]().
 
 <a name='files'></a>
-### 7.1. File tree and naming
 
-Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_p1.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_p1.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``Wrapper.py``. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. Please **DO NOT** include data in your submission.
+### 7.2. File tree and naming
+
+Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_p1.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_p1.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``YourDirectoryID_p1/Phase1/Code/Wrapper.py`` for Phase 1; ``YourDirectoryID_p1/Phase2/Code/Train.py`` and ``YourDirectoryID_p1/Phase2/Code/Test.py`` for Phase 2. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. 
+
+<p style="background-color:#ddd; padding:5px">
+<b>NOTE:</b> 
+Please <b>DO NOT</b> include data in your submission. Furthermore, the size of your submission file should <b>NOT</b> exceed more than <b>100MB</b>.
+</p>
+
+The file tree of your submission <b>SHOULD</b> resemble this:
 
 ```
 YourDirectoryID_p1.zip
-│   README.md
-|   Your Code files 
-|   ├── Any subfolders you want along with files
-|   Wrapper.py 
-└── Report.pdf
-```
-<a name='report'></a>
-### 7.2. Report
+|   Phase1 
+|   ├── Code
+|   |   ├── Wrapper.py
+|   |   └── Any subfolders you want along with files
+|   Phase2
+|   ├── Code
+|   |   ├── Train.py
+|   |   ├── Test.py
+|   |   └── Any subfolders you want along with files
+├── Report.pdf
+└── README.md
 
-For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
+```
+
+<a name='report'></a>
+
+### 7.3. Report
+
+For each section of the homework, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented. You must include the following details in your writeup:
 
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
-- For Phase 1, present input and output images after each section (corner detection, ANMS, feature extraction, feature matching, feature matches after RANSAC) and final panorama. 
-- For Phase 2, present supervised and unsupervised detected homographies against a synthetic ground truth for 4 images.
-- For Phase 2, present input and output panorama's using supervised and unsupervised approaches.
-- For Phase 2, present the average EPE results for both supervised and unsupervised approaches along with agorithm run-time for forward pass of the network.
 
+<b> Phase 1</b>
+- For Phase 1, present input and output images after each section (corner detection, ANMS, feature extraction, feature matching, feature matches after RANSAC) and final panorama. 
+- Provide final panorama output for test images in your `Report.pdf`. 
+
+<p style="background-color:#ddd; padding:5px">
+<b>NOTE:</b> 
+Test images will be released 24 hours before the deadline.
+</p>
+
+<b> Phase 2</b>
+- Present supervised and unsupervised detected homographies against a synthetic ground truth for 4 images.
+- Present input and output panorama's using supervised and unsupervised approaches for all the test images.
+- Present the average EPE results for both supervised and unsupervised approaches along with agorithm run-time for forward pass of the network.
+Finally, present a comparison of number of parameters, final train and final test accuracy, inference run-time (test time per image after the TensorFlow graph is setup) and other competences of your choice in a tabular form.
+
+
+<a name='funcs'></a>
+
+## 8. Allowed and Disallowed functions
+
+<b> Allowed:
+
+- Any functions regarding reading, writing and displaying/plotting images in `cv2`, `matplotlib`
+- Basic math utitlies including convolution operations in `numpy` and `math`
+- `tf.layers` and `tf.nn` API for implementing network architecture
+- `tf.image` for data augmentation
+- Any functions for pretty plots
+
+
+<b> Disallowed:
+
+- Any third party code for implementing spatial transformer network
+- Any third party code for implementing architecture or augmentation
+- `Keras` or any other layer API
+
+If you have any doubts regarding allowed and disallowed functions, please drop a public post on [Piazza](https://piazza.com/umd/spring2019/cmsc733). 
 
 <a name='coll'></a>
-## Collaboration Policy
-You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.
 
+## 9. Collaboration Policy
+<p style="background-color:#ddd; padding:5px">
+<b>NOTE:</b> 
+You are <b>STRONGLY</b> encouraged to discuss the ideas with your peers. Treat the class as a big group/family and enjoy the learning experience. 
+</p>
+
+However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the [CMSC733 Fall 2019 website](http://prg.cs.umd.edu/cmsc733).
+
+<a name='ack'></a>
+
+## 10. Acknowledgements
+
+This fun project was inspired by our research in <a href="http://prg.cs.umd.edu/">Perception and Robotics Group</a> at University of Maryland, College Park.
+
+***

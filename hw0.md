@@ -369,7 +369,7 @@ For each section of the homework, explain briefly what you did, and describe any
     - Batch size chosen
     - Confusion Matrix of the trained model on training data
     - Confusion Matrix of the trained model on testing data
-- Compare all the sections (3.3 - 3.5) and analyze why one works better than the other. Finally, present a comparison of number of parameters, final train and final test accuracy, inference run-time (test time per image after the TensorFlow graph is setup) and other competences of your choice in a tabluar form for Sections 3.3, 3.4 and 3.5.
+- Compare all the sections (3.3 - 3.5) and analyze why one works better than the other. Finally, present a comparison of number of parameters, final train and final test accuracy, inference run-time (test time per image after the TensorFlow graph is setup) and other competences of your choice in a tabular form for Sections 3.3, 3.4 and 3.5.
 
 
 <a name='funcs'></a>
