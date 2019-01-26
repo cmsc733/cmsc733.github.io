@@ -36,7 +36,7 @@ Table of Contents:
 
 <a name='prob'></a>
 ## 2. Problem Statement 
-The purpose of this project is to stitch two or more images in order to create one seamless panorama image. Each image should have few repeated local features ($$\sim$$ 30-50% or more, emperically chosen). In this project, you need to capture multiple such images. The following method of stitching images should work for most image sets but you'll need to be creative to make the algorithm work on harder image sets. 
+The purpose of this project is to stitch two or more images in order to create one seamless panorama image. Each image should have few repeated local features ($$\sim$$ 30-50\% or more, emperically chosen). In this project, you need to capture multiple such images. The following method of stitching images should work for most image sets but you'll need to be creative for working on harder image sets. 
 
 <a name='ph1'></a>
 ## 3. Phase 1: Traditional Approach
@@ -62,13 +62,13 @@ Sample input images and it's respective output are shown below.
 
 <a name='corner'></a>
 ### 3.1. Corner Detection
-The first step in stitching a panorama is extracting corners like most computer vision tasks. Here we will use either Harris corners or Shi-Tomasi corners. Use ``cv2.cornerHarris`` or ``cv2.goodFeaturesToTrack`` functions in OpenCV to implement this part.
+The first step in stitching a panorama is extracting corners like most computer vision tasks. Here we will use either Harris corners or Shi-Tomasi corners. Refer to ``cv2.cornerHarris`` or ``cv2.goodFeaturesToTrack`` to implement this part.
 
 <a name='anms'></a>
 ### 3.2. Adaptive Non-Maximal Suppression (ANMS)
 The objective of this step is to detect corners such that they are equally distributed across the image in order to avoid weird artifacts in warping. 
 
-In a real image, a corner is never perfectly sharp, each corner might get a lot of hits out of the $$N$$ strong corners - we want to choose only the $$N_{best}$$ best corners after ANMS. In essence, you will get a lot more corners than you should! ANMS will try to find corners which are true local maxima. The algorithm for implementing ANMS is given below. **DO NOT use any built-in or third party function to implement this part.**
+In a real image, a corner is never perfectly sharp, each corner might get a lot of hits out of the $$N$$ strong corners - we want to choose only the $$N_{best}$$ best corners after ANMS. In essence, you will get a lot more corners than you should! ANMS will try to find corners which are true local maxima. The algorithm for implementing ANMS is given below.
 
 <div class="fig figcenter fighighlight">
   <img src="/assets/2019/p1/anms.png" width="100%">
@@ -97,9 +97,9 @@ A sample output of ANMS for two different images are shown below.
 
 <a name='feat-descriptor'></a>
 ### 3.3. Feature Descriptor
-In the previous step, you found the feature points (locations of the $$N$$ best best corners after ANMS are called the feature point locations). You need to describe each feature point by a feature vector, this is like encoding the information at each feature points by a vector. One of the simplest feature descriptor is described next.
+In the previous step, you found the feature points (locations of the $$N$$ best best corners after ANMS are called the feature point locations). You need to describe each feature point by a feature vector, this is like encoding the information at each feature points by a vector. One of the easiest feature descriptor is described next.
 
-Take a patch of size $$40 \times 40$$ centered **(this is very important)** around the keypoint. Now apply gaussian blur (feel free to play around with the parameters, you can use ``cv2.GaussianBlur`` for this part. For a start you can use OpenCV's default parameters. Now, sub-sample the blurred output (this reduces the dimension) to $$8 \times 8$$. Then reshape to obtain a $$64 \times 1$$ vector. Standardize the vector to have zero mean and variance of 1. Standardization is used to remove bias and to achieve some amount of illumination invariance.
+Take a patch of size $$40 \times 40$$ centered **(this is very important)** around the keypoint. Now apply gaussian blur (feel free to play around with the parameters, for a start you can use OpenCV's default parameters in ``cv2.GaussianBlur`` command. Now, sub-sample the blurred output (this reduces the dimension) to $$8 \times 8$$. Then reshape to obtain a $$64 \times 1$$ vector. Standardize the vector to have zero mean and variance of 1. Standardization is used to remove bias and to achieve some amount of illumination invariance.
 
 
 <a name='feat-match'></a>
@@ -116,13 +116,13 @@ In the previous step, you encoded each keypoint by $$64\times1$$ feature vector.
 
 <a name='homography'></a>
 ### 3.5. RANSAC for outlier rejection and to estimate Robust Homography
-We now have matched all the features correspondences but not all matches are correct and/or unique. To remove incorrect and non-unique matches, we will use a robust method called **Random Sampling Concensus** or **RANSAC** and finally compute homography from the obtained correct matches.
+We now have matched all the features correspondences but not all matches will be right. To remove incorrect matches, we will use a robust method called *Random Sampling Concensus* or **RANSAC** to compute homography.
 
-The RANSAC steps are given below: 
-1. Select four feature pairs (at random), $$p_i$$ from image 1, $$p_i^\prime$$ from image 2.
-2. Compute homography $$H$$ between the previously picked point pairs.
-3. Compute inliers where $$SSD(p_i^\prime, Hp_i) < \tau$$, where $$\tau$$ is some user chosen threshold and $$SSD$$ is sum of square difference function.  
-4. Repeat the last three steps until you have exhausted $$N_{max}$$ number of iterations (specified by user) or you found more than some percentage of inliers (Say $$90\%$$ for example).
+Recall the RANSAC steps are: 
+1. Select four feature pairs (at random), $$p_i$$ from image 1, $$p_i^1$$ from image 2.
+2. Compute homography $$H$$ (exact).
+3. Compute inliers where $$SSD(p_i^1, Hp_i) < \texttt{thresh}$$. 
+4. Repeat the last three steps until you have exhausted $$N_{max}$$ number of iterations (specified by user) or you found more than percentage of inliers (Say $$90\%$$ for example).
 5. Keep largest set of inliers.
 6. Re-compute least-squares $$\hat{H}$$ estimate on all of the inliers.
 
@@ -145,13 +145,13 @@ Panorama can be produced by overlaying the pairwise aligned images to create the
   <div class="figcaption"> Fig 7: Final Panorama output for images shown in Fig. 6. </div>
 </div>
 
-*Come up with a logic to blend the common region between images while not affecting the regions which are not common.* Here, common means shared region, i.e., a part of first image and part of second image should overlap in the output panorama. **Describe what you did in your report in detail.**
+*Come up with a logic to blend the common region between images while not affecting the regions which are not common.* Here, common means shared region, i.e., a part of first image and part of second image should overlap in the output panorama. Describe what you did in your report. 
 
-<p style="background-color:#ddd; padding:5px"><b>Note:</b> The pipeline talks about how to stitch a pair of images, you <b>NEED,</b> to extend this to work for multiple images. You can re-run your images pairwise or do something smarter.</p>
+<p style="background-color:#ddd; padding:5px"><b>Note:</b> The pipeline talks about how to stitch a pair of images, you need to extend this to work for multiple images. You can re-run your images pairwise or do something smarter.</p>
 Your end goal is to be able to stitch any number of given images - maybe 2 or 3 or 4 or 100, your algorithm should work. If a random image with no matches are given, your algorithm needs to report an error.
 
-<p style="background-color:#ddd; padding:5px"><b>Note:</b> When blending these images, there will be inconsistency between pixels from different input images due to different exposure/white balance settings or photometric distortions or vignetting. This can be resolved by <i><a href="http://www.irisa.fr/vista/Papers/2003_siggraph_perez.pdf">Poisson blending</a></i>.</p>
-Feel free to use any built-in or third party code for Poisson blending.
+<p style="background-color:#ddd; padding:5px"><b>Note:</b> When blending these images, there are inconsistency between pixels from different input images due to different exposure/white balance settings or photometric distortions or vignetting. This can be resolved by <i><a href="http://www.irisa.fr/vista/Papers/2003_siggraph_perez.pdf">Poisson blending</a></i>.</p>
+
 
 An input and output of a seamless panorama of three images are shown below.
 
@@ -169,23 +169,23 @@ You are going to be implementing two deep learning approaches to estimate the ho
 
 <a name='datagen'></a>
 ### 4.1. Data Generation
-To train a Convolutional Neural Network (CNN) to estimate homography between a pair of images (we call this network **HomographyNet** and the original paper can be found [here](https://arxiv.org/pdf/1606.03798.pdf)) we need data (pairs of images) with the known homography between them. This is in-general hard to obtain as we would need the 3D movement between the pair of images to obtain the homography between them. An easier option is to generate synthetic pairs of images to train a network. But what images do we use so that the network is not baised? Simple, use images from [MSCOCO dataset](http://cocodataset.org/#home) which contains images of a lot of objects in natural scenes. MSCOCO is quite large and it'll take forever to train on these images. Hence, we provide a small subset of MSCOCO for you to train your HomographyNet on. This dataset can be downloaded from [here](https://arxiv.org/pdf/1606.03798.pdf). 
+To train a Convolutional Neural Network (CNN) to estimate homography between a pair of images (we call this network *HomographyNet* and the original paper can be found [here](https://arxiv.org/pdf/1606.03798.pdf)) we need data (pairs of images) with the known homogaraphy between them. This is in-general hard to obtain as we would need the 3D movement between the pair of images to obtain the homography between them. An easier option is to generate synthetic pairs of images to train a network. But what images do we use so that the network is not baised? Simple, use images from [MSCOCO dataset](http://cocodataset.org/#home) which contains images of a lot of objects in natural scenes. MSCOCO is quite large and it'll take forever to train on these images. Hence, we provide a small subset of MSCOCO for you to train your HomographyNet on. This dataset can be downloaded from [here](https://arxiv.org/pdf/1606.03798.pdf). 
 
 Now that you've downloaded the dataset, we need to generate synthetic data, i.e., pairs of images with known homography between them. Before, we generate image pairs, we need all the image pairs to be of the same size (as HomographyNet is not fully convolutional, it cannot accept image sizes of arbitrary shape). First step in generating data is to obtain a random crop of the image (called patch). Then the original image will be warped using a random homography then the respective patch is extracted. While we perform this operation we need to ensure that we are not extracting the patch from outside the image after warping. An illustration is shown below.
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p1/ActiveRegion.png" width="70%">
+  <img src="/assets/2019/p1/ActiveRegion.png" width="100%">
   <div class="figcaption">
-  	Fig. 9: Patch is shown as dashed blue box. Active region is shown as a blue highlight - this is the region where the top left corner of the patch can lie such that all the pixels in the patch will lie within the image after warping the random extracted patch. Red line shows the maximum perturbation \(\rho\). 
+  	Fig. 9: Patch is shown as dashed blue box. Active region is shown as a blue highlight -- this is the region where the top left corner of the patch can lie such that all the pixels in the patch will lie within the image after warping the random extracted patch. Red line shows the maximum perturbation \(\rho\). 
   </div>
   <div style="clear:both;"></div>
 </div>
 
 Let's go through the steps of generating data now. 
 
-- In step 1, obtain a random patch ($$P_A$$ of size $$M_P\times N_P$$) from the image ($$I_A$$) of size $$M\times N$$) with $$M>M_P$$ and $$N>N_P$$ such that all the pixels in the patch will lie within the image after warping the random extracted patch. Think about where you have to extract the patch $$P_A$$ from in $$I_A$$ if maximum possible perturbation is $$[-\rho, \rho]$$. 
+In step 1, obtain a random patch ($$P_A$$ of size $$M_P\times N_P$$) from the image ($$I_A$$) of size $$M\times N$$) with $$M>M_P$$ and $$N>N_P$$ such that all the pixels in the patch will lie within the image after warping the random extracted patch. Think about where you have to extract the patch $$P_A$$ from in $$I_A$$ if maximum possible perturbation is $$[-\rho, \rho]$$. 
 
-- In step 2, perform a random perturbation in the range $$[-\rho, \rho]$$ of the corner points (top left corner, top right corner, left bottom corner and right bottom corner -- *not the corners in computer vision sense*) of $$P_A$$ in $$ I_A$$. This is illustrated in the figures below.
+In step 2, perform a random perturbation in the range $$[-\rho, \rho]$$ of the corner points (top left corner, top right corner, left bottom corner and right bottom corner -- *not the corners in computer vision sense*) of $$P_A$$ in $$ I_A$$. This is illustrated in the figures below.
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p1/I1Patch.png" width="100%">
@@ -204,19 +204,19 @@ Let's go through the steps of generating data now.
 </div>
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p1/PerturbPtsImg.png" width="70%">
+  <img src="/assets/2019/p1/PerturbPtsImg.png" width="100%">
   <div class="figcaption">
   	Fig. 12: Red dashed lines show the patch formed by perturbed point corners. Notice how the shape is not rectangular making it hard to extract data without adding extra data or masking.
   </div>
   <div style="clear:both;"></div>
 </div>
 
-As mentioned in the last figure, we want to extract data such that we add minimal amount of extra data and we don't want to mask anything or add black pixels (pixels outside image assuming zero padding). In order to do this, we'll warp the image $$I_A$$ with the inverse of homography between $$C_A$$ and $$C_B$$ (denoted by $$H_B^A$$), i.e., which is the homography between $$C_B$$ and $$C_A$$ (denoted by $$H_A^B$$). Use ``cv2.getPerspectiveTransform`` and ``np.linalg.inv`` to implement this part. 
+As mentioned in the last figure, we want to extract data such that we add minimal amount of extra data and we don't want to mask anything or add black pixels (pixels outside image assuming zero padding). In order to do this, we'll warp the image $$I_A$$ with the inverse of homography between $$C_A$$ and $$C_B$$ (denoted by $$H_B^A$$), i.e., which is the homography between $$C_B$$ and $$C_A$$ (denoted by $$H_A^B$$). Refer to ``cv2.getPerspectiveTransform`` and ``np.linalg.inv`` to implement this part. 
 
-In step 3, use the value of $$H_A^B$$ to warp $$I_A$$ and obtain $$I_B$$. Use ``cv2.warpPerspective`` to implement this part. Now, we can extract the patch $$P_B$$ using the corners in $$C_A$$ (work the math out and convince yourself why this is true). This is shown in the figure below.
+In step 3, use the value of $$H_A^B$$ to warp $$I_A$$ and obtain $$I_B$$. Refer  to ``cv2.warpPerspective`` to implement this part. Now, we can extract the patch $$P_B$$ using the corners in $$C_A$$ (work the math out and convince yourself why this is true). This is shown in the figure below.
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p1/I2Patch.png" width="70%">
+  <img src="/assets/2019/p1/I2Patch.png" width="100%">
   <div class="figcaption">
   	Fig. 13: Red dashed lines show the patch \(P_B\) extracted from warped image \(I_B\).
   </div>
@@ -226,7 +226,7 @@ In step 3, use the value of $$H_A^B$$ to warp $$I_A$$ and obtain $$I_B$$. Use ``
 Now, the extracted patches are shown below.
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p1/Patches.png" width="70%">
+  <img src="/assets/2019/p1/Patches.png" width="100%">
   <div class="figcaption">
   	Fig. 14: Extracted Patches \(P_A\) and \(P_B\) with known homography between them. 
   </div>
