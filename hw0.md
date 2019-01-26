@@ -249,7 +249,7 @@ The starter code given to you has Tensorboard code snippets built-in and display
 
 Report the train accuracy over epochs (training accuracy over the whole train dataset not just minibatches as given to you!, you need to implement this), test accuracy over epochs (test accuracy over the whole test dataset!, you need to implement this), number of parameters in your model (code for this can be found in ``Test.py`` and snippet is also given next), plot of loss value over epochs (not over minibatches as given to you!, you need to sum up loss values for all iterations of an epoch to achieve this), your architecture, other hyperparameters chosen such as optimizer, learning rate and batch size. Also present a confusion matrix for both training and testing data (code in ``Test.py``).
 
-You can use the following snippet of code to obtain the bumber of parameters in your model. This loads a model from the ``ModelPath`` and prints out the number of parameters.
+You can use the following snippet of code to obtain the number of parameters in your model. This loads a model from the ``ModelPath`` and prints out the number of parameters.
 
 ```
 with tf.Session() as sess:
