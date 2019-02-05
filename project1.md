@@ -40,7 +40,7 @@ The purpose of this project is to stitch two or more images in order to create o
 
 <a name='data'></a>
 ## 3. Data Collection
-As we mentioned before, you need to capture two sets of images in order to stitch a seamless panorama. Each sequence should have at-least 3 images with $$\sim$$ 30-50%$$ image overlap between them. Feel free to check the sample images given to you in `YourDirectoryID_p1\Phase1\Data\Train\` folder. Be sure to resize the images you capture to somthing managable and place the sets respectively in `YourDirectoryID_p1\Phase1\Data\Train\CustomSet1` and `YourDirectoryID_p1\Phase1\Data\Train\CustomSet2`. Make sure all the images are in `.jpg` format.  
+As we mentioned before, you need to capture two sets of images in order to stitch a seamless panorama. Each sequence should have at-least 3 images with $$\sim$$ 30-50%$$ image overlap between them. Feel free to check the sample images given to you in `YourDirectoryID_p1\Phase1\Data\Train\` folder. Be sure to resize the images you capture to something manageable and place the sets respectively in `YourDirectoryID_p1\Phase1\Data\Train\CustomSet1` and `YourDirectoryID_p1\Phase1\Data\Train\CustomSet2`. Make sure all the images are in `.jpg` format.  
 
 <a name='ph1'></a>
 ## 4. Phase 1: Traditional Approach
