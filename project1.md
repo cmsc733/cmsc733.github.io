@@ -382,6 +382,8 @@ Test images will be released 24 hours before the deadline.
 - Any functions for pretty plots
 - Any functions for filtering and implementing gaussian blur
 - Any function for warping and blending for Phase 1
+- `cv2.getPerspectiveTransform`
+- `cv2.warpPerspective` (For more info, refer: [Geometric_Transformations](Geometric_Transformations))
 
 <b> Disallowed:
 
