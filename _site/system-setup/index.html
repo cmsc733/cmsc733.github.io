@@ -54,26 +54,43 @@
 
 <p>This is the system setup instructions for CMSC733 class for local machines. We <b>ONLY</b> support Ubuntu-16.04. Feel free to use a Virtual Machine on your system if you don’t an Ubuntu machine. We <b>STRONGLY</b> recommend <a href="https://www.virtualbox.org/wiki/Downloads">Virtual Box</a> as a virtual machine monitor.</p>
 
-<h3 id="install-opencv-33">1. Install OpenCV-3.3:</h3>
+<h3 id="install-opencv-34">1. Install OpenCV-3.4:</h3>
+
+<p>Due to certain issues in <code class="highlighter-rouge">opencv-4</code>, we have decided to revert back to <code class="highlighter-rouge">opencv3</code> for this course. After the latest release, the ‘right’ way to install <code class="highlighter-rouge">opencv-3</code> is to <code class="highlighter-rouge">build</code> from source. Feel free to follow the official documentation for version <code class="highlighter-rouge">3.4.0</code> if you want or follow the given steps:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>sudo apt update
 sudo apt upgrade
-sudo apt install python-pip
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo apt install libopencv
-</code></pre>
-</div>
+<p>Go to <a href="https://github.com/chahatdeep/ubuntu-for-robotics/tree/master/CMSC733">this github page</a> and download the two shell scripts:<br />
+- <a href="https://github.com/chahatdeep/ubuntu-for-robotics/blob/master/CMSC733/install_opencv3-Part1.sh">install_opencv3-Part1.sh</a><br />
+- <a href="https://github.com/chahatdeep/ubuntu-for-robotics/blob/master/CMSC733/install_opencv3-Part2.sh">install_opencv3-Part2.sh</a></p>
 
-<p>Check the OpenCV version by opening <code class="highlighter-rouge">python</code> console and do the following:</p>
+<p>Do: <br />
+<code class="highlighter-rouge">
+sudo chmod u+x install_opencv3-Part1.sh install_opencv3-Part2.sh
+./install_opencv3-Part1.sh
+</code></p>
+
+<p>If it outputs an error, please read the lines <code class="highlighter-rouge">33-36</code> from <code class="highlighter-rouge">install_opencv3-Part1.sh</code> to tackle the problem (hopefully).<br />
+If it works, perfectly fine, do:<br />
+<code class="highlighter-rouge">
+install_opencv3-Part2.sh
+</code></p>
+
+<p>Now, check the OpenCV version by opening <code class="highlighter-rouge">python</code> console and do the following:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>import cv2
 cv2.__version__
 </code></pre>
 </div>
 
-<p>It must be <code class="highlighter-rouge">3.3.1</code> or later.</p>
+<p>It must be <code class="highlighter-rouge">3.4.0</code>.</p>
+
+<p>Please feel free to use any other sources for installation and try to avoid <code class="highlighter-rouge">virtualenv</code> and <code class="highlighter-rouge">conda</code> if possible.</p>
+
+<hr />
 
 <h3 id="python-dependencies">2. Python Dependencies:</h3>
 

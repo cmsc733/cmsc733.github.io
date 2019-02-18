@@ -5,6 +5,8 @@ title: Homework 0 - Alohomora!
 permalink: /2019/hw/hw0/
 ---
 
+Student results can be found [here](/2019/hw/hw0-results/)
+
 Table of Contents:
 
 - [1. Due Date](#due)
