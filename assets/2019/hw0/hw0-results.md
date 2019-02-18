@@ -7,14 +7,14 @@ permalink: /2019/hw/hw0-results/
 
 <p style="background-color:#f4c842; padding:5px">
 <b>phamkhoi</b><br>
-<b>(Gold Submission)<br></b>
+<b>(Gold Submission)<br>
 </b><a href="/assets/2019/hw0/results/pdf/phamkhoi.pdf">
 <img src="/assets/2019/hw0/results/png/phamkhoi.png" width="100%"></a> 
 </p>
 
 <p style="background-color:#ccc; padding:5px">
 <b>ameyap</b><br>
-<b>(Silver Submission)<br></b>
+<b>(Silver Submission)<br>
 </b><a href="/assets/2019/hw0/results/pdf/ameyap.pdf"> 
 <img src="/assets/2019/hw0/results/png/ameyap.png" width="100%"></a>
 </p>
@@ -22,10 +22,11 @@ permalink: /2019/hw/hw0-results/
 
 <p style="background-color:#9e5d24; padding:5px">
 <b><font color="white">abhinavmodi</b><br>
-<b>(Bronze Submission)</font><br></b>
+<b>(Bronze Submission)</font><br>
 </b><a href="/assets/2019/hw0/results/pdf/abhinavmodi.pdf"> 
 <img src="/assets/2019/hw0/results/png/abhinavmodi.png" width="100%"></a>
-</p>
+
+<p></p>
 
 <center>
 <hr width="50%">
