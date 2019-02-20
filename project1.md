@@ -288,7 +288,7 @@ Note that, we didn't talk about the network architecture here, feel free to use 
 
 <a name='testset'></a>
 ## 6. Notes about Test Set
-One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in your report (more on this [later](#sub)). For the deep learning part, your algorithm will only run on the image size you chose during training, i.e., $$M_P\times N_P$$. A simple way to deal with this is to resize the test image to $$M_P\times N_P$$ to obtain the homography and then warp the original image or crop a central region of $$M_P\times N_P$$ or obtain random crops of size $$M_P\times N_P$$ and average all the predicted homography values. **Feel free to be creative here.**
+One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in your report (more on this [later](#sub)).
 
 The Test Set can be downloaded from [here](https://drive.google.com/file/d/1a62PbNlU2N_vN-kboRnGedJ_xTDeGxna/view?usp=sharing). The Test Set has the following folder structure.
 
@@ -310,6 +310,8 @@ P1TestSet.zip
 
 - Stich Panoramas of images from `Phase1` folder using the traditional approach, supervised homography and unsupervised homography.
 - Use images from `Phase2` folder to evaluate your deep learning based homography algorithms (both supervised and unsupervised). Here you can apply random perturbations as before on the center crop of the image (of size you chose during training). This Test is to evaluate how well your algorithm generalized to images outside the training set.
+(For this part, your algorithm will only run on the image size you chose during training, i.e., $$M_P\times N_P$$. A simple way to deal with this is to resize the test image to $$M_P\times N_P$$ to obtain the homography and then warp the original image or crop a central region of $$M_P\times N_P$$ or obtain random crops of size $$M_P\times N_P$$ and average all the predicted homography values. **Feel free to be creative here.** Mention what you did for this part in your report.)
+
 
 <a name='extra'></a>
 ## 7. Extra Credit
