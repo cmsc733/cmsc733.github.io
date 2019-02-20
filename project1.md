@@ -290,6 +290,27 @@ Note that, we didn't talk about the network architecture here, feel free to use 
 ## 6. Notes about Test Set
 One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in your report (more on this [later](#sub)). For the deep learning part, your algorithm will only run on the image size you chose during training, i.e., $$M_P\times N_P$$. A simple way to deal with this is to resize the test image to $$M_P\times N_P$$ to obtain the homography and then warp the original image or crop a central region of $$M_P\times N_P$$ or obtain random crops of size $$M_P\times N_P$$ and average all the predicted homography values. **Feel free to be creative here.**
 
+The Test Set can be downloaded from [here](https://drive.google.com/file/d/1a62PbNlU2N_vN-kboRnGedJ_xTDeGxna/view?usp=sharing). The Test Set has the following folder structure.
+
+```
+P1TestSet.zip
+|   Phase1 
+|   ├── TestSet1
+|	|	└── *.jpg
+|	├── TestSet2
+|	|	└── *.jpg
+|	├── TestSet3
+|	|	└── *.jpg
+|	└── TestSet4
+|	|	└── *.jpg
+|   |   
+└── Phase2
+	└── *.jpg
+```
+
+- Stich Panoramas of images from `Phase1` folder using the traditional approach, supervised homography and unsupervised homography.
+- Use images from `Phase2` folder to evaluate your deep learning based homography algorithms (both supervised and unsupervised). Here you can apply random perturbations as before on the center crop of the image (of size you chose during training). This Test is to evaluate how well your algorithm generalized to images outside the training set.
+
 <a name='extra'></a>
 ## 7. Extra Credit
 Implementing the extra credit can give you upto 50% on the bonus score. As we discussed [earlier](#testset), there is no optimal way to obtain the best homography between two images as we trained our networks on a small patch size. A good way would be to obtain homographies from a lot of patches and then use RANSAC to obtain the best method. We want you to implement this method using deep learning and present a high quality analysis. Refer to the [DSAC paper](https://arxiv.org/abs/1611.05705) which presents ideas on how to implement RANSAC in a differentiable way for a neural network. You are free to use the DSAC [code from the authors](https://hci.iwr.uni-heidelberg.de/vislearn/research/scene-understanding/pose-estimation/#DSAC) to implement this part. 
