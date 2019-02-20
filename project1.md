@@ -288,7 +288,7 @@ Note that, we didn't talk about the network architecture here, feel free to use 
 
 <a name='testset'></a>
 ## 6. Notes about Test Set
-One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in your report (more on this [later](#sub)).
+<!-- One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in your report (more on this [later](#sub)). -->
 
 The Test Set can be downloaded from [here](https://drive.google.com/file/d/1a62PbNlU2N_vN-kboRnGedJ_xTDeGxna/view?usp=sharing). The Test Set has the following folder structure.
 
