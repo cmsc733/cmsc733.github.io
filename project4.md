@@ -93,14 +93,15 @@ To formulate: Given all camera parameters $$(R,t,f)$$ (rotation, translation and
 In order to solve this problem, first recall: $$\cfrac{u}{f_u} = \cfrac{x}{z}$$
 <p style="background-color:#ddd; padding:5px"><b>Note:</b>
 Now, to generate a point cloud from RGB-D data, follow these steps:</p>
-  1. Compute 3D coordinate <font color="red">\(X^{IR}\)</font> in the <font color="red">$$IR$$</font> camera frame. (IR: Infrared or depth sensor frame)
-<font color="red">$$x^{IR} = \cfrac{uz}{f^{IR}}$$; $$\ \ y^{IR} = \cfrac{vz}{f^{IR}}$$; $$\ \ X^{IR} = [x^{IR} \ y^{IR} \ z^{IR}]$$</font>
+  1. Compute 3D coordinate <font color="red">\(X^{IR}\)</font> in the <font color="red">\(IR\)</font> camera frame. (IR: Infrared or depth sensor frame)
+  
+<font color="red">\(x^{IR} = \cfrac{uz}{f^{IR}}\); \ \ \(y^{IR} = \cfrac{vz}{f^{IR}}\); \ \ \(X^{IR} = [x^{IR} \ y^{IR} \ z^{IR}]\)</font>
 2. Transform into RGB frame
-  <font color="blue">$$X^{RGB} = RX^{IR} + t$$</font>
+  <font color="blue">\(X^{RGB} = RX^{IR} + t\)</font>
 3. Reproject them into the image plane
-<font color="blue">$$u^{RGB} = f^{RGB}\cfrac{x^{RGB}}{z^{RGB}} = f^{RGB}\cfrac{y^{RGB}}{z^{RGB}}$$</font>
-  4. Read <font color="blue">$$(r,g,b)$$</font> at <font color="blue">$$(u,v)^{RGB}$$</font>
-  <font color="blue">$$(r,g,b)$$</font> is the color of <font color="red">$$X^{IR}$$</font> point.
+<font color="blue">\(u^{RGB} = f^{RGB}\cfrac{x^{RGB}}{z^{RGB}} = f^{RGB}\cfrac{y^{RGB}}{z^{RGB}}\)</font>
+  4. Read <font color="blue">\((r,g,b)\)</font> at <font color="blue">\((u,v)^{RGB}\)</font>
+  <font color="blue">\((r,g,b)\)</font> is the color of <font color="red">\(X^{IR}\)</font> point.
   
 Now, once the point clouds are generated from a single view, let us learn how to build 3D model of the scene from multiple views.
 
