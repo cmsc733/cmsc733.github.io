@@ -93,7 +93,7 @@ To formulate: Given all camera parameters $$(R,t,f)$$ (rotation, translation and
 In order to solve this problem, first recall: $$\cfrac{u}{f_u} = \cfrac{x}{z}$$
 <p style="background-color:#ddd; padding:5px"><b>Note:</b>
 Now, to generate a point cloud from RGB-D data, follow these steps:</p>
-  1. Compute 3D coordinate <font color="red">$$X^{IR}$$</font> in the <font color="red">$$IR$$</font> camera frame. (IR: Infrared or depth sensor frame)
+  1. Compute 3D coordinate <font color="red">\(X^{IR}\)</font> in the <font color="red">$$IR$$</font> camera frame. (IR: Infrared or depth sensor frame)
 <font color="red">$$x^{IR} = \cfrac{uz}{f^{IR}}$$; $$\ \ y^{IR} = \cfrac{vz}{f^{IR}}$$; $$\ \ X^{IR} = [x^{IR} \ y^{IR} \ z^{IR}]$$</font>
 2. Transform into RGB frame
   <font color="blue">$$X^{RGB} = RX^{IR} + t$$</font>
