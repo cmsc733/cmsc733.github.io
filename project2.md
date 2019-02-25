@@ -35,7 +35,7 @@ video just like [Snapchat's face swap filter](https://www.snapchat.com/) or [thi
 http://faceswaplive.com/). It's a fairly complicated procedure and variants of these have
 been used in many movies. One of the most successful examples has been using these method
 is replacing Paul Walker's brother's face by Paul Walkers in the Fast and Furious 7 movie
-after the sudden death of Paul Walker in a car crash during shooting. And the ethical issue with this project is people creating fake videos of celibrities called Deep Fakes. Now that I have conviced you that this is not just for fun but is useful too, In the next few sections, let us
+after the sudden death of Paul Walker in a car crash during shooting. And the ethical issue with this project is people creating fake videos of celibrities called Deep Fakes. Now that I have conviced you that this is not just for fun but is useful too. In the next few sections, let us
 see how this can be done.
 
 
