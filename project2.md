@@ -277,7 +277,7 @@ For each section of the project, explain briefly what you did, and describe any 
 
 <a name='debug'></a>
 ## 8. Debugging Tips
-- Plot the triangles with different colors
+- Plot the triangles with different colors as shown [here](https://www.learnopencv.com/wp-content/uploads/2015/11/opencv-delaunay-vornoi-subdiv-example.jpg)
 - Plot the face fiducials to check if they match up with color coding the points
 - View the warped images
 - Plotting and indexing functions could be using [row, column] indexing which is different from [x,y] indexing. They are swapped such that x denotes column and y denoted row. Be sure to check documentation to see which function uses what.
