@@ -32,18 +32,21 @@ Table of Contents:
 ## 2. Introduction
 The aim of this project is to implement an end-to-end pipeline to swap faces in a
 video just like [Snapchat's face swap filter](https://www.snapchat.com/) or [this face swap website](
-http://faceswaplive.com/). It's a fairly complicated procedure and variants of these have
-been used in many movies. One of the most successful examples has been using these method
-is replacing Paul Walker's brother's face by Paul Walkers in the Fast and Furious 7 movie
-after the sudden death of Paul Walker in a car crash during shooting. And the ethical issue with this project is people creating fake videos of celibrities called Deep Fakes. Now that I have conviced you that this is not just for fun but is useful too. In the next few sections, let us
-see how this can be done.
+http://faceswaplive.com/). It's a fairly complicated procedure and variants of the approach you'll implement have
+been used in many movies. 
+
+One of the most popular example of using such a method
+is replacing Paul Walker's brother's face by Paul Walker's face in the Fast and Furious 7 movie
+after his sudden death in a car crash during shooting. Now that I have conviced you that this is not just for fun but is useful too. In the next few sections, let us see how this can be done.
+
+Note that, you'll need to be aware of ethical issues while replacing faces. Similar methods are used by people for the creation of fake videos of celibrities called Deep Fakes. 
 
 
 <a name='data'></a>
 ## 3. Data Collection
 Record two videos. One of yourself with just your face and the other with
-your face and your friend's face in all the frames. Convert them to .avi or .mp4 format.
-Save them to the Data folder. Feel free to play around with more videos. In the first video,
+your face and your friend's face in all the frames. Convert them to ``.avi`` or ``.mp4`` format.
+Save them to the ``Data`` folder. Feel free to play around with more videos. In the first video,
 we'll replace your face with some celebrity's face or your favorite relative's face. In the
 second video we'll swap the two faces. If there are more than two faces in the video, swap
 the two largest faces.
@@ -66,7 +69,7 @@ The overview of the system for face replacement is shown below.
 
 <a name='landmarks'></a>
 ### 4.1. Facial Landmarks detection
-The first step in the traditional approach is to find facial landmarks (important points on the face) so that we have one-to-one correspondence between the facial landmakrs. This is analogous to the detection of corners in the panorama project. One of the major reasons to use facial landmarks instead of using all the points on the face is to reduce computational complexity. Remember that better results can be obtained using all the points (dense flow) or using a meshgrid. For detecting facial landmarks we'll use dlib library built into OpenCV and python. A sample output of Dlib is shown below.
+The first step in the traditional approach is to find facial landmarks (important points on the face) so that we have one-to-one correspondence between the facial landmakrs. This is analogous to the detection of corners in the panorama project. One of the major reasons to use facial landmarks instead of using all the points on the face is to reduce computational complexity. Remember that better results can be obtained using all the points (dense flow) or using a meshgrid. For detecting facial landmarks we'll use ``dlib`` library built into OpenCV and python. A sample output of Dlib is shown below.
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/dlib.jpg" width="80%">
@@ -77,7 +80,7 @@ The first step in the traditional approach is to find facial landmarks (importan
 
 <a name='tri'></a>
 ### 4.2. Face Warping using Triangulation
-Like we discussed before, we have now obtained facial landmarks, but what do we do with them? We need to ideally warp the faces in 3D, however we don't have 3D information. Hence can we make some assumption about the 2D image to approximate 3D information of the face. One simple way is to triangulate using the facial landmarks as corners and then make the assumption that in each triangle the content is planar (forms a plane in 3D) and hence the warping between the the triangles in two images is affine. Triangulating or forming a triangular mesh over the 2D image is simple but we want to trinagulate such that it's fast and has an "efficient" triangulation. One such method is obtained by drawing the dual of the Voronoi diagram, i.e., connecting each two neighboring sites in the Voronoi diagram. This is called the **Delaunay Triangulation** and can be constructed in \\(\mathcal{O}(n\log{}n)\\) time. We want the triangulation to be consistent with the image boundary such that texture regions won't fae into the background while warping. Delaunay Triangulation tries the maximize the smallest angle in each triangle.
+Like we discussed before, we have now obtained facial landmarks, but what do we do with them? We need to ideally warp the faces in 3D, however we don't have 3D information. Hence can we make some assumption about the 2D image to approximate 3D information of the face. One simple way is to triangulate using the facial landmarks as corners and then make the assumption that in each triangle the content is planar (forms a plane in 3D) and hence the warping between the the triangles in two images is affine. Triangulating or forming a triangular mesh over the 2D image is simple but we want to trinagulate such that it's fast and has an "efficient" triangulation. One such method is obtained by drawing the dual of the Voronoi diagram, i.e., connecting each two neighboring sites in the Voronoi diagram. This is called the **Delaunay Triangulation** and can be constructed in \\(\mathcal{O}(n\log{}n)\\) time. We want the triangulation to be consistent with the image boundary such that texture regions won't fade into the background while warping. <i>Delaunay Triangulation tries the maximize the smallest angle in each triangle</i>.
  
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/DT.PNG" width="100%">
@@ -101,7 +104,7 @@ Like we discussed before, we have now obtained facial landmarks, but what do we 
 </div>
 
 
-Since, Delaunay Triangulation tries the maximize the smallest angle in each triangle, we will obtain the same triangulation in both the images, i.e., cat and baby's face. Hence, if we have correspondences between the facial landmarks we also have correspondences between the triangles (this is awesome! and makes life simple). Because we are using dlib to obtain the facial landmarks (or click points manually if you want to warp a cat to a kid), we have correspondences between facial landmarks and hence correspondences between the triangles, i.e., we have the same mesh in both images. Use the ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV to implement Delaunay Triangulation. Refer to [this tutorial](https://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/) for an easy start. Now, we need to warp the destination face to the source face (we are using inverse warping so that we don't have any holes in the image, read up why inverse warping is better than forward warping) or to a mean face (obtained by averaging the triangulations of two faces). Implement the following steps to warp one face ($$\mathcal{A}$$ or source) to another ($$\mathcal{B}$$ or destination). 
+Since, Delaunay Triangulation tries the maximize the smallest angle in each triangle, we will obtain the same triangulation in both the images, i.e., cat and baby's face. Hence, if we have correspondences between the facial landmarks we also have correspondences between the triangles (this is awesome! and makes life simple). Because we are using ``dlib`` to obtain the facial landmarks (or click points manually if you want to warp a cat to a kid), we have correspondences between facial landmarks and hence correspondences between the triangles, i.e., we have the same mesh in both images. Use the ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV to implement Delaunay Triangulation. Refer to [this tutorial](https://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/) for an easy start. Now, we need to warp the destination face to the source face (we are using inverse warping so that we don't have any holes in the image, [read up why inverse warping is better than forward warping](https://www.cs.unc.edu/~lazebnik/research/fall08/lec08_faces.pdf)) or to a mean face (obtained by averaging the triangulations of two faces). Implement the following steps to warp one face ($$\mathcal{A}$$ or source) to another ($$\mathcal{B}$$ or destination). 
 
 1. For each triangle in the target/destination face $$\mathcal{B}$$, compute the Barycentric coordinate. 
 
