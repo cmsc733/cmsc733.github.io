@@ -104,7 +104,7 @@ Like we discussed before, we have now obtained facial landmarks, but what do we 
 </div>
 
 
-Since, Delaunay Triangulation tries the maximize the smallest angle in each triangle, we will obtain the same triangulation in both the images, i.e., cat and baby's face. Hence, if we have correspondences between the facial landmarks we also have correspondences between the triangles (this is awesome! and makes life simple). Because we are using ``dlib`` to obtain the facial landmarks (or click points manually if you want to warp a cat to a kid), we have correspondences between facial landmarks and hence correspondences between the triangles, i.e., we have the same mesh in both images. Use the ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV to implement Delaunay Triangulation. Refer to [this tutorial](https://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/) for an easy start. Now, we need to warp the destination face to the source face (we are using inverse warping so that we don't have any holes in the image, [read up why inverse warping is better than forward warping](https://www.cs.unc.edu/~lazebnik/research/fall08/lec08_faces.pdf)) or to a mean face (obtained by averaging the triangulations of two faces). Implement the following steps to warp one face ($$\mathcal{A}$$ or source) to another ($$\mathcal{B}$$ or destination). 
+Since, Delaunay Triangulation tries the maximize the smallest angle in each triangle, we will obtain the same triangulation in both the images, i.e., cat and baby's face. Hence, if we have correspondences between the facial landmarks we also have correspondences between the triangles (this is awesome! and makes life simple). Because we are using ``dlib`` to obtain the facial landmarks (or click points manually if you want to warp a cat to a kid), we have correspondences between facial landmarks and hence correspondences between the triangles, i.e., we have the same mesh in both images. Use the ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV to implement Delaunay Triangulation. Refer to [this tutorial](https://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/) for an easy start. Now, we need to warp the destination face to the source face (we are using inverse warping so that we don't have any holes in the image, [read up why inverse warping is better than forward warping](https://www.cs.unc.edu/~lazebnik/research/fall08/lec08_faces.pdf)) or to a mean face (obtained by averaging the triangulations (corners of triangles) of two faces). Implement the following steps to warp one face ($$\mathcal{A}$$ or source) to another ($$\mathcal{B}$$ or destination). 
 
 1. For each triangle in the target/destination face $$\mathcal{B}$$, compute the Barycentric coordinate. 
 
@@ -159,11 +159,11 @@ The warped images are shown below.
 <a name='tps'></a>
 ### 4.3. Face Warping using Thin Plate Spline
 As we discussed before, triangulation assumes that we are doing affine transformation on each triangle. This might not be the best way to do warping since the human face has a very complex and smooth shape. A better way to do the transformation is by using Thin Plate Splines (TPS) which can model arbitrarily complex shapes. Now, we want to compute a TPS that maps from the feature points in $$\mathcal{B}$$ to the corresponding feature
-points in $$\mathcal{A}$$ . Note that we need two splines, one for the $$x$$ coordinate and one for the $$y$$. A thin
+points in $$\mathcal{A}$$ . Note that we need two splines, one for the $$x$$ coordinate and one for the $$y$$. Imagine a TPS to mathematically model beating a metal plate with a hammer. A thin
 plate spline has the following form:
 
 $$
-f(x,y) = a_1 + (a_x)x + (a_y)y + \sum_{i=1}^p{w_i U\left( \vert \vert (x_i,y_i) - (x,y)\vert \vert\right)}
+f(x,y) = a_1 + (a_x)x + (a_y)y + \sum_{i=1}^p{w_i U\left( \vert \vert (x_i,y_i) - (x,y)\vert \vert_1\right)}
 $$
 
 Here, $$ U(r) = r^2\log (r^2 )$$.
@@ -178,7 +178,7 @@ $$
   \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_p \\ 0 \\ 0 \\ 0 \end{bmatrix}  
 $$
 
-where \\( K_{ij} = U\left( \vert \vert (x_i,y_i)-(x_j,y_j) \vert \vert \right)\\). $$v_i = f(x_i,y_i)$$ and the i<sup>th</sup> row of $$P$$ is $$(x_i, y_i, 1)$$. $$K$$ is a matrix of size size $$p \times p$$, and $$P$$ is a matrix of size $$p \times 3$$. In order to have a stable solution you need to compute the solution by:
+where \\( K_{ij} = U\left( \vert \vert (x_i,y_i)-(x_j,y_j) \vert \vert_1 \right)\\). $$v_i = f(x_i,y_i)$$ and the i<sup>th</sup> row of $$P$$ is $$(x_i, y_i, 1)$$. $$K$$ is a matrix of size size $$p \times p$$, and $$P$$ is a matrix of size $$p \times 3$$. In order to have a stable solution you need to compute the solution by:
 
 $$ 
  \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_p \\ a_x \\ a_y \\ a_1  \end{bmatrix}  = 
@@ -218,14 +218,14 @@ We will follow a method called Poisson Blending to blend the warped face onto th
 
 <a name='motfilt'></a>
 ### 4.6. Motion Filtering
-After you have detected, warped and blended the face your algorithm works really well for individual frames. But when you want to do this for a video, you'll see flickering. Come up with your own solution to reduce the amount of flickering. You can use a low-pass fillter or a fancy Kalman Filter to do this. Feel free to use any third party or built-in code to do this. If you use third party code, please do not forget to cite them. Look at this holy grail video of face replacement where Jimmy Fallon interviews his cousin.
+After you have detected, warped and blended the face your algorithm works really well for individual frames. But when you want to do this for a video, you'll see flickering. Come up with your own solution to reduce the amount of flickering. You can use a low-pass filter or a fancy Kalman Filter to do this. **Feel free to use any third party or built-in code to do this.** If you use third party code, please do not forget to cite them. Look at this holy grail video of face replacement where Jimmy Fallon interviews his cousin.
 
 <iframe src="https://player.vimeo.com/video/257360045" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 <p><a href="https://vimeo.com/257360045">Jimmy Fallon interview his twin!</a> from <a href="https://vimeo.com/user16478660">ZeroCool22</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
 
 <a name='ph2'></a>
 ## 5. Phase 2: Deep Learning Approach
-For this phase, we'll run an off-the-shelf model to obtain face fiducials using deep learning. We think that implementing this part is fairly trivial and is left as a fun excericse if you want some programming practice (you are not graded on this implementation). We'll use the code from [this paper](https://arxiv.org/abs/1803.07835), which implements a supervised encoder-decoder model to obtain the full 3D mesh of the face. We recommend you to read the paper for more details. The code from the paper can be found [here](https://github.com/YadiraF/PRNet). Your task is to setup the code and run to obtain face fiducials/full 3D mesh. Use this output to perform face replacement as before. Feel free to use as much code as you want from last part/phase. Present a detailed comparison of both the traditional methods (triangulation and TPS) along with the deep learning method.   
+For this phase, we'll run an off-the-shelf model to obtain face fiducials using deep learning. We think that implementing this part is fairly trivial and is left as a fun exercise if you want some programming practice (you are not graded for the implementation of the network). We'll use the code from [this paper](https://arxiv.org/abs/1803.07835), which implements a supervised encoder-decoder model to obtain the full 3D mesh of the face. We recommend you to read the paper for more details. The code from the paper can be found [here](https://github.com/YadiraF/PRNet). Your task is to setup the code and run to obtain face fiducials/full 3D mesh. Use this output to perform face replacement as before. Feel free to use as much code as you want from last part/phase. Present a detailed comparison of both the traditional methods (triangulation and TPS) along with the deep learning method.   
 
 <a name='testset'></a>
 ## 6. Notes about Test Set
@@ -261,7 +261,7 @@ YourDirectoryID_p2.zip
 <a name='report'></a>
 ### 7.2. Report
 
-For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
+For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You **MUST** include the following details in your writeup:
 
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
 - Present the Data you collected in ``Data`` folder with names ``Data1.mp4`` and ``Data2.mp4`` (Be sure to have the format as ``.mp4`` **ONLY**).
