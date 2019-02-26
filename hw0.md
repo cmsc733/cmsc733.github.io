@@ -381,7 +381,7 @@ For each section of the homework, explain briefly what you did, and describe any
 <b> Allowed:
 
 - Any functions regarding reading, writing and displaying/plotting images in `cv2`, `matplotlib`
-- Basic math utitlies including convolution operations in `numpy` and `math`
+- Basic math utilities including convolution operations in `numpy` and `math`
 - `KMeans` clustering from `sklearn` or `scipy`
 - `tf.layers` and `tf.nn` API for implementing network architecture
 - `tf.image` for data augmentation

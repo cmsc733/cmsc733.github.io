@@ -21,8 +21,10 @@ Table of Contents:
   - [6.1. File tree and naming](#files)
   - [6.2. Report](#report)
 - [7. Submission Guidelines](#sub)
-- [8. Collaboration Policy](#coll)
-- [9. Acknowledgements](#ack)
+- [8. Debugging Tips](#debug)
+- [9. Allowed and Disallowed functions](#allowed)
+- [10. Collaboration Policy](#coll)
+- [11. Acknowledgements](#ack)
 
 <a name='due'></a>
 ## 1. Deadline 
@@ -263,18 +265,48 @@ YourDirectoryID_p2.zip
 
 For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You **MUST** include the following details in your writeup:
 
-- Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
+- Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder (Use the same draft folder from P1) and should of a conference quality paper.
 - Present the Data you collected in ``Data`` folder with names ``Data1.mp4`` and ``Data2.mp4`` (Be sure to have the format as ``.mp4`` **ONLY**).
 - Present the output videos for Triangulation, TPS and PRNet as ``Data1OutputTri.mp4``, ``Data1OutputTPS.mp4`` and ``Data1OutputPRNet.mp4`` for Data 1 respectively in the ``Data`` folder. Also, present outputs videos for Triangulation, TPS and PRNet as ``Data2OutputTri.mp4``, ``Data2OutputTPS.mp4`` and ``Data2OutputPRNet.mp4`` for Data 2 respectively in the ``Data`` folder. (Be sure to have the format as ``.mp4`` **ONLY**).
 - For Phase 1, present input and output images for two frames from each of the videos using both Triangulation and TPS approach.
 - For Phase 2, present input and output images for two frames from each of the videos using PRNet approach.
 - Present failure cases for both Phase 1 and 2 and present your thoughts on why the failure occurred. 
 
+
+<a name='debug'></a>
+## 8. Debugging Tips
+- Plot the triangles with different colors
+- Plot the face fiducials to check if they match up with color coding the points
+- View the warped images
+- Plotting and indexing functions could be using [row, column] indexing which is different from [x,y] indexing. They are swapped such that x denotes column and y denoted row. Be sure to check documentation to see which function uses what.
+- OpenCV documentation often has a lot of bugs with regard to indexing. Be sure to implement simple sanity checks.
+
+<a name='allowed'></a>
+## 9. Allowed and Disallowed functions
+
+<b> Allowed:
+
+Any functions regarding reading, writing and displaying/plotting images in `cv2`, `matplotlib`
+- Basic math utilities including convolution operations in `numpy` and `math`
+- Any functions for pretty plots
+- Any function for blending
+- Any function for Motion Filtering
+- Any function for interpolation including ``scipy.interpolated.interp2d``
+- Functions for Delaunay Triangulation including ``getTriangleList()`` function in ``cv2.Subdiv2D`` class of OpenCV. However you are not allowed to use this for checking which triangle a point belongs to and to compute barycentric coordinates.
+- PRNet network and any helper functions for Phase2.
+
+
+<b> Disallowed:
+- Any function that implements barycentic coordinate calculation.
+- Any function that implements checking which triangle a point belongs to.
+- Any function which implements in part of full the TPS.
+
+
 <a name='coll'></a>
-## 8. Collaboration Policy
+## 10. Collaboration Policy
 You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.
 
 <a name='ack'></a>
-## 9. Acknowledgements
+## 11. Acknowledgements
 This fun project was inspired by a similar project in UPenn's <a href="https://alliance.seas.upenn.edu/~cis581/wiki/index.php?title=CIS_581:_Computer_Vision_%26_Computational_Photography">CIS581</a> (Computer Vision & Computational Photography). 
 
