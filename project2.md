@@ -94,7 +94,7 @@ Like we discussed before, we have now obtained facial landmarks, but what do we 
 <div class="fig fighighlight">
   <img src="/assets/2019/p2/DTAsDualOfVoronoi.PNG" width="70%">
   <div class="figcaption">
-    Fig 4: Delaunay Triangulation is the dual of the Voronoi diagram. Black lines show the Voinoi diagram and colored lines show the Delaunay triangulation.
+    Fig 4: Delaunay Triangulation is the dual of the Voronoi diagram. Black lines show the Voronoi diagram and colored lines show the Delaunay triangulation.
   </div>
 </div>
 
