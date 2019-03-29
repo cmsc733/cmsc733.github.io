@@ -5,6 +5,8 @@ title: AutoCalib
 permalink: /2019/hw/hw1/
 ---
 
+**To be submitted individually**
+
 Table of Contents:
 - [1. Due Date](#due)
 - [2. Introduction](#intro)
@@ -41,9 +43,9 @@ and radial distortion parameters are denoted by $$k_1$$ and $$k_2$$ respectively
 
 <a name='data'></a>
 ## 3. Data
-The Zhang's paper relies on a calibration target (checkerboard in our case) to estimate camera intrinsic parameters. The calibration target used can be found in the file ``checkerboardPattern.pdf``. This was
+The Zhang's paper relies on a calibration target (checkerboard in our case) to estimate camera intrinsic parameters. The calibration target used can be found in the file ``checkerboardPattern.pdf`` [Link](https://github.com/cmsc733/cmsc733.github.io/raw/master/assets/2019/hw1/checkerboardPattern.pdf). This was
 printed on an A4 paper and the size of each square was 21.5mm. Note that the $$Y$$ axis has odd number of squares and $$X$$ axis has even number of squares. It is a general practice to neglect
-the outer squares (extreme square on each side and in both directions). Thirteen images taken from a Google Pixel XL phone with focus locked are given in the folder ``./Code/Imgs`` which you will use to calibrate.
+the outer squares (extreme square on each side and in both directions). Thirteen images taken from a Google Pixel XL phone with focus locked can be downloaded from [here](https://github.com/cmsc733/cmsc733.github.io/raw/master/assets/2019/hw1/Calibration_Imgs.zip) which you will use to calibrate.
 
 
 <a name='init'></a>
@@ -102,7 +104,7 @@ For each section of the homework, explain briefly what you did, and describe any
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
 - Present images of checkerboard after rectification and reprojection of corners on rectified image.
 - Present the value of re-projection error. 
-
+- Clearly, specify the $K$ matrix in the report.
 
 <a name='coll'></a>
 ## 7. Collaboration Policy
