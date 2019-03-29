@@ -23,7 +23,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Due Date 
-**10:59AM, Thursday, September 6, 2018.**
+**11:59PM, Thursday, April 6, 2019.**
 
 <a name='intro'></a>
 ## 2. Introduction
