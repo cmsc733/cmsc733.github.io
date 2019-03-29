@@ -104,7 +104,7 @@ For each section of the homework, explain briefly what you did, and describe any
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
 - Present images of checkerboard after rectification and reprojection of corners on rectified image.
 - Present the value of re-projection error. 
-- Clearly, specify the $K$ matrix in the report.
+- Clearly, specify the $$K$$ matrix in the report.
 
 <a name='coll'></a>
 ## 7. Collaboration Policy
