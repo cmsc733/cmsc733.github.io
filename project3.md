@@ -61,15 +61,12 @@ Let's learn how to recreate such algorithm. There are a few steps that collectiv
 - **Perspective-n-Point**
 - **Bundle Adjustment**
 
-*(If you haven't heard of the above terminology before, don't worry! If you knew the following already, you wouldn't be taking the class right now!)* 
-
 <a name='intradtro'></a>
-## 3. Phase 1: Traditional Approach
+## 3. Traditional Approach to the SfM problem
 
 <a name='featmatch'></a>
 ### 3.1. Feature Matching, Fundamental Matrix and RANSAC
-We have already learned about keypoint matching using SIFT keypoints and descriptors (Recall Project 2: Panorama Stitching). It is important to refine the matches by rejecting outline correspondence.
-Before rejecting the correspondences, let us first understand what Fundamental matrix is!
+We have already learned about keypoint matching using SIFT keypoints and descriptors (Recall Project 1: Panorama Stitching). It is important to refine the matches by rejecting outline correspondence. Before rejecting the correspondences, let us first understand what Fundamental matrix is!
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p3/featmatch.png" width="100%">
@@ -82,7 +79,7 @@ Before rejecting the correspondences, let us first understand what Fundamental m
 
 <a name='estfundmatrix'></a>
 ### 3.2. Estimating Fundamental Matrix 
-The fundamental matrix, denoted by $$F$$, is a $$3\times 3$$ (_rank 2_) matrix that relates the corresponding set of points in two images from different views (or stereo images). But in order to understand what fundamental matrix actually is, we need to understand what _epipolar geometry_ is! The epipolar geometry is the intrinsic projective geometry between two views. It only depends on the cameras' internal parameters ($$K$$ matrix) and the relative pose _i.e._ it is **independent of the scene structure**. 
+The fundamental matrix, denoted by $$F$$, is a $$3\times 3$$ (_rank 2_) matrix that relates the corresponding set of points in two images from different views (or stereo images). But in order to understand what fundamental matrix actually is, we need to understand what _epipolar geometry_ is! The epipolar geometry is the intrinsic projective geometry between two views. It only depends on the cameras' internal parameters ($$K$$ matrix) and the relative pose _i.e._ it is **independent of the scene structure**.  
 
 <a name='epipole'></a>
 #### 3.2.1. Epipolar Geometry
@@ -155,6 +152,7 @@ x = V(:, end);
 F = reshape(x, [3,3])';
 ```
 
+**To sumarize, write a function `EstimateFundamentalMatrix.py` that linearly estimates a fundamental matrix $$F$$, such that $$x_2^T F x_1 = 0$$. The fundamental matrix can be estimated by solving the linear least squares $$Ax=0$$.**
 
 
 <a name='ransac'></a>
@@ -162,6 +160,7 @@ F = reshape(x, [3,3])';
 
 Since the point correspondences are computed using SIFT or some other feature descriptors, the data is bound to be noisy and (in general) contains several outliers. Thus, to remove these outliers, we use RANSAC algorithm _(Yes! The same as used in Panorama stitching!)_ to obtain a better estimate of the fundamental matrix. So, out of all possibilities, the $$\mathbf{F}$$ matrix with maximum number of inliers is chosen.
 Below is the pseduo-code that returns the $$\mathbf{F}$$ matrix for a set of matching corresponding points (computed using SIFT) which maximizes the number of inliers.
+
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p3/ransac.png"  width="80%">
@@ -177,6 +176,9 @@ Below is the pseduo-code that returns the $$\mathbf{F}$$ matrix for a set of mat
   <div style="clear:both;"></div>
 </div>
 
+
+**Given, $$N\geq8$$ correspondences between two images, $$x_1 \leftrightarrow x_2$$, implement a function `GetInlierRANSANC.py` that estimates inlier correspondences using fundamental matrix based RANSAC.**
+
 <a name='estE'></a>
 ### 3.3. Estimate *Essential Matrix* from Fundamental Matrix
 
@@ -186,6 +188,8 @@ where $$\mathbf{K}$$ is the camera calibration matrix or camera intrinsic matrix
 $$\mathbf{E}=U\begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix}V^T$$
 
 _It is important to note that the $$\mathbf{F}$$ is defined in the original image space (i.e. pixel coordinates) whereas $$\mathbf{E}$$ is in the normalized image coordinates. Normalized image coordinates have the origin at the optical center of the image. Also, relative camera poses between two views can be computed using $$\mathbf{E}$$ matrix. Moreover, $$\mathbf{F}$$ has 7 degrees of freedom while $$\mathbf{E}$$ has 5 as it takes camera parameters in account. ([5-Point Motion Estimation Made Easy](http://users.cecs.anu.edu.au/~hongdong/new5pt_cameraREady_ver_1.pdf))_
+
+**Given $$F$$ , estimate $$E = K^T F K$$ by implementing the function `EssentialMatrixFromFundamentalMatrix.py`.**
 
 <a name='essential'></a>
 ### 3.4. Estimate **Camera Pose** from Essential Matrix
@@ -199,9 +203,15 @@ These four pose configurations can be computed from $$\mathbf{E}$$ matrix. Let $
 
 **It is important to note that the $$\ det(R)=1$$. If $$det(R)=-1$$, the camera pose must be corrected _i.e._ $$C=-C$$ and $$R=-R$$.**
 
+**Implement the function `ExtractCameraPose.py`, given $$E$$.$$**
+
 <a name='tri'></a>
-### 3.5. Check for **Cheirality Condition** using **Triangulation**
-In the previous section, we computed four different possible camera poses for a pair of images using essential matrix. Though, in order to find the _correct_ unique camera pose, we need to remove the disambiguity. This can be accomplish by checking the **cheirality condition** _i.e._ *the reconstructed points must be in front of the cameras*. 
+### 3.5. **Triangulation** Check for **Cheirality Condition** 
+In the previous section, we computed four different possible camera poses for a pair of images using essential matrix. In this section we will triangulate the 3D points, given two camera poses. 
+
+**Given two camera poses, $$(C_1, R_1)$$ and $$(C_2, R_2)$$, and correspondences, $$x_1 \leftrightarrow x_2$$, triangulate 3D points using linear least squares. Implement the function `LinearTriangulation.py`.**
+
+Though, in order to find the _correct_ unique camera pose, we need to remove the disambiguity. This can be accomplish by checking the **cheirality condition** _i.e._ *the reconstructed points must be in front of the cameras*. 
 To check the cheirality condition, triangulate the 3D points (given two camera poses) using **linear least squares** to check the sign of the depth $$Z$$ in the camera coordinate system w.r.t. camera center. A 3D point $$X$$ is in front of the camera iff:
 $$r_3\mathbf{(X-C)} > 0$$
 where $$r_3$$ is the third row of the rotation matrix (z-axis of the camera). Not all triangulated points satisfy this coniditon due of the presence of correspondence noise. The best camera configuration, $$(C, R, X)$$ is the one that produces the maximum number of points satisfying the cheirality condition. 
@@ -214,7 +224,9 @@ where $$r_3$$ is the third row of the rotation matrix (z-axis of the camera). No
   <div style="clear:both;"></div>
 </div>
 
-
+**Given four camera pose configurations and their triangulated points, find the unique camera
+pose by checking the cheirality condition - the reconstructed points must be in front of the
+cameras (implement the function `DisambiguateCameraPose.py`).**
 
 <a name='nonlintri'></a>
 #### 3.5.1. Non-Linear Triangulation
@@ -231,6 +243,8 @@ Here, $$j$$ is the index of each camera, $$\widetilde{X}$$ is the hoomogeneous r
   <div style="clear:both;"></div>
 </div>
 
+**Given two camera poses and linearly triangulated points, $$X$$, refine the locations of the 3D
+points that minimizes reprojection error (implement the function `NonlinearTriangulation.py`).**
 
 <a name='pnp'></a>
 ### 3.6. Perspective-$$n$$-Points
