@@ -334,7 +334,7 @@ Also, compare your result against VSfM output. You can download the off-the-shel
 ## Project Overview
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p3/overview.png"  width="80%">
+  <img src="/assets/2019/p3/summary.png"  width="80%">
   <div class="figcaption">
  	Figure 7: The final reconstructed scene after Sparse Bundle Adjustment (SBA).
   </div>
