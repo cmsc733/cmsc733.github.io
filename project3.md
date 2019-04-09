@@ -16,32 +16,39 @@ Table of Contents:
 		- [3.2.1. Epipolar Geometry](#epipole)
 		- [3.2.2. Fundamental Matrix](#fundmatrix)
 		- [3.2.3. Match Outlier Rejection using RANSAC](#ransac)
-  - [3.3. Estimate *Essential Matrix* from Fundamental Matrix](#estE)
-  - [3.5. Estimate Camera Pose from Essential Matrix](#essential)
-	- [3.5. Check for Cheirality Condition using Triangulation](#tri)
-		- [3.5.1. Non-Linear Triangulation](#nonlintri)
+
+- [3.3. Estimate *Essential Matrix* from Fundamental Matrix](#estE)
+
+- [3.4. Estimate Camera Pose from Essential Matrix](#essential)
+
+- [3.5. Check for Cheirality Condition using Triangulation](#tri)
+
+- [3.5.1. Non-Linear Triangulation](#nonlintri)
+
+- [3.6. Perspective-$$n$$-points](#pnp)
 	
-	- [3.6. Perspective-$$n$$-points](#pnp)
-			- [3.6.1. Linear Camera Pose Estimation](#campose)
-			
-			- [3.6.2. PnP RANSAC](#pnpransac)
-			
-			- [3.6.2. NonLinear PnP](#nonpnp)
-			
-	- [3.7. Bundle Adjustment](#ba)
-			
-			- [3.7.1. Visibility Matrix](#vismatrix)
-			
-			- [3.7.2. Bundle Adjustment](#sba)
-			
+	- [3.6.1. Linear Camera Pose Estimation](#campose)
+	
+	- [3.6.2. PnP RANSAC](#pnpransac)
+	
+	- [3.6.2. NonLinear PnP](#nonpnp)
+	
+- [3.7. Bundle Adjustment](#ba)
+	
+	- [3.7.1. Visibility Matrix](#vismatrix)
+	
+	- [3.7.2. Bundle Adjustment](#sba)
+
 - [4. Putting the pipeline together](#combine)
 
 - [5. Notes about Data Set](#dataset)
 
 - [6. Submission Guidelines](#sub)
-
-  - [6.1. File tree and naming](#files)
-  - [6.2. Report](#report)
+	
+	- [6.1. File tree and naming](#files)
+	
+	- [6.2. Report](#report)
+	
 - [7. Collaboration Policy](#coll)
 
 <a name='due'></a>
