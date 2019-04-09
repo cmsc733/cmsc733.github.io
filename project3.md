@@ -20,18 +20,29 @@ Table of Contents:
   - [3.5. Estimate Camera Pose from Essential Matrix](#essential)
 	- [3.5. Check for Cheirality Condition using Triangulation](#tri)
 		- [3.5.1. Non-Linear Triangulation](#nonlintri)
+	
 	- [3.6. Perspective-$$n$$-points](#pnp)
 			- [3.6.1. Linear Camera Pose Estimation](#campose)
+			
 			- [3.6.2. PnP RANSAC](#pnpransac)
+			
 			- [3.6.2. NonLinear PnP](#nonpnp)
+			
 	- [3.7. Bundle Adjustment](#ba)
+			
 			- [3.7.1. Visibility Matrix](#vismatrix)
+			
 			- [3.7.2. Bundle Adjustment](#sba)
-- [4. Notes about Test Set](#testset)
-- [5. Submission Guidelines](#sub)
-  - [5.1. File tree and naming](#files)
-  - [5.2. Report](#report)
-- [6. Collaboration Policy](#coll)
+			
+- [4. Putting the pipeline together](#combine)
+
+- [5. Notes about Data Set](#dataset)
+
+- [6. Submission Guidelines](#sub)
+
+  - [6.1. File tree and naming](#files)
+  - [6.2. Report](#report)
+- [7. Collaboration Policy](#coll)
 
 <a name='due'></a>
 ## 1. Deadline 
@@ -301,23 +312,23 @@ where $$V_{ij}$$ is the visibility matrix.
 
 Clearly, solving such a method to compute the structure from motion is complex and slow _(can take from several minutes for only 8-10 images)_. This minimization can be solved using a nonlinear optimization functions such as `scipy.optimize.leastsq` but will be extremely slow due to a number of parameters. The Sparse Bundle Adjustment toolbox such as [pySBA](https://buildmedia.readthedocs.org/media/pdf/python-sba/latest/python-sba.pdf) and [large-scale BA in scipy](https://scipy-cookbook.readthedocs.io/items/bundle_adjustment.html) are designed to solve such optimization by exploiting sparsity of visibility matrix, $$V$$ . Note that a small number of entries in $$V$$ are one because a 3D point is visible from a small subset of images. Using the sparse bundle adjustment package is not trivial and would be much faster than one you write. For SBA, you are allowed to use any optimization library.
 
-### 5. Putting the pipeline together
+## 4. Putting the pipeline together
 
 Write a program `Wrapper.py` that run the full pipeline of structure from motion based on the above algorithm. 
 
 Also, compare your result against VSfM output. You can download the off-the-shelf SfM software here: [VSfM](http://ccwu.me/vsfm/).
 
 <a name='testset'></a>
-## 6. Notes about the Data Set
+## 5. Notes about the Data Set
 Run your SfM algorithm on the images provided [here]. Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB's calibration tool in Computer Vision toolbolx will be handy.
 
 <a name='sub'></a>
-## 7. Submission Guidelines
+## 6. Submission Guidelines
 
 <b> If your submission does not comply with the following guidelines, you'll be given ZERO credit </b>
 
 <a name='files'></a>
-### 7.1. File tree and naming
+### 6.1. File tree and naming
 
 Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_p3.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_p1.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``Wrapper.py``. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. Please **DO NOT** include data in your submission.
 
@@ -336,7 +347,7 @@ YourDirectoryID_hw1.zip
 └── Report.pdf
 ```
 <a name='report'></a>
-### 7.2. Report
+### 6.2. Report
 
 There will be no Test Set for this project. 
 For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
@@ -353,5 +364,5 @@ other observations in your report.
 - Do not use any function that directly implements a part of the pipeline. If you have any doubts, please contact us via Piazza.
 
 <a name='coll'></a>
-## 8. Collaboration Policy
+## 7. Collaboration Policy
 You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.
