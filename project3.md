@@ -5,6 +5,7 @@ title: Buildings built in minutes - An SfM Approach
 permalink: /2019/proj/p3/
 ---
 
+**To be submitted in a group of two.**
 
 Table of Contents:
 - [1. Deadline](#due)
@@ -20,7 +21,12 @@ Table of Contents:
 	- [3.5. Check for Cheirality Condition using Triangulation](#tri)
 		- [3.5.1. Non-Linear Triangulation](#nonlintri)
 	- [3.6. Perspective-$$n$$-points](#pnp)
+			- [3.6.1. Linear Camera Pose Estimation](#campose)
+			- [3.6.2. PnP RANSAC](#pnpransac)
+			- [3.6.2. NonLinear PnP](#nonpnp)
 	- [3.7. Bundle Adjustment](#ba)
+			- [3.7.1. Visibility Matrix](#vismatrix)
+			- [3.7.2. Bundle Adjustment](#sba)
 - [4. Notes about Test Set](#testset)
 - [5. Submission Guidelines](#sub)
   - [5.1. File tree and naming](#files)
@@ -266,6 +272,7 @@ function such as `scipy.optimize.leastsq` or `scipy.optimize.least_squares` in S
 ### 3.7. Bundle Adjustment
 
 Once you have computed all the camera poses and 3D points, we need to refine the poses and 3D points together, initialized by previous reconstruction by minimizing reporjection error.
+
 <div class="fig fighighlight">
   <img src="/assets/2019/p3/BA.png"  width="80%">
   <div class="figcaption">
@@ -273,27 +280,44 @@ Once you have computed all the camera poses and 3D points, we need to refine the
   </div>
   <div style="clear:both;"></div>
 </div>
+
+### 3.7.1 Visibility Matrix
+
+Find the relationship between a camera and point, construct a $$I \times J$$ binary matrix, $$V$$ where
+$$V_{ij}$$ is one if the $$j^{th}$$ point is visible from the $$i^{th}$$ camera and zero otherwise (implement the
+function `BuildVisibilityMatrix.py`)
+
+### 3.7.2 Bundle Adjustment
+
+Given initialized camera poses and 3D points, refine them by minimizing reprojection error (implement the function `BundleAdjustment.py`). The bundle adjustment refines camera
+poses and 3D points simultaneously by minimizing the following reprojection error over $$C_{i_{i=1}}^I$$,
+$$q_{i_{i=1}}^I$$ and $$X_{j_{j=1}}^J$$.
+
+
 The optimization problem can formulated as following:
 
 $$\underset{\{C_i, q_i\}_{i=1}^i,\{X\}_{j=1}^J}{\operatorname{min}}\sum_{i=1}^I\sum_{j=1}^J V_{ij}\left(\left(u^j - \dfrac{P_1^{jT}\tilde{\phi}}{P_3^{jT}\tilde{X}}\right)^2 + \left(v^j - \dfrac{P_2^{jT}\tilde{\phi}}{P_3^{jT}\tilde{X}}\right)^2\right)$$
 where $$V_{ij}$$ is the visibility matrix.
 
- Visibility matrix signifies the relationship between the camera and a point. $$V_{ij}$$ is one if $$j^{th}$$ point is visible from the $$i^{th}$$ camera and zero otherwise. One can use a nonlinear optimization toolbox such as `fminunc` or `lsqnonlin` in MATLAB but is extremely slow as the number of parameters are large. The <i>Sparse Bundle Adjustment</i> toolbox is designed to solve such optimization problem by exploiting sparsity of visibility matrix, $$V$$.
+Clearly, solving such a method to compute the structure from motion is complex and slow _(can take from several minutes for only 8-10 images)_. This minimization can be solved using a nonlinear optimization functions such as `scipy.optimize.leastsq` but will be extremely slow due to a number of parameters. The Sparse Bundle Adjustment toolbox such as [pySBA](https://buildmedia.readthedocs.org/media/pdf/python-sba/latest/python-sba.pdf) and [large-scale BA in scipy](https://scipy-cookbook.readthedocs.io/items/bundle_adjustment.html) are designed to solve such optimization by exploiting sparsity of visibility matrix, $$V$$ . Note that a small number of entries in $$V$$ are one because a 3D point is visible from a small subset of images. Using the sparse bundle adjustment package is not trivial and would be much faster than one you write. For SBA, you are allowed to use any optimization library.
 
-Clearly, solving such a method to compute the structure from motion is complex and slow _(can take from several minutes for only 8-10 images)_. The above steps collectively is the traditional way of solving the problem of SfM. However, the solution to the problem of structure from motion can be made more robust with deep learning.
+### 5. Putting the pipeline together
 
+Write a program `Wrapper.py` that run the full pipeline of structure from motion based on the above algorithm. 
+
+Also, compare your result against VSfM output. You can download the off-the-shelf SfM software here: [VSfM](http://ccwu.me/vsfm/).
 
 <a name='testset'></a>
-## 4. Notes about Test Set
-One day (24 hours) before the deadline, a test set will be released with details of what faces to replace. We'll grade on the completion of the project and visually appealing results.
+## 6. Notes about the Data Set
+Run your SfM algorithm on the images provided [here]. Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB's calibration tool in Computer Vision toolbolx will be handy.
 
 <a name='sub'></a>
-## 5. Submission Guidelines
+## 7. Submission Guidelines
 
 <b> If your submission does not comply with the following guidelines, you'll be given ZERO credit </b>
 
 <a name='files'></a>
-### 6.1. File tree and naming
+### 7.1. File tree and naming
 
 Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_p3.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_p1.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``Wrapper.py``. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. Please **DO NOT** include data in your submission.
 
@@ -312,18 +336,22 @@ YourDirectoryID_hw1.zip
 └── Report.pdf
 ```
 <a name='report'></a>
-### 6.2. Report
+### 7.2. Report
 
+There will be no Test Set for this project. 
 For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
 
+- Please make your report extremely detailed with re-projection error after each step (Linear, Non-linear triangulation, Linear, Non-linear PnP before and after BA and so on). Describe all the steps (anything that is not obvious) and any
+other observations in your report.
+
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
-- Present the
-- Present the Data you collected in ``Data`` folder with names ``Data1.mp4`` and ``Data2.mp4`` (Be sure to have the format as ``.mp4`` **ONLY**).
-- Present the output videos for Triangulation, TPS and PRNet as ``Data1OutputTri.mp4``, ``Data1OutputTPS.mp4`` and ``Data1OutputPRNet.mp4`` for Data 1 respectively in the ``Data`` folder. Also, present outputs videos for Triangulation, TPS and PRNet as ``Data2OutputTri.mp4``, ``Data2OutputTPS.mp4`` and ``Data2OutputPRNet.mp4`` for Data 2 respectively in the ``Data`` folder. (Be sure to have the format as ``.mp4`` **ONLY**).
-- For Phase 1, present input and output images for two frames from each of the videos using both Triangulation and TPS approach.
-- For Phase 2, present input and output images for two frames from each of the videos using PRNet approach.
-- Present failure cases for both Phase 1 and 2 and present your thoughts on why the failure occurred. 
+
+- Present the Data you collected in ``Data/Imgs/``.
+
+- Present failure cases and explanation, if any. 
+
+- Do not use any function that directly implements a part of the pipeline. If you have any doubts, please contact us via Piazza.
 
 <a name='coll'></a>
-## 7. Collaboration Policy
+## 8. Collaboration Policy
 You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.
