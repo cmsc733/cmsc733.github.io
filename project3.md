@@ -189,7 +189,7 @@ $$\mathbf{E}=U\begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix}V^
 
 _It is important to note that the $$\mathbf{F}$$ is defined in the original image space (i.e. pixel coordinates) whereas $$\mathbf{E}$$ is in the normalized image coordinates. Normalized image coordinates have the origin at the optical center of the image. Also, relative camera poses between two views can be computed using $$\mathbf{E}$$ matrix. Moreover, $$\mathbf{F}$$ has 7 degrees of freedom while $$\mathbf{E}$$ has 5 as it takes camera parameters in account. ([5-Point Motion Estimation Made Easy](http://users.cecs.anu.edu.au/~hongdong/new5pt_cameraREady_ver_1.pdf))_
 
-**Given $$F$$ , estimate $$E = K^T F K$$ by implementing the function `EssentialMatrixFromFundamentalMatrix.py`.**
+**Given $$F$$ , estimate the essential matrix $$E = K^T F K$$ by implementing the function `EssentialMatrixFromFundamentalMatrix.py`.**
 
 <a name='essential'></a>
 ### 3.4. Estimate **Camera Pose** from Essential Matrix
@@ -233,7 +233,7 @@ cameras (implement the function `DisambiguateCameraPose.py`).**
 Given two camera poses and linearly triangulated points, $$X$$, the locations of the 3D points that minimizes the reprojection error (Recall [Project 2](https://cmsc426.github.io/pano/#reproj)) can be refined. The linear triangulation minimizes the algebraic error. Though, the reprojection error is geometrically meaningful error and can be computed by measuring error between measurement and projected 3D point:<br>
 $$\underset{x}{\operatorname{min}}$$ $$\sum_{j=1,2}\left(u^j - \frac{P_1^{jT}\widetilde{\phi}}{P_3^{jT}{X}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{\phi}}{P_3^{jT}{X}}\right)^2$$
 
-Here, $$j$$ is the index of each camera, $$\widetilde{X}$$ is the hoomogeneous representation of $$X$$. $$P_i^T$$ is each row of camera projection matrix, $$P$$. This minimization is highly nonlinear due to the divisions. The initial guess of the solution, $$X_0$$, is estimated via the linear triangulation to minimize the cost function. This minimization can be solved using nonlinear optimization toolbox such as `fminunc` or `lsqnonlin` in MATLAB. 
+Here, $$j$$ is the index of each camera, $$\widetilde{X}$$ is the hoomogeneous representation of $$X$$. $$P_i^T$$ is each row of camera projection matrix, $$P$$. This minimization is highly nonlinear due to the divisions. The initial guess of the solution, $$X_0$$, is estimated via the linear triangulation to minimize the cost function. This minimization can be solved using nonlinear optimization functions such as `scipy.optimize.leastsq` or `scipy.optimize.least_squares` in Scipy library. 
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p3/nonlintria.png"  width="100%">
@@ -252,7 +252,7 @@ points that minimizes reprojection error (implement the function `NonlinearTrian
 Now, since we have a set of $$n$$ 3D points in the world, their $$2D$$ projections in the image and the intrinsic parameter; the 6 DOF camera pose can be estimated using linear least squares. This fundamental problem, in general is known as _Persepective_-$$n$$- _Point_ (PnP). For there to exist a solution, $$n\geq 3$$. There are multiple methods to solve the P$$n$$P problem and have an assumptions in most of them that the camera is calibrated. Methods such as [Unified P$$n$$P](https://pdfs.semanticscholar.org/f1d6/2775d4a51161663ff9453b37bb21a1263f25.pdf) (or UPnP) do not abide with the said assumption as they estimate both intrinsic and extrinsic parameters. In this section, you will a simpler version of PnP. You will register a new image given 2D-3D correspondences, i.e. $$X\leftrightarrow x$$ followed by nonlinear optimization.
 
 ### 3.6.1 Linear Camera Pose Estimation
-Given 2D-3D correspondences, $$X\leftrightarrow x$$ and the intrinsic paramter $$K$$, estimate the camera pose using linear least squares (implement the function $$\texttt{LinearPnP.py}$$. 2D points can be normalized by the intrinsic parameter to isolate camera parameters, $$(C,R)$$, i.e. $$K^{-1}x$$. A linear least squares system that relates the 3D and 2D points can be solved for $$(t, R)$$ where $$t = −R^T C$$. Since the linear least square solve does not enforce orthogonality of the rotation matrix, $$R \in SO(3)$$, the rotation matrix must be corrected by $$R = UV^T$$ where $$R=UDV^T$$. If the corrected rotation has $$-1$$ determinant, $$R = −R$$. This linear PnP requires at least 6 correspondences. _(Think why?)_
+Given 2D-3D correspondences, $$X\leftrightarrow x$$ and the intrinsic paramter $$K$$, estimate the camera pose using linear least squares (implement the function `LinearPnP.py`. 2D points can be normalized by the intrinsic parameter to isolate camera parameters, $$(C,R)$$, i.e. $$K^{-1}x$$. A linear least squares system that relates the 3D and 2D points can be solved for $$(t, R)$$ where $$t = −R^T C$$. Since the linear least square solve does not enforce orthogonality of the rotation matrix, $$R \in SO(3)$$, the rotation matrix must be corrected by $$R = UV^T$$ where $$R=UDV^T$$. If the corrected rotation has $$-1$$ determinant, $$R = −R$$. This linear PnP requires at least 6 correspondences. _(Think why?)_
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p3/PnPRANSAC.png"  width="50%">
@@ -279,7 +279,7 @@ The alogrithm below depicts the solution with RANSAC.
 Just like in triangulation, since we have the linearly estimated camera pose, we can refine the camera pose that minimizes the reprojection error (Linear PnP only minimizes the algebraic error).
 
 ### 3.6.3 Nonlinear PnP
-Given $$N \geq 6$$ 3D-2D correspondences, $$X \leftrightarrow x$$, and linearly estimated camera pose, $$(C, R)$$, refine the camera pose that minimizes reprojection error (implement the function NonlinearPnP.py). The linear PnP minimizes algebraic error. Reprojection error that is geometrically meaningful error is computed by measuring error between measurement and projected 3D point
+Given $$N \geq 6$$ 3D-2D correspondences, $$X \leftrightarrow x$$, and linearly estimated camera pose, $$(C, R)$$, refine the camera pose that minimizes reprojection error (implement the function `NonlinearPnP.py`). The linear PnP minimizes algebraic error. Reprojection error that is geometrically meaningful error is computed by measuring error between measurement and projected 3D point
 
 $$\underset{C,R}{\operatorname{min}} \sum_{i=1,J} \left(u^j - \frac{P_1^{jT}\widetilde{X_j}}{P_3^{jT}{\widetilde{X_j}}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{X_j}}{P_3^{jT}{X_j}}\right)^2$$
 
@@ -331,6 +331,16 @@ Write a program `Wrapper.py` that run the full pipeline of structure from motion
 
 Also, compare your result against VSfM output. You can download the off-the-shelf SfM software here: [VSfM](http://ccwu.me/vsfm/).
 
+## Project Overview
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p3/overview.png"  width="80%">
+  <div class="figcaption">
+ 	Figure 7: The final reconstructed scene after Sparse Bundle Adjustment (SBA).
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
 <a name='testset'></a>
 ## 5. Notes about the Data Set
 Run your SfM algorithm on the images provided [here]. Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB's calibration tool in Computer Vision toolbolx will be handy.
@@ -349,6 +359,18 @@ Your submission on ELMS/Canvas must be a ``zip`` file, following the naming conv
 YourDirectoryID_hw1.zip
 │   README.md
 |   Your Code files 
+|   ├── GetInliersRANSAC.py
+|   ├── EstimateFundamentalMatrix.py
+|   ├── EssentialMatrixFromFundamentalMatrix.py
+|   ├── ExtractCameraPose.py
+|   ├── LinearTriangulation.py
+|   ├── DisambiguateCameraPose.py
+|   ├── NonlinearTriangulation.py
+|   ├── PnPRANSAC.py
+|   ├── NonlinearPnP.py
+|   ├── BuildVisibilityMatrix.py
+|   ├── BundleAdjustment.py
+|   ├── Wrapper.py
 |   ├── Any subfolders you want along with files
 |   Wrapper.py 
 |   Data
@@ -357,6 +379,7 @@ YourDirectoryID_hw1.zip
 |   ├── LinearTriangulationOutputForAllImageSet
 |   ├── NonLinearTriangulationOutputForAllImageSet
 |   ├── PnPOutputForAllImageSetShowingCameraPoses
+|   ├── Imgs/
 └── Report.pdf
 ```
 <a name='report'></a>
