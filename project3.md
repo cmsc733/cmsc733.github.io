@@ -336,14 +336,33 @@ Also, compare your result against VSfM output. You can download the off-the-shel
 <div class="fig fighighlight">
   <img src="/assets/2019/p3/summary.png"  width="80%">
   <div class="figcaption">
- 	Figure 7: The final reconstructed scene after Sparse Bundle Adjustment (SBA).
+ 	Figure: The overview.
   </div>
   <div style="clear:both;"></div>
 </div>
 
 <a name='testset'></a>
 ## 5. Notes about the Data Set
-Run your SfM algorithm on the images provided [here]. Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB's calibration tool in Computer Vision toolbolx will be handy.
+Run your SfM algorithm on the images provided [here](https://github.com/cmsc733/cmsc733.github.io/blob/master/assets/2019/p3/Data.zip). The data given to you are a set of 6 images of building in-front of Levine Hall at UPenn, using a GoPro Hero 3 with fisheye lens distortion corrected. Keypoints matching (SIFT keypoints and descriptors used) data is also provided in the same folder for pairs of images. The data folder contains 5 matching files named `matching*.txt` where `*` refers to numbers from 1 to 5. For eg., `matching3.txt` contains the matching between the third image and the fourth, fifth and sixth images, i.e., $$\mathcal{I}_3 \leftrightarrow \mathcal{I}_4$$, $$\mathcal{I}_3 \leftrightarrow \mathcal{I}_5$$ and $$\mathcal{I}_3 \leftrightarrow \mathcal{I}_6$$ . Therefore, `matching6.txt` does not exist because it is the matching by itself.
+
+The file format of the matching file is described next. Each matching file is formatted as
+follows for the i th matching file:
+
+**nFeatures:** (the number of feature points of the $$i^{th}$$ image - each following row specifies
+matches across images given a feature location in the $$i^{th}$$ image.)
+**Each Row:** (the number of matches for the j th feature) (Red Value) (Green Value) (Blue Value) (u_{current image}) (v_{current image}) (image id) (u_{image id image}) (v_{image id image}) (image id) (u_{image id image})
+(v_{image id image}) ...
+
+An example of matching1.txt is given below:
+```
+nFeatures: 2002
+3 137 128 105 454.740000 392.370000 2 308.570000 500.320000 4 447.580000 479.360000
+2 137 128 105 454.740000 392.370000 4 447.580000 479.360000
+```
+The images are taken at 1280 × 960 resolution and the camera intrinsic parameters $$K$$ are given in `calibration.txt` file. You will program this full pipeline guided by the functions described in following sections.
+
+
+Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB's calibration tool in Computer Vision toolbolx will be handy.
 
 <a name='sub'></a>
 ## 6. Submission Guidelines
