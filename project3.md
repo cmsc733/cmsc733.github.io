@@ -219,9 +219,24 @@ Here, $$j$$ is the index of each camera, $$\widetilde{X}$$ is the hoomogeneous r
 <a name='pnp'></a>
 ### 3.6. Perspective-$$n$$-Points
 
-Now, since we have a set of $$n$$ 3D points in the world, their $$2D$$ projections in the image and the intrinsic parameter; the 6 DOF camera pose can be estimated using linear least squares. This fundamental problem, in general is known as _Persepective_-$$n$$-_Point_ (PnP). For there to exist a solution, $$n\geq 3$$. There are multiple methods to solve the P$$n$$P problem and have an assumptions in most of them that the camera is calibrated. Methods such as [Unified P$$n$$P](https://pdfs.semanticscholar.org/f1d6/2775d4a51161663ff9453b37bb21a1263f25.pdf) (or UPnP) do not abide with the said assumption as they estimate both intrinsic and extrinsic parameters.
+Now, since we have a set of $$n$$ 3D points in the world, their $$2D$$ projections in the image and the intrinsic parameter; the 6 DOF camera pose can be estimated using linear least squares. This fundamental problem, in general is known as _Persepective_-$$n$$- _Point_ (PnP). For there to exist a solution, $$n\geq 3$$. There are multiple methods to solve the P$$n$$P problem and have an assumptions in most of them that the camera is calibrated. Methods such as [Unified P$$n$$P](https://pdfs.semanticscholar.org/f1d6/2775d4a51161663ff9453b37bb21a1263f25.pdf) (or UPnP) do not abide with the said assumption as they estimate both intrinsic and extrinsic parameters. In this section, you will a simpler version of PnP. You will register a new image given 2D-3D correspondences, i.e. $$X\leftrightarrow x$$ followed by nonlinear optimization.
 
-P$$n$$P is prone to error as there are outliers in the given set of point correspondences. To overcome this error, we can use RANSAC (yes, again!) to make our camera pose more robust to outliers. The alogrithm below depicts the solution with RANSAC.
+### 3.6.1 Linear Camera Pose Estimation
+Given 2D-3D correspondences, $$X\leftrightarrow x$$ and the intrinsic paramter $$K$$, estimate the camera pose using linear least squares (implement the function $$\texttt{LinearPnP.py}$$. 2D points can be normalized by the intrinsic parameter to isolate camera parameters, $$(C,R)$$, i.e. $$K^{-1}x$$. A linear least squares system that relates the 3D and 2D points can be solved for $$(t, R)$$ where $$t = −R^T C$$. Since the linear least square solve does not enforce orthogonality of the rotation matrix, $$R \in SO(3)$$, the rotation matrix must be corrected by $$R = UV^T$$ where $$R=UDV^T$$. If the corrected rotation has $$-1$$ determinant, $$R = −R$$. This linear PnP requires at least 6 correspondences. _(Think why?)_
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p3/PnPRANSAC.png"  width="50%">
+  <div class="figcaption">
+ 	Figure: Plot of the camera poses with feature points. Different color represents feature correspondences from different pair of images. Blue points are features from Image 1 and Image 2; Red points are features from Image 2 and Image 3 etc.
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+### 3.6.2 PnP RANSAC
+
+P$$n$$P is prone to error as there are outliers in the given set of point correspondences. To overcome this error, we can use RANSAC (yes, again!) to make our camera pose more robust to outliers. To formalize, given $$N \geq 6$$ 3D-2D correspondences, $$X \leftrightarrow x$$, implement the following function that estimates camera pose $$(C, R)$$ via RANSAC (implement the function PnPRANSAC.py).
+
+The alogrithm below depicts the solution with RANSAC.
 
 <div class="fig fighighlight">
   <img src="/assets/2019/p3/pnpransac.png"  width="80%">
@@ -229,18 +244,23 @@ P$$n$$P is prone to error as there are outliers in the given set of point corres
  	Algorithm 2: PnP RANSAC
   </div>
   <div style="clear:both;"></div>
-
-
-  <img src="/assets/2019/p3/PnPRANSAC.png"  width="50%">
-  <div class="figcaption">
- 	Figure 7: Plot of the camera poses with feature points. Different color represents feature correspondences from different pair of images. Blue points are features from Image 1 and Image 2; Red points are features from Image 2 and Image 3 etc.
-  </div>
-  <div style="clear:both;"></div>
 </div>
 
-Just like in triangulation, since we have the linearly estimated camera pose, we can refine the camera pose that minimizes the reprojection error (Linear PnP only minimizes the algebraic error). Though, reprojection error is the geometrically meaningful error and can be computed by measuring error between measurement and projected 3D point.
+Just like in triangulation, since we have the linearly estimated camera pose, we can refine the camera pose that minimizes the reprojection error (Linear PnP only minimizes the algebraic error).
+
+### 3.6.3 Nonlinear PnP
+Given $$N \geq 6$$ 3D-2D correspondences, $$X \leftrightarrow x$$, and linearly estimated camera pose, $$(C, R)$$, refine the camera pose that minimizes reprojection error (implement the function NonlinearPnP.py). The linear PnP minimizes algebraic error. Reprojection error that is geometrically meaningful error is computed by measuring error between measurement and projected 3D point
 
 $$\underset{C,R}{\operatorname{min}} \sum_{i=1,J} \left(u^j - \frac{P_1^{jT}\widetilde{X_j}}{P_3^{jT}{\widetilde{X_j}}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{X_j}}{P_3^{jT}{X_j}}\right)^2$$
+
+here $$\widetilde{X}$$ is the homogeneous representation of $$X$$. $$P_i^T$$ is each row of camera projection matrix, $$P$$ which is computed by $$P = KR [I_{3\times3} − C]$$. A compact representation of the rotation matrix using quaternion is a better choice to enforce orthogonality of the rotation matrix, $$R = R(q)$$ where $$q$$ is four dimensional quaternion, i.e.,
+
+$$\underset{C,q}{\operatorname{min}} \sum_{i=1,J} \left(u^j - \frac{P_1^{jT}\widetilde{X_j}}{P_3^{jT}{\widetilde{X_j}}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{X_j}}{P_3^{jT}{X_j}}\right)^2$$
+
+This minimization is highly nonlinear because of the divisions and quaternion parameteriza-
+tion. The initial guess of the solution, $$(C_0, R_0)$$, estimated via the linear PnP is needed to
+minimize the cost function. This minimization can be solved using a nonlinear optimization
+function such as `scipy.optimize.leastsq` or `scipy.optimize.least_squares` in Scipy library.
 
 <a name='ba'></a>
 ### 3.7. Bundle Adjustment
@@ -257,7 +277,6 @@ The optimization problem can formulated as following:
 
 $$\underset{\{C_i, q_i\}_{i=1}^i,\{X\}_{j=1}^J}{\operatorname{min}}\sum_{i=1}^I\sum_{j=1}^J V_{ij}\left(\left(u^j - \dfrac{P_1^{jT}\tilde{\phi}}{P_3^{jT}\tilde{X}}\right)^2 + \left(v^j - \dfrac{P_2^{jT}\tilde{\phi}}{P_3^{jT}\tilde{X}}\right)^2\right)$$
 where $$V_{ij}$$ is the visibility matrix.
-(_Don't scratch your head yet!_)
 
  Visibility matrix signifies the relationship between the camera and a point. $$V_{ij}$$ is one if $$j^{th}$$ point is visible from the $$i^{th}$$ camera and zero otherwise. One can use a nonlinear optimization toolbox such as `fminunc` or `lsqnonlin` in MATLAB but is extremely slow as the number of parameters are large. The <i>Sparse Bundle Adjustment</i> toolbox is designed to solve such optimization problem by exploiting sparsity of visibility matrix, $$V$$.
 
