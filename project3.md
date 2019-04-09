@@ -350,7 +350,8 @@ follows for the i th matching file:
 
 **nFeatures:** (the number of feature points of the $$i^{th}$$ image - each following row specifies
 matches across images given a feature location in the $$i^{th}$$ image.)
-**Each Row:** (the number of matches for the j th feature) (Red Value) (Green Value) (Blue Value) (u_{current image}) (v_{current image}) (image id) (u_{image id image}) (v_{image id image}) (image id) (u_{image id image})
+
+**Each Row:** (the number of matches for the $$j^{th}$$ feature) (Red Value) (Green Value) (Blue Value) ($$u_{\texttt{current image}}$$) ($$v_{\texttt{current image}}$$) (image id) ($$u_{\texttt{image id image}}$$) ($$v_{\texttt{image id image}}$$) (image id) ($$u_{\texttt{image id image}}$$)
 (v_{image id image}) ...
 
 An example of matching1.txt is given below:
@@ -361,8 +362,8 @@ nFeatures: 2002
 ```
 The images are taken at 1280 × 960 resolution and the camera intrinsic parameters $$K$$ are given in `calibration.txt` file. You will program this full pipeline guided by the functions described in following sections.
 
-
-Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB's calibration tool in Computer Vision toolbolx will be handy.
+**For the extra credit:**
+Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB's calibration tool in Computer Vision toolbox will be handy.
 
 <a name='sub'></a>
 ## 6. Submission Guidelines
@@ -393,7 +394,7 @@ YourDirectoryID_hw1.zip
 |   ├── Any subfolders you want along with files
 |   Wrapper.py 
 |   Data
-|   ├── BundleAdjustmentOutputForAllImageSet
+|   ├── BundleAdjustmentOutputForAllImage
 |   ├── FeatureCorrespondenceOutputForAllImageSet
 |   ├── LinearTriangulationOutputForAllImageSet
 |   ├── NonLinearTriangulationOutputForAllImageSet
