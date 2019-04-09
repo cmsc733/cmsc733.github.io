@@ -34,7 +34,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Deadline 
-**11:59PM, Thursday, April 11, 2019.**
+**11:59PM, Thursday, April 22, 2019.**
 
 <a name='intro'></a>
 ## 2. Introduction
@@ -61,7 +61,7 @@ We have already learned about keypoint matching using SIFT keypoints and descrip
 Before rejecting the correspondences, let us first understand what Fundamental matrix is!
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/featmatch.png" width="100%">
+  <img src="/assets/2019/p3/featmatch.png" width="100%">
   <div class="figcaption">
     Figure 1: Feature matching between two images from different views.
   </div>
@@ -79,12 +79,12 @@ Let's say a point $$\mathbf{X}$$ in the 3D-space (viewed in two images) is captu
 and the plane formed can be denoted by $$\pi$$. Since these points are coplanar, the rays back-projected from $$\mathbf{x}$$ and $$\mathbf{x'}$$ intersect at $$\mathbf{X}$$. This is the most significant property in searching for a correspondence. 
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/epipole1.png"  width="120%">
+  <img src="/assets/2019/p3/epipole1.png"  width="120%">
   <div class="figcaption">
  	Figure 2(a): Caption goes here.
   </div>
 <br><br>
-  <img src="/assets/sfm/epipole2.png"  width="120%">
+  <img src="/assets/2019/p3/epipole2.png"  width="120%">
   <div class="figcaption">
   	Figure 2(b): Caption goes here.
   </div>
@@ -128,7 +128,7 @@ $$Ax=0$$ is obtained.
 	This system of equation can be answered by solving the linear least squares using Singular Value Decomposition (SVD) as explained in the <a href="https://cmsc426.github.io/math-tutorial/#svd">Math module</a>. When applying SVD to matrix $$\mathbf{A}$$, the decomposition $$\mathbf{USV^T}$$ would be obtained with $$\mathbf{U}$$ and $$\mathbf{V}$$ orthonormal matrices and a diagonal matrix $$\mathbf{S}$$ that contains the singular values. The singular values $$\sigma_i$$ where $$i\in[1,9], i\in\mathbb{Z}$$, are positive and are in decreasing order with $$\sigma_9=0$$ since we have 8 equations for 9 unknowns. Thus, the last column of $$\mathbf{V}$$ is the true solution given that $$\sigma_i\neq 0 \  \forall i\in[1,8], i\in\mathbb{Z}$$. However, due to noise in the correspondences, the estimated $$\mathbf{F}$$ matrix can be of rank 3 _i.e._ $$\sigma_9\neq0$$. So, to enfore the rank 2 constraint, the last singular value of the estimated $$\mathbf{F}$$ must be set to zero. If $$F$$ has a full rank then it will have an empty null-space _i.e._ it won't have any point that is on entire set of lines. Thus, there wouldn't be any epipoles. See Fig. 3 for full rank comparisons for $$F$$ matrices.
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/FMatrixRank.png"  width="120%">
+  <img src="/assets/2019/p3/FMatrixRank.png"  width="120%">
   <div class="figcaption">
  	Figure 3: F Matrix: Rank 3 vs Rank 2 comparison
   </div>
@@ -153,13 +153,13 @@ Since the point correspondences are computed using SIFT or some other feature de
 Below is the pseduo-code that returns the $$\mathbf{F}$$ matrix for a set of matching corresponding points (computed using SIFT) which maximizes the number of inliers.
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/ransac.png"  width="80%">
+  <img src="/assets/2019/p3/ransac.png"  width="80%">
   <div class="figcaption">
  	Algorithm 1: Get Inliers RANSAC
   </div>
   <div style="clear:both;"></div>
 <br><br>
-  <img src="/assets/sfm/featmatchransac.png"  width="100%">
+  <img src="/assets/2019/p3/featmatchransac.png"  width="100%">
   <div class="figcaption">
  	Figure 4: Feature matching after RANSAC. (Green: Selected correspondences; Red: Rejected correspondences)
   </div>
@@ -196,7 +196,7 @@ $$r_3\mathbf{(X-C)} > 0$$
 where $$r_3$$ is the third row of the rotation matrix (z-axis of the camera). Not all triangulated points satisfy this coniditon due of the presence of correspondence noise. The best camera configuration, $$(C, R, X)$$ is the one that produces the maximum number of points satisfying the cheirality condition. 
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/lintria.png"  width="60%">
+  <img src="/assets/2019/p3/lintria.png"  width="60%">
   <div class="figcaption">
   	Figure 5: Initial triangulation plot with disambiguity, showing all four possible camera poses.
   </div>
@@ -213,7 +213,7 @@ $$\underset{x}{\operatorname{min}}$$ $$\sum_{j=1,2}\left(u^j - \frac{P_1^{jT}\wi
 Here, $$j$$ is the index of each camera, $$\widetilde{X}$$ is the hoomogeneous representation of $$X$$. $$P_i^T$$ is each row of camera projection matrix, $$P$$. This minimization is highly nonlinear due to the divisions. The initial guess of the solution, $$X_0$$, is estimated via the linear triangulation to minimize the cost function. This minimization can be solved using nonlinear optimization toolbox such as `fminunc` or `lsqnonlin` in MATLAB. 
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/nonlintria.png"  width="100%">
+  <img src="/assets/2019/p3/nonlintria.png"  width="100%">
   <div class="figcaption">
  	Figure 6: Comparison between non-linear vs linear triangulation.
   </div>
@@ -229,14 +229,14 @@ Now, since we have a set of $$n$$ 3D points in the world, their $$2D$$ projectio
 P$$n$$P is prone to error as there are outliers in the given set of point correspondences. To overcome this error, we can use RANSAC (yes, again!) to make our camera pose more robust to outliers. The alogrithm below depicts the solution with RANSAC.
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/pnpransac.png"  width="80%">
+  <img src="/assets/2019/p3/pnpransac.png"  width="80%">
   <div class="figcaption">
  	Algorithm 2: PnP RANSAC
   </div>
   <div style="clear:both;"></div>
 
 
-  <img src="/assets/sfm/PnPRANSAC.png"  width="50%">
+  <img src="/assets/2019/p3/PnPRANSAC.png"  width="50%">
   <div class="figcaption">
  	Figure 7: Plot of the camera poses with feature points. Different color represents feature correspondences from different pair of images. Blue points are features from Image 1 and Image 2; Red points are features from Image 2 and Image 3 etc.
   </div>
@@ -252,7 +252,7 @@ $$\underset{C,R}{\operatorname{min}} \sum_{i=1,J} \left(u^j - \frac{P_1^{jT}\wid
 
 Once you have computed all the camera poses and 3D points, we need to refine the poses and 3D points together, initialized by previous reconstruction by minimizing reporjection error.
 <div class="fig fighighlight">
-  <img src="/assets/sfm/BA.png"  width="80%">
+  <img src="/assets/2019/p3/BA.png"  width="80%">
   <div class="figcaption">
  	Figure 7: The final reconstructed scene after Sparse Bundle Adjustment (SBA).
   </div>
