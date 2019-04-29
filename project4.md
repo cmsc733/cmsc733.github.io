@@ -40,7 +40,7 @@ Your task is to make [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/pro
 
 You will be mainly graded on the analysis of your approach and 'your original' implementation to make the SfMLearner better! Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in [section 5](#sub).
 
-Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify or use any code available online to make the results better but DO NOT forget to cite them. You are restricted to $\sim$ 20K images provided in the dataset for training.
+Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify or use any code available online to make the results better but DO NOT forget to cite them. You are restricted to $$\sim$$ 20K images provided in the dataset for training.
 
 
 [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf)
