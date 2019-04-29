@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Learning the Structure from Motion: An Unsupervised Approach 
-permalink: /2019/proj/p4/
+permalink: /2019/proj/p4-new/
 ---
 
 <b>To be submitted in a group.</b>
