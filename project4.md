@@ -1,14 +1,14 @@
 ---
 layout: page
 mathjax: true
-title: Buildings built in minutes - An SfM Approach
+title: Learning the Structure from Motion: An Unsupervised Approach
 permalink: /2019/proj/p4/
 ---
 
 **To be submitted in a group of two.**
 
 Table of Contents:
-Learning the Structure from Motion: An Unsupervised Approach 
+ 
 - [1. Deadline](#due)
 - [2. Introduction](#intro)
 - [3. SfMLearner](#sfmlearner)
