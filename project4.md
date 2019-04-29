@@ -8,16 +8,19 @@ permalink: /2019/proj/p4/
 
 Table of Contents:
 
-- [4. Phase 2: Deep Learning Approach (SfMLearner)](#sfmlearner)
-   	- [4.1. View Synthesis](#view)
-   	- [4.2. Differentiable Depth Image-based Rendering](#render)
-   	- [4.3. Explainability Mask](#expl-mask)
-   	- [4.4. Gradient Locality Issues](#gradlocal)
-- [5. Notes about Test Set](#testset)
-- [6. Submission Guidelines](#sub)
-  - [6.1. File tree and naming](#files)
-  - [6.2. Report](#report)
-- [7. Collaboration Policy](#coll)
+- [1. Deadline](#due)
+- [2. Introduction](#intro)
+- [3. SfMLearner](#sfmlearner)
+   	- [3.1. View Synthesis](#view)
+   	- [3.2. Differentiable Depth Image-based Rendering](#render)
+   	- [3.3. Explainability Mask](#expl-mask)
+   	- [3.4. Gradient Locality Issues](#gradlocal)
+- [4. Notes about the dataset](#testset)
+- [5. Submission Guidelines](#sub)
+  - [5.1. File tree and naming](#files)
+  - [5.2. Report](#report)
+  - [5.3. Video Presentation](#video)
+- [6. Collaboration Policy](#coll)
 
 <i>To be submitted in a group.</i>
 
@@ -65,7 +68,7 @@ where $$p$$ indexes over pixel coordinates and $$\hat{I_s}$$ is the source view 
 <div class="fig fighighlight">
   <img src="/assets/2019/p4/overview.png"  width="80%">
   <div class="figcaption">
-  Figure xx: Overview of the supervision pipeline based on view synthesis.
+  Figure 1: Overview of the supervision pipeline based on view synthesis.
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -78,7 +81,7 @@ Fig. xx is an illustration of the differentiable image warping process.
 <div class="fig fighighlight">
   <img src="/assets/2019/p4/image-warp.png"  width="80%">
   <div class="figcaption">
-  Figure xx: For each point \(p_t\) in the target view, we first project it onto the source view based on the predicted depth and camera pose, and then use bilinear interpolation to obtain the value of the warped image \(\hat{I}_s\) at location \(p_t\).
+  Figure 2: For each point \(p_t\) in the target view, we first project it onto the source view based on the predicted depth and camera pose, and then use bilinear interpolation to obtain the value of the warped image \(\hat{I}_s\) at location \(p_t\).
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -109,7 +112,7 @@ The network architecture is given below:
 <div class="fig fighighlight">
   <img src="/assets/2019/p4/network.png"  width="100%">
   <div class="figcaption">
-  Figure xx: Overview of the supervision pipeline based on view synthesis.
+  Figure 3: Network architecture for SfMLearner's depth/pose/explainability prediction modules.
   </div>
   <div style="clear:both;"></div>
 </div>
