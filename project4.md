@@ -1,10 +1,11 @@
 ---
 layout: page
 mathjax: true
-title: Buildings built in minutes - An SfM Approach
+title: Learning the Structure from Motion: An Unsupervised Approach 
 permalink: /2019/proj/p4/
 ---
 
+<b>To be submitted in a group.</b>
 
 Table of Contents:
 
@@ -22,7 +23,6 @@ Table of Contents:
   - [5.3. Video Presentation](#video)
 - [6. Collaboration Policy](#coll)
 
-<i>To be submitted in a group.</i>
 
 <a name='due'></a>
 
