@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Sexy Semantic Mapping
-permalink: /2019/proj/p4/
+permalink: /2019/proj/p4-old/
 ---
 
 Table of Contents:
