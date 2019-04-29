@@ -50,7 +50,9 @@
   </header>
 
   <article class="post-content">
-  <p>Table of Contents:<br />
+  <p><strong>To be submitted individually</strong></p>
+
+<p>Table of Contents:<br />
 - <a href="#due">1. Due Date</a><br />
 - <a href="#intro">2. Introduction</a><br />
 - <a href="#data">3. Data</a><br />
@@ -66,7 +68,7 @@
 
 <p><a name="due"></a><br />
 ## 1. Due Date <br />
-<strong>10:59AM, Thursday, September 6, 2018.</strong></p>
+<strong>11:59PM, Thursday, April 6, 2019.</strong></p>
 
 <p><a name="intro"></a><br />
 ## 2. Introduction</p>
@@ -84,9 +86,9 @@ f_x & 0 & c_x\\
 
 <p><a name="data"></a><br />
 ## 3. Data<br />
-The Zhang’s paper relies on a calibration target (checkerboard in our case) to estimate camera intrinsic parameters. The calibration target used can be found in the file <code class="highlighter-rouge">checkerboardPattern.pdf</code>. This was<br />
+The Zhang’s paper relies on a calibration target (checkerboard in our case) to estimate camera intrinsic parameters. The calibration target used can be found in the file <code class="highlighter-rouge">checkerboardPattern.pdf</code> <a href="https://github.com/cmsc733/cmsc733.github.io/raw/master/assets/2019/hw1/checkerboardPattern.pdf">Link</a>. This was<br />
 printed on an A4 paper and the size of each square was 21.5mm. Note that the <script type="math/tex">Y</script> axis has odd number of squares and <script type="math/tex">X</script> axis has even number of squares. It is a general practice to neglect<br />
-the outer squares (extreme square on each side and in both directions). Thirteen images taken from a Google Pixel XL phone with focus locked are given in the folder <code class="highlighter-rouge">./Code/Imgs</code> which you will use to calibrate.</p>
+the outer squares (extreme square on each side and in both directions). Thirteen images taken from a Google Pixel XL phone with focus locked can be downloaded from <a href="https://github.com/cmsc733/cmsc733.github.io/raw/master/assets/2019/hw1/Calibration_Imgs.zip">here</a> which you will use to calibrate.</p>
 
 <p><a name="init"></a><br />
 ## 4. Initial Parameter Estimation<br />
@@ -141,6 +143,7 @@ We have the initial estimates of <script type="math/tex">K, R, t, k_s</script>, 
   <li>Your report <strong>MUST</strong> be typeset in LaTeX in the IEEE Tran format provided to you in the <code class="highlighter-rouge">Draft</code> folder and should of a conference quality paper.</li>
   <li>Present images of checkerboard after rectification and reprojection of corners on rectified image.</li>
   <li>Present the value of re-projection error.</li>
+  <li>Clearly, specify the <script type="math/tex">K</script> matrix in the report.</li>
 </ul>
 
 <p><a name="coll"></a><br />

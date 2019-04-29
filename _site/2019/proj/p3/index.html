@@ -50,7 +50,9 @@
   </header>
 
   <article class="post-content">
-  <p>Table of Contents:<br />
+  <p><strong>To be submitted in a group of two.</strong></p>
+
+<p>Table of Contents:<br />
 - <a href="#due">1. Deadline</a><br />
 - <a href="#intro">2. Introduction</a><br />
 - <a href="#trad">3. Phase 1: Traditional Approach</a><br />
@@ -58,27 +60,51 @@
 	- <a href="#estfundmatrix">3.2. Estimating Fundamental Matrix</a>  <br />
 		- <a href="#epipole">3.2.1. Epipolar Geometry</a><br />
 		- <a href="#fundmatrix">3.2.2. Fundamental Matrix</a><br />
-		- <a href="#ransac">3.2.3. Match Outlier Rejection using RANSAC</a><br />
-  - <a href="#estE">3.3. Estimate <em>Essential Matrix</em> from Fundamental Matrix</a><br />
-  - <a href="#essential">3.5. Estimate Camera Pose from Essential Matrix</a><br />
-	- <a href="#tri">3.5. Check for Cheirality Condition using Triangulation</a><br />
-		- <a href="#nonlintri">3.5.1. Non-Linear Triangulation</a><br />
-	- <a href="#pnp">3.6. Perspective-<script type="math/tex">n</script>-points</a><br />
-	- <a href="#ba">3.7. Bundle Adjustment</a><br />
-- <a href="#sfmlearner">4. Phase 2: Deep Learning Approach (SfMLearner)</a><br />
-   	- <a href="#view">4.1. View Synthesis</a><br />
-   	- <a href="#render">4.2. Differentiable Depth Image-based Rendering</a><br />
-   	- <a href="#expl-mask">4.3. Explainability Mask</a><br />
-   	- <a href="#gradlocal">4.4. Gradient Locality Issues</a><br />
-- <a href="#testset">5. Notes about Test Set</a><br />
-- <a href="#sub">6. Submission Guidelines</a><br />
-  - <a href="#files">6.1. File tree and naming</a><br />
-  - <a href="#report">6.2. Report</a><br />
-- <a href="#coll">7. Collaboration Policy</a></p>
+		- <a href="#ransac">3.2.3. Match Outlier Rejection using RANSAC</a></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>- [3.3. Estimate *Essential Matrix* from Fundamental Matrix](#estE)
+
+- [3.4. Estimate Camera Pose from Essential Matrix](#essential)
+
+- [3.5. Check for Cheirality Condition using Triangulation](#tri)
+	- [3.5.1. Non-Linear Triangulation](#nonlintri)
+- [3.6. Perspective-$$n$$-points](#pnp)
+	- [3.6.1. Linear Camera Pose Estimation](#campose)
+	- [3.6.2. PnP RANSAC](#pnpransac)
+	- [3.6.3. NonLinear PnP](#nonpnp)
+- [3.7. Bundle Adjustment](#ba)
+	- [3.7.1. Visibility Matrix](#vismatrix)
+	- [3.7.2. Bundle Adjustment](#sba)
+</code></pre>
+</div>
+
+<ul>
+  <li>
+    <p><a href="#combine">4. Putting the pipeline together</a></p>
+  </li>
+  <li>
+    <p><a href="#dataset">5. Notes about Data Set</a></p>
+  </li>
+  <li>
+    <p><a href="#sub">6. Submission Guidelines</a></p>
+
+    <ul>
+      <li>
+        <p><a href="#files">6.1. File tree and naming</a></p>
+      </li>
+      <li>
+        <p><a href="#report">6.2. Report</a></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><a href="#coll">7. Collaboration Policy</a></p>
+  </li>
+</ul>
 
 <p><a name="due"></a><br />
 ## 1. Deadline <br />
-<strong>11:59PM, Thursday, April 11, 2019.</strong></p>
+<strong>11:59PM, Thursday, April 22, 2019.</strong></p>
 
 <p><a name="intro"></a><br />
 ## 2. Introduction<br />
@@ -96,18 +122,15 @@ We have been playing with images for so long, mostly in 2D scene. Recall <a href
   <li><strong>Bundle Adjustment</strong></li>
 </ul>
 
-<p><em>(If you haven’t heard of the above terminology before, don’t worry! If you knew the following already, you wouldn’t be taking the class right now!)</em></p>
-
 <p><a name="intradtro"></a><br />
-## 3. Phase 1: Traditional Approach</p>
+## 3. Traditional Approach to the SfM problem</p>
 
 <p><a name="featmatch"></a><br />
 ### 3.1. Feature Matching, Fundamental Matrix and RANSAC<br />
-We have already learned about keypoint matching using SIFT keypoints and descriptors (Recall Project 2: Panorama Stitching). It is important to refine the matches by rejecting outline correspondence.<br />
-Before rejecting the correspondences, let us first understand what Fundamental matrix is!</p>
+We have already learned about keypoint matching using SIFT keypoints and descriptors (Recall Project 1: Panorama Stitching). It is important to refine the matches by rejecting outline correspondence. Before rejecting the correspondences, let us first understand what Fundamental matrix is!</p>
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/featmatch.png" width="100%" />
+  <img src="/assets/2019/p3/featmatch.png" width="100%" />
   <div class="figcaption">
     Figure 1: Feature matching between two images from different views.
   </div>
@@ -124,12 +147,12 @@ Let’s say a point <script type="math/tex">\mathbf{X}</script> in the 3D-space 
 and the plane formed can be denoted by <script type="math/tex">\pi</script>. Since these points are coplanar, the rays back-projected from <script type="math/tex">\mathbf{x}</script> and <script type="math/tex">\mathbf{x'}</script> intersect at <script type="math/tex">\mathbf{X}</script>. This is the most significant property in searching for a correspondence.</p>
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/epipole1.png" width="120%" />
+  <img src="/assets/2019/p3/epipole1.png" width="120%" />
   <div class="figcaption">
  	Figure 2(a): Caption goes here.
   </div>
 <br /><br />
-  <img src="/assets/sfm/epipole2.png" width="120%" />
+  <img src="/assets/2019/p3/epipole2.png" width="120%" />
   <div class="figcaption">
   	Figure 2(b): Caption goes here.
   </div>
@@ -175,7 +198,7 @@ By stacking the above equation in a matrix <script type="math/tex">A</script>, t
 	This system of equation can be answered by solving the linear least squares using Singular Value Decomposition (SVD) as explained in the <a href="https://cmsc426.github.io/math-tutorial/#svd">Math module</a>. When applying SVD to matrix <script type="math/tex">\mathbf{A}</script>, the decomposition <script type="math/tex">\mathbf{USV^T}</script> would be obtained with <script type="math/tex">\mathbf{U}</script> and <script type="math/tex">\mathbf{V}</script> orthonormal matrices and a diagonal matrix <script type="math/tex">\mathbf{S}</script> that contains the singular values. The singular values <script type="math/tex">\sigma_i</script> where <script type="math/tex">i\in[1,9], i\in\mathbb{Z}</script>, are positive and are in decreasing order with <script type="math/tex">\sigma_9=0</script> since we have 8 equations for 9 unknowns. Thus, the last column of <script type="math/tex">\mathbf{V}</script> is the true solution given that <script type="math/tex">\sigma_i\neq 0 \  \forall i\in[1,8], i\in\mathbb{Z}</script>. However, due to noise in the correspondences, the estimated <script type="math/tex">\mathbf{F}</script> matrix can be of rank 3 <em>i.e.</em> <script type="math/tex">\sigma_9\neq0</script>. So, to enfore the rank 2 constraint, the last singular value of the estimated <script type="math/tex">\mathbf{F}</script> must be set to zero. If <script type="math/tex">F</script> has a full rank then it will have an empty null-space <em>i.e.</em> it won’t have any point that is on entire set of lines. Thus, there wouldn’t be any epipoles. See Fig. 3 for full rank comparisons for <script type="math/tex">F</script> matrices.</p>
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/FMatrixRank.png" width="120%" />
+  <img src="/assets/2019/p3/FMatrixRank.png" width="120%" />
   <div class="figcaption">
  	Figure 3: F Matrix: Rank 3 vs Rank 2 comparison
   </div>
@@ -189,6 +212,8 @@ x = V(:, end);
 F = reshape(x, [3,3])';
 </code></p>
 
+<p><strong>To sumarize, write a function <code class="highlighter-rouge">EstimateFundamentalMatrix.py</code> that linearly estimates a fundamental matrix <script type="math/tex">F</script>, such that <script type="math/tex">x_2^T F x_1 = 0</script>. The fundamental matrix can be estimated by solving the linear least squares <script type="math/tex">Ax=0</script>.</strong></p>
+
 <p><a name="ransac"></a><br />
 #### 3.2.3. Match Outlier Rejection via RANSAC</p>
 
@@ -196,18 +221,20 @@ F = reshape(x, [3,3])';
 Below is the pseduo-code that returns the <script type="math/tex">\mathbf{F}</script> matrix for a set of matching corresponding points (computed using SIFT) which maximizes the number of inliers.</p>
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/ransac.png" width="80%" />
+  <img src="/assets/2019/p3/ransac.png" width="80%" />
   <div class="figcaption">
  	Algorithm 1: Get Inliers RANSAC
   </div>
   <div style="clear:both;"></div>
 <br /><br />
-  <img src="/assets/sfm/featmatchransac.png" width="100%" />
+  <img src="/assets/2019/p3/featmatchransac.png" width="100%" />
   <div class="figcaption">
  	Figure 4: Feature matching after RANSAC. (Green: Selected correspondences; Red: Rejected correspondences)
   </div>
   <div style="clear:both;"></div>
 </div>
+
+<p><strong>Given, <script type="math/tex">N\geq8</script> correspondences between two images, <script type="math/tex">x_1 \leftrightarrow x_2</script>, implement a function <code class="highlighter-rouge">GetInlierRANSANC.py</code> that estimates inlier correspondences using fundamental matrix based RANSAC.</strong></p>
 
 <p><a name="estE"></a><br />
 ### 3.3. Estimate <em>Essential Matrix</em> from Fundamental Matrix</p>
@@ -219,6 +246,8 @@ where <script type="math/tex">\mathbf{K}</script> is the camera calibration matr
 \mathbf{E}=U\begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix}V^T %]]></script></p>
 
 <p><em>It is important to note that the <script type="math/tex">\mathbf{F}</script> is defined in the original image space (i.e. pixel coordinates) whereas <script type="math/tex">\mathbf{E}</script> is in the normalized image coordinates. Normalized image coordinates have the origin at the optical center of the image. Also, relative camera poses between two views can be computed using <script type="math/tex">\mathbf{E}</script> matrix. Moreover, <script type="math/tex">\mathbf{F}</script> has 7 degrees of freedom while <script type="math/tex">\mathbf{E}</script> has 5 as it takes camera parameters in account. (<a href="http://users.cecs.anu.edu.au/~hongdong/new5pt_cameraREady_ver_1.pdf">5-Point Motion Estimation Made Easy</a>)</em></p>
+
+<p><strong>Given <script type="math/tex">F</script> , estimate the essential matrix <script type="math/tex">E = K^T F K</script> by implementing the function <code class="highlighter-rouge">EssentialMatrixFromFundamentalMatrix.py</code>.</strong></p>
 
 <p><a name="essential"></a><br />
 ### 3.4. Estimate <strong>Camera Pose</strong> from Essential Matrix<br />
@@ -234,153 +263,166 @@ W=\begin{bmatrix}0 & -1 & 0\\ 1 & 0 & 0\\ 0 & 0 & 1\end{bmatrix} %]]></script>. 
 
 <p><strong>It is important to note that the <script type="math/tex">\ det(R)=1</script>. If <script type="math/tex">det(R)=-1</script>, the camera pose must be corrected <em>i.e.</em> <script type="math/tex">C=-C</script> and <script type="math/tex">R=-R</script>.</strong></p>
 
+<p><strong>Implement the function <code class="highlighter-rouge">ExtractCameraPose.py</code>, given <script type="math/tex">E</script>.$$</strong></p>
+
 <p><a name="tri"></a><br />
-### 3.5. Check for <strong>Cheirality Condition</strong> using <strong>Triangulation</strong><br />
-In the previous section, we computed four different possible camera poses for a pair of images using essential matrix. Though, in order to find the <em>correct</em> unique camera pose, we need to remove the disambiguity. This can be accomplish by checking the <strong>cheirality condition</strong> <em>i.e.</em> <em>the reconstructed points must be in front of the cameras</em>. <br />
+### 3.5. <strong>Triangulation</strong> Check for <strong>Cheirality Condition</strong> <br />
+In the previous section, we computed four different possible camera poses for a pair of images using essential matrix. In this section we will triangulate the 3D points, given two camera poses.</p>
+
+<p><strong>Given two camera poses, <script type="math/tex">(C_1, R_1)</script> and <script type="math/tex">(C_2, R_2)</script>, and correspondences, <script type="math/tex">x_1 \leftrightarrow x_2</script>, triangulate 3D points using linear least squares. Implement the function <code class="highlighter-rouge">LinearTriangulation.py</code>.</strong></p>
+
+<p>Though, in order to find the <em>correct</em> unique camera pose, we need to remove the disambiguity. This can be accomplish by checking the <strong>cheirality condition</strong> <em>i.e.</em> <em>the reconstructed points must be in front of the cameras</em>. <br />
 To check the cheirality condition, triangulate the 3D points (given two camera poses) using <strong>linear least squares</strong> to check the sign of the depth <script type="math/tex">Z</script> in the camera coordinate system w.r.t. camera center. A 3D point <script type="math/tex">X</script> is in front of the camera iff:<br />
 <script type="math/tex">r_3\mathbf{(X-C)} > 0</script><br />
 where <script type="math/tex">r_3</script> is the third row of the rotation matrix (z-axis of the camera). Not all triangulated points satisfy this coniditon due of the presence of correspondence noise. The best camera configuration, <script type="math/tex">(C, R, X)</script> is the one that produces the maximum number of points satisfying the cheirality condition.</p>
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/lintria.png" width="60%" />
+  <img src="/assets/2019/p3/lintria.png" width="60%" />
   <div class="figcaption">
   	Figure 5: Initial triangulation plot with disambiguity, showing all four possible camera poses.
   </div>
   <div style="clear:both;"></div>
 </div>
 
+<p><strong>Given four camera pose configurations and their triangulated points, find the unique camera<br />
+pose by checking the cheirality condition - the reconstructed points must be in front of the<br />
+cameras (implement the function <code class="highlighter-rouge">DisambiguateCameraPose.py</code>).</strong></p>
+
 <p><a name="nonlintri"></a><br />
 #### 3.5.1. Non-Linear Triangulation<br />
 Given two camera poses and linearly triangulated points, <script type="math/tex">X</script>, the locations of the 3D points that minimizes the reprojection error (Recall <a href="https://cmsc426.github.io/pano/#reproj">Project 2</a>) can be refined. The linear triangulation minimizes the algebraic error. Though, the reprojection error is geometrically meaningful error and can be computed by measuring error between measurement and projected 3D point:<br /><br />
-<script type="math/tex">\underset{x}{\operatorname{min}}</script> <script type="math/tex">\sum_{j=1,2}\left(u^j - \frac{P_1^{jT}\widetilde{\phi}}{P_3^{jT}{X}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{\phi}}{P_3^{jT}{X}}\right)^2</script></p>
+<script type="math/tex">\underset{x}{\operatorname{min}}</script> <script type="math/tex">\sum_{j=1,2}\left(u^j - \frac{P_1^{jT}\widetilde{X}}{P_3^{jT}{X}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{X}}{P_3^{jT}{X}}\right)^2</script></p>
 
-<p>Here, <script type="math/tex">j</script> is the index of each camera, <script type="math/tex">\widetilde{X}</script> is the hoomogeneous representation of <script type="math/tex">X</script>. <script type="math/tex">P_i^T</script> is each row of camera projection matrix, <script type="math/tex">P</script>. This minimization is highly nonlinear due to the divisions. The initial guess of the solution, <script type="math/tex">X_0</script>, is estimated via the linear triangulation to minimize the cost function. This minimization can be solved using nonlinear optimization toolbox such as <code class="highlighter-rouge">fminunc</code> or <code class="highlighter-rouge">lsqnonlin</code> in MATLAB.</p>
+<p>Here, <script type="math/tex">j</script> is the index of each camera, <script type="math/tex">\widetilde{X}</script> is the hoomogeneous representation of <script type="math/tex">X</script>. <script type="math/tex">P_i^T</script> is each row of camera projection matrix, <script type="math/tex">P</script>. This minimization is highly nonlinear due to the divisions. The initial guess of the solution, <script type="math/tex">X_0</script>, is estimated via the linear triangulation to minimize the cost function. This minimization can be solved using nonlinear optimization functions such as <code class="highlighter-rouge">scipy.optimize.leastsq</code> or <code class="highlighter-rouge">scipy.optimize.least_squares</code> in Scipy library.</p>
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/nonlintria.png" width="100%" />
+  <img src="/assets/2019/p3/nonlintria.png" width="100%" />
   <div class="figcaption">
  	Figure 6: Comparison between non-linear vs linear triangulation.
   </div>
   <div style="clear:both;"></div>
 </div>
 
+<p><strong>Given two camera poses and linearly triangulated points, <script type="math/tex">X</script>, refine the locations of the 3D<br />
+points that minimizes reprojection error (implement the function <code class="highlighter-rouge">NonlinearTriangulation.py</code>).</strong></p>
+
 <p><a name="pnp"></a><br />
 ### 3.6. Perspective-<script type="math/tex">n</script>-Points</p>
 
-<p>Now, since we have a set of <script type="math/tex">n</script> 3D points in the world, their <script type="math/tex">2D</script> projections in the image and the intrinsic parameter; the 6 DOF camera pose can be estimated using linear least squares. This fundamental problem, in general is known as <em>Persepective</em>-<script type="math/tex">n</script>-<em>Point</em> (PnP). For there to exist a solution, <script type="math/tex">n\geq 3</script>. There are multiple methods to solve the P<script type="math/tex">n</script>P problem and have an assumptions in most of them that the camera is calibrated. Methods such as <a href="https://pdfs.semanticscholar.org/f1d6/2775d4a51161663ff9453b37bb21a1263f25.pdf">Unified P<script type="math/tex">n</script>P</a> (or UPnP) do not abide with the said assumption as they estimate both intrinsic and extrinsic parameters.</p>
+<p>Now, since we have a set of <script type="math/tex">n</script> 3D points in the world, their <script type="math/tex">2D</script> projections in the image and the intrinsic parameter; the 6 DOF camera pose can be estimated using linear least squares. This fundamental problem, in general is known as <em>Persepective</em>-<script type="math/tex">n</script>- <em>Point</em> (PnP). For there to exist a solution, <script type="math/tex">n\geq 3</script>. There are multiple methods to solve the P<script type="math/tex">n</script>P problem and have an assumptions in most of them that the camera is calibrated. Methods such as <a href="https://pdfs.semanticscholar.org/f1d6/2775d4a51161663ff9453b37bb21a1263f25.pdf">Unified P<script type="math/tex">n</script>P</a> (or UPnP) do not abide with the said assumption as they estimate both intrinsic and extrinsic parameters. In this section, you will a simpler version of PnP. You will register a new image given 2D-3D correspondences, i.e. <script type="math/tex">X\leftrightarrow x</script> followed by nonlinear optimization.</p>
 
-<p>P<script type="math/tex">n</script>P is prone to error as there are outliers in the given set of point correspondences. To overcome this error, we can use RANSAC (yes, again!) to make our camera pose more robust to outliers. The alogrithm below depicts the solution with RANSAC.</p>
+<h3 id="linear-camera-pose-estimation">3.6.1 Linear Camera Pose Estimation</h3>
+<p>Given 2D-3D correspondences, <script type="math/tex">X\leftrightarrow x</script> and the intrinsic paramter <script type="math/tex">K</script>, estimate the camera pose using linear least squares (implement the function <code class="highlighter-rouge">LinearPnP.py</code>. 2D points can be normalized by the intrinsic parameter to isolate camera parameters, <script type="math/tex">(C,R)</script>, i.e. <script type="math/tex">K^{-1}x</script>. A linear least squares system that relates the 3D and 2D points can be solved for <script type="math/tex">(t, R)</script> where <script type="math/tex">t = −R^T C</script>. Since the linear least square solve does not enforce orthogonality of the rotation matrix, <script type="math/tex">R \in SO(3)</script>, the rotation matrix must be corrected by <script type="math/tex">R = UV^T</script> where <script type="math/tex">R=UDV^T</script>. If the corrected rotation has <script type="math/tex">-1</script> determinant, <script type="math/tex">R = −R</script>. This linear PnP requires at least 6 correspondences. <em>(Think why?)</em></p>
 
 <div class="fig fighighlight">
-  <img src="/assets/sfm/pnpransac.png" width="80%" />
+  <img src="/assets/2019/p3/PnPRANSAC.png" width="50%" />
   <div class="figcaption">
- 	Algorithm 2: PnP RANSAC
-  </div>
-  <div style="clear:both;"></div>
-
-
-  <img src="/assets/sfm/PnPRANSAC.png" width="50%" />
-  <div class="figcaption">
- 	Figure 7: Plot of the camera poses with feature points. Different color represents feature correspondences from different pair of images. Blue points are features from Image 1 and Image 2; Red points are features from Image 2 and Image 3 etc.
+ 	Figure: Plot of the camera poses with feature points. Different color represents feature correspondences from different pair of images. Blue points are features from Image 1 and Image 2; Red points are features from Image 2 and Image 3 etc.
   </div>
   <div style="clear:both;"></div>
 </div>
 
-<p>Just like in triangulation, since we have the linearly estimated camera pose, we can refine the camera pose that minimizes the reprojection error (Linear PnP only minimizes the algebraic error). Though, reprojection error is the geometrically meaningful error and can be computed by measuring error between measurement and projected 3D point.</p>
+<h3 id="pnp-ransac">3.6.2 PnP RANSAC</h3>
+
+<p>P<script type="math/tex">n</script>P is prone to error as there are outliers in the given set of point correspondences. To overcome this error, we can use RANSAC (yes, again!) to make our camera pose more robust to outliers. To formalize, given <script type="math/tex">N \geq 6</script> 3D-2D correspondences, <script type="math/tex">X \leftrightarrow x</script>, implement the following function that estimates camera pose <script type="math/tex">(C, R)</script> via RANSAC (implement the function PnPRANSAC.py).</p>
+
+<p>The alogrithm below depicts the solution with RANSAC.</p>
+
+<div class="fig fighighlight">
+  <img src="/assets/2019/p3/pnpransac.png" width="80%" />
+  <div class="figcaption">
+ 	Algorithm 2: PnP RANSAC
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<p>Just like in triangulation, since we have the linearly estimated camera pose, we can refine the camera pose that minimizes the reprojection error (Linear PnP only minimizes the algebraic error).</p>
+
+<h3 id="nonlinear-pnp">3.6.3 Nonlinear PnP</h3>
+<p>Given <script type="math/tex">N \geq 6</script> 3D-2D correspondences, <script type="math/tex">X \leftrightarrow x</script>, and linearly estimated camera pose, <script type="math/tex">(C, R)</script>, refine the camera pose that minimizes reprojection error (implement the function <code class="highlighter-rouge">NonlinearPnP.py</code>). The linear PnP minimizes algebraic error. Reprojection error that is geometrically meaningful error is computed by measuring error between measurement and projected 3D point</p>
 
 <script type="math/tex; mode=display">\underset{C,R}{\operatorname{min}} \sum_{i=1,J} \left(u^j - \frac{P_1^{jT}\widetilde{X_j}}{P_3^{jT}{\widetilde{X_j}}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{X_j}}{P_3^{jT}{X_j}}\right)^2</script>
+
+<p>here <script type="math/tex">\widetilde{X}</script> is the homogeneous representation of <script type="math/tex">X</script>. <script type="math/tex">P_i^T</script> is each row of camera projection matrix, <script type="math/tex">P</script> which is computed by <script type="math/tex">P = KR [I_{3\times3} − C]</script>. A compact representation of the rotation matrix using quaternion is a better choice to enforce orthogonality of the rotation matrix, <script type="math/tex">R = R(q)</script> where <script type="math/tex">q</script> is four dimensional quaternion, i.e.,</p>
+
+<script type="math/tex; mode=display">\underset{C,q}{\operatorname{min}} \sum_{i=1,J} \left(u^j - \frac{P_1^{jT}\widetilde{X_j}}{P_3^{jT}{\widetilde{X_j}}}\right)^2 + \left(v^j - \frac{P_2^{jT}\widetilde{X_j}}{P_3^{jT}{X_j}}\right)^2</script>
+
+<p>This minimization is highly nonlinear because of the divisions and quaternion parameteriza-<br />
+tion. The initial guess of the solution, <script type="math/tex">(C_0, R_0)</script>, estimated via the linear PnP is needed to<br />
+minimize the cost function. This minimization can be solved using a nonlinear optimization<br />
+function such as <code class="highlighter-rouge">scipy.optimize.leastsq</code> or <code class="highlighter-rouge">scipy.optimize.least_squares</code> in Scipy library.</p>
 
 <p><a name="ba"></a><br />
 ### 3.7. Bundle Adjustment</p>
 
 <p>Once you have computed all the camera poses and 3D points, we need to refine the poses and 3D points together, initialized by previous reconstruction by minimizing reporjection error.</p>
+
 <div class="fig fighighlight">
-  <img src="/assets/sfm/BA.png" width="80%" />
+  <img src="/assets/2019/p3/BA.png" width="80%" />
   <div class="figcaption">
  	Figure 7: The final reconstructed scene after Sparse Bundle Adjustment (SBA).
   </div>
   <div style="clear:both;"></div>
 </div>
+
+<h3 id="visibility-matrix">3.7.1 Visibility Matrix</h3>
+
+<p>Find the relationship between a camera and point, construct a <script type="math/tex">I \times J</script> binary matrix, <script type="math/tex">V</script> where<br />
+<script type="math/tex">V_{ij}</script> is one if the <script type="math/tex">j^{th}</script> point is visible from the <script type="math/tex">i^{th}</script> camera and zero otherwise (implement the<br />
+function <code class="highlighter-rouge">BuildVisibilityMatrix.py</code>)</p>
+
+<h3 id="bundle-adjustment">3.7.2 Bundle Adjustment</h3>
+
+<p>Given initialized camera poses and 3D points, refine them by minimizing reprojection error (implement the function <code class="highlighter-rouge">BundleAdjustment.py</code>). The bundle adjustment refines camera<br />
+poses and 3D points simultaneously by minimizing the following reprojection error over <script type="math/tex">C_{i_{i=1}}^I</script>,<br />
+<script type="math/tex">q_{i_{i=1}}^I</script> and <script type="math/tex">X_{j_{j=1}}^J</script>.</p>
+
 <p>The optimization problem can formulated as following:</p>
 
-<p><script type="math/tex">\underset{\{C_i, q_i\}_{i=1}^i,\{X\}_{j=1}^J}{\operatorname{min}}\sum_{i=1}^I\sum_{j=1}^J V_{ij}\left(\left(u^j - \dfrac{P_1^{jT}\tilde{\phi}}{P_3^{jT}\tilde{X}}\right)^2 + \left(v^j - \dfrac{P_2^{jT}\tilde{\phi}}{P_3^{jT}\tilde{X}}\right)^2\right)</script><br />
-where <script type="math/tex">V_{ij}</script> is the visibility matrix.<br />
-(<em>Don’t scratch your head yet!</em>)</p>
+<p><script type="math/tex">\underset{\{C_i, q_i\}_{i=1}^i,\{X\}_{j=1}^J}{\operatorname{min}}\sum_{i=1}^I\sum_{j=1}^J V_{ij}\left(\left(u^j - \dfrac{P_1^{jT}\tilde{X}}{P_3^{jT}\tilde{X}}\right)^2 + \left(v^j - \dfrac{P_2^{jT}\tilde{X}}{P_3^{jT}\tilde{X}}\right)^2\right)</script><br />
+where <script type="math/tex">V_{ij}</script> is the visibility matrix.</p>
 
-<p>Visibility matrix signifies the relationship between the camera and a point. <script type="math/tex">V_{ij}</script> is one if <script type="math/tex">j^{th}</script> point is visible from the <script type="math/tex">i^{th}</script> camera and zero otherwise. One can use a nonlinear optimization toolbox such as <code class="highlighter-rouge">fminunc</code> or <code class="highlighter-rouge">lsqnonlin</code> in MATLAB but is extremely slow as the number of parameters are large. The <i>Sparse Bundle Adjustment</i> toolbox is designed to solve such optimization problem by exploiting sparsity of visibility matrix, <script type="math/tex">V</script>.</p>
+<p>Clearly, solving such a method to compute the structure from motion is complex and slow <em>(can take from several minutes for only 8-10 images)</em>. This minimization can be solved using a nonlinear optimization functions such as <code class="highlighter-rouge">scipy.optimize.leastsq</code> but will be extremely slow due to a number of parameters. The Sparse Bundle Adjustment toolbox such as <a href="https://buildmedia.readthedocs.org/media/pdf/python-sba/latest/python-sba.pdf">pySBA</a> and <a href="https://scipy-cookbook.readthedocs.io/items/bundle_adjustment.html">large-scale BA in scipy</a> are designed to solve such optimization by exploiting sparsity of visibility matrix, <script type="math/tex">V</script> . Note that a small number of entries in <script type="math/tex">V</script> are one because a 3D point is visible from a small subset of images. Using the sparse bundle adjustment package is not trivial and would be much faster than one you write. For SBA, you are allowed to use any optimization library.</p>
 
-<p>Clearly, solving such a method to compute the structure from motion is complex and slow <em>(can take from several minutes for only 8-10 images)</em>. The above steps collectively is the traditional way of solving the problem of SfM. However, the solution to the problem of structure from motion can be made more robust with deep learning.</p>
+<h2 id="putting-the-pipeline-together">4. Putting the pipeline together</h2>
 
-<p><a name="sfmlearner"></a><br />
-## 4. Phase 2: Deep Learning Approach (SfMLearner)</p>
+<p>Write a program <code class="highlighter-rouge">Wrapper.py</code> that run the full pipeline of structure from motion based on the above algorithm.</p>
 
-<p>To achieve more robust results, we are going to implement an unsupervised deep learning framework (<a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a>) to estimate monocular depth and camera motion from continuous set of frames. This is an end-to-end learning approach that will basically replace all the steps from feature matching to non linear PnP.</p>
+<p>Also, compare your result against VSfM output. You can download the off-the-shelf SfM software here: <a href="http://ccwu.me/vsfm/">VSfM</a>.</p>
 
-<p>One of the trivial ways to do it is to learn rotation and translation from a sequence of data. Although, learning such parameters directly is weakly constrained. Thus, methods like SfMLearner, jointly train a single view depth CNN and a camera pose estimation CNN from unlabeled video sequence.</p>
-
-<p>Assumption: The scene is fairly rigid <i>i.e.</i> the scene appearance change across different frames is dominated by the camera motion.</p>
-
-<p><b> You are required to read <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a> paper before reading further. </b></p>
-
-<p><a name="view"></a><br />
-### 4.1. View Synthesis<br />
-The key supervision signal for our depth and pose prediction CNNs comes from the task of novel view synthesis: given one input view of a scene, synthesize a new image of the scene seen from a different camera pose. We can synthesize a target view given a per-pixel depth in that image, plus the pose and visibility in a nearby view. Thus, synthesizing the target view works as a supervision for training. The view synthesis objective can be formulated as:</p>
-
-<p><script type="math/tex">L_{vs} = \sum_s \sum_p |I_t(p) - \hat{I_s}(p)|</script> <br />
-where <script type="math/tex">p</script> indexes over pixel coordinates and <script type="math/tex">\hat{I_s}</script> is the source view <script type="math/tex">I_s</script> warped to the target coordinate frame based on a depth imae-based rendering module. See Figure xx for an illustration of SfMLearner learning pipeline for depth and pose estimation.</p>
+<h2 id="project-overview">Project Overview</h2>
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p3/overview.png" width="80%" />
+  <img src="/assets/2019/p3/summary.png" width="80%" />
   <div class="figcaption">
-  Figure xx: Overview of the supervision pipeline based on view synthesis.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-<h3 id="differentiable-depth-image-based-rendering">4.2. Differentiable Depth Image-based Rendering</h3>
-<p>A key component of this framework is a differentiable depth image-based renderer (Refer section 3.1 of the paper) that reconstructs the target view <script type="math/tex">I_t</script> by sampling pixels from a source view <script type="math/tex">I_s</script> based on the predicted depth map <script type="math/tex">\hat{D_t}</script> and the relative pose <script type="math/tex">\hat{T}_{t\rightarrow s}</script></p>
-
-<p>Fig. xx is an illustration of the differentiable image warping process.</p>
-<div class="fig fighighlight">
-  <img src="/assets/2019/p3/image-warp.png" width="80%" />
-  <div class="figcaption">
-  Figure xx: For each point \(p_t\) in the target view, we first project it onto the source view based on the predicted depth and camera pose, and then use bilinear interpolation to obtain the value of the warped image \(\hat{I}_s\) at location \(p_t\).
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-<p>To obtain <script type="math/tex">I_s(p_s)</script> for populating the value of <script type="math/tex">\hat{I}_s(p_t)</script>, we use the differentiable bilinear sampling mechanism proposed in the spatial transformer networks(STN) that linearly interpolates the values of the 4-pixel neighboring pixels of <script type="math/tex">p_s</script> to approximate <script type="math/tex">I_s(p_s)</script>. For this project, you may ‘use’ STN rather than writing your own. A sample tensorflow implementation of STN can be found <a href="https://github.com/kevinzakka/spatial-transformer-network">here</a>. Feel free to use any other implementation.</p>
-
-<h3 id="explainability-mask">4.3. Explainability Mask</h3>
-
-<p><b>Note</b>: Till now, we assume the scene is static; there are no occlusions between the target and source views; the surface is Lambertian so that the photo-consistency error is meaningful. With any of the these assumptions voilated in the training sequence, the gradients could be corrupted. To improve the robustness of our training process, we separately train a <i>explainability prediction</i> network that outputs a per-pixel soft mask <script type="math/tex">\hat{E}_s</script> for each  target-source pair.</p>
-
-<p>Thus, the view synthesis objective is updated as:</p>
-
-<script type="math/tex; mode=display">L_{vs} = \sum_s \sum_p \hat{E}_s(p)\ |I_t(p) - \hat{I_s}(p)|</script>
-
-<h3 id="gradient-locality-issues">4.4. Gradient Locality Issues</h3>
-
-<p>There is still another problem that needs to be dealt with. The gradients in the framework are mainly derived from the pixel intensity difference between the center pixel and its neighbours which will cause problems in training if the correct <script type="math/tex">p_s</script> (neighbour pixel) is located in a low-texture region. This is a common issue in motion estimation. To overcome this problem, we can use a encoder-decoder CNN with a small bottleneck for the depth network that implicitly constrains the output to be globally smooth and facilitates gradients to propogate from meaningful regions to nearby regions. <br />
-Thus, for smoothness, we minimize the <script type="math/tex">L_1</script> norm of second-order gradients for the predicted depth maps:</p>
-
-<script type="math/tex; mode=display">L_{final} = \sum_l L^l_{vs} + \lambda_s L^l_{smooth} + \lambda_e \sum_s L_{reg}(\hat{E}^l_s)</script>
-
-<p>where <script type="math/tex">l</script> indexes over different images scales, <script type="math/tex">s</script> indexes over source images and <script type="math/tex">\lambda_s</script> and <script type="math/tex">\lambda_e</script> are weighting for the depth smoothness loss and explainability regularization respectively.</p>
-
-<p>The network architecture is given below:</p>
-
-<div class="fig fighighlight">
-  <img src="/assets/2019/p3/network.png" width="100%" />
-  <div class="figcaption">
-  Figure xx: Overview of the supervision pipeline based on view synthesis.
+ 	Figure: The overview.
   </div>
   <div style="clear:both;"></div>
 </div>
 
 <p><a name="testset"></a><br />
-## 5. Notes about Test Set<br />
-One day (24 hours) before the deadline, a test set will be released with details of what faces to replace. We’ll grade on the completion of the project and visually appealing results.</p>
+## 5. Notes about the Data Set<br />
+Run your SfM algorithm on the images provided <a href="https://github.com/cmsc733/cmsc733.github.io/blob/master/assets/2019/p3/Data.zip">here</a>. The data given to you are a set of 6 images of building in-front of Levine Hall at UPenn, using a GoPro Hero 3 with fisheye lens distortion corrected. Keypoints matching (SIFT keypoints and descriptors used) data is also provided in the same folder for pairs of images. The data folder contains 5 matching files named <code class="highlighter-rouge">matching*.txt</code> where <code class="highlighter-rouge">*</code> refers to numbers from 1 to 5. For eg., <code class="highlighter-rouge">matching3.txt</code> contains the matching between the third image and the fourth, fifth and sixth images, i.e., <script type="math/tex">\mathcal{I}_3 \leftrightarrow \mathcal{I}_4</script>, <script type="math/tex">\mathcal{I}_3 \leftrightarrow \mathcal{I}_5</script> and <script type="math/tex">\mathcal{I}_3 \leftrightarrow \mathcal{I}_6</script> . Therefore, <code class="highlighter-rouge">matching6.txt</code> does not exist because it is the matching by itself.</p>
+
+<p>The file format of the matching file is described next. Each matching file is formatted as<br />
+follows for the i th matching file:</p>
+
+<p><strong>nFeatures:</strong> (the number of feature points of the <script type="math/tex">i^{th}</script> image - each following row specifies<br />
+matches across images given a feature location in the <script type="math/tex">i^{th}</script> image.)</p>
+
+<p><strong>Each Row:</strong> (the number of matches for the <script type="math/tex">j^{th}</script> feature) (Red Value) (Green Value) (Blue Value) (<script type="math/tex">u_{\texttt{current image}}</script>) (<script type="math/tex">v_{\texttt{current image}}</script>) (image id) (<script type="math/tex">u_{\texttt{image id image}}</script>) (<script type="math/tex">v_{\texttt{image id image}}</script>) (image id) (<script type="math/tex">u_{\texttt{image id image}}</script>)<br />
+(v_{image id image}) …</p>
+
+<p>An example of matching1.txt is given below:<br />
+<code class="highlighter-rouge">
+nFeatures: 2002
+3 137 128 105 454.740000 392.370000 2 308.570000 500.320000 4 447.580000 479.360000
+2 137 128 105 454.740000 392.370000 4 447.580000 479.360000
+</code><br />
+The images are taken at 1280 × 960 resolution and the camera intrinsic parameters <script type="math/tex">K</script> are given in <code class="highlighter-rouge">calibration.txt</code> file. You will program this full pipeline guided by the functions described in following sections.</p>
+
+<p><strong>For the extra credit:</strong><br />
+Also, capture a set of images and run your SfM algorithm. DO NOT steal images from the internet. Analyze the success and the failure of your algorithm and showcase that in your report. Note: You need to capture images, calibrate them and undistort them. Feel free to use any in-built calibration tool for this. MATLAB’s calibration tool in Computer Vision toolbox will be handy.</p>
 
 <p><a name="sub"></a><br />
 ## 6. Submission Guidelines</p>
@@ -395,32 +437,53 @@ One day (24 hours) before the deadline, a test set will be released with details
 <div class="highlighter-rouge"><pre class="highlight"><code>YourDirectoryID_hw1.zip
 │   README.md
 |   Your Code files 
+|   ├── GetInliersRANSAC.py
+|   ├── EstimateFundamentalMatrix.py
+|   ├── EssentialMatrixFromFundamentalMatrix.py
+|   ├── ExtractCameraPose.py
+|   ├── LinearTriangulation.py
+|   ├── DisambiguateCameraPose.py
+|   ├── NonlinearTriangulation.py
+|   ├── PnPRANSAC.py
+|   ├── NonlinearPnP.py
+|   ├── BuildVisibilityMatrix.py
+|   ├── BundleAdjustment.py
+|   ├── Wrapper.py
 |   ├── Any subfolders you want along with files
 |   Wrapper.py 
 |   Data
-|   ├── Data1.mp4
-|   ├── Data2.mp4
-|   ├── Data1OutputTri.mp4
-|   ├── Data1OutputTPS.mp4
-|   ├── Data1OutputPRNet.mp4
-|   ├── Data2OutputTri.mp4
-|   ├── Data2OutputTPS.mp4
-|   ├── Data2OutputPRNet.mp4
+|   ├── BundleAdjustmentOutputForAllImage
+|   ├── FeatureCorrespondenceOutputForAllImageSet
+|   ├── LinearTriangulationOutputForAllImageSet
+|   ├── NonLinearTriangulationOutputForAllImageSet
+|   ├── PnPOutputForAllImageSetShowingCameraPoses
+|   ├── Imgs/
 └── Report.pdf
 </code></pre>
 </div>
 <p><a name="report"></a><br />
 ### 6.2. Report</p>
 
-<p>For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:</p>
+<p>There will be no Test Set for this project. <br />
+For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:</p>
 
 <ul>
-  <li>Your report <strong>MUST</strong> be typeset in LaTeX in the IEEE Tran format provided to you in the <code class="highlighter-rouge">Draft</code> folder and should of a conference quality paper.</li>
-  <li>Present the Data you collected in <code class="highlighter-rouge">Data</code> folder with names <code class="highlighter-rouge">Data1.mp4</code> and <code class="highlighter-rouge">Data2.mp4</code> (Be sure to have the format as <code class="highlighter-rouge">.mp4</code> <strong>ONLY</strong>).</li>
-  <li>Present the output videos for Triangulation, TPS and PRNet as <code class="highlighter-rouge">Data1OutputTri.mp4</code>, <code class="highlighter-rouge">Data1OutputTPS.mp4</code> and <code class="highlighter-rouge">Data1OutputPRNet.mp4</code> for Data 1 respectively in the <code class="highlighter-rouge">Data</code> folder. Also, present outputs videos for Triangulation, TPS and PRNet as <code class="highlighter-rouge">Data2OutputTri.mp4</code>, <code class="highlighter-rouge">Data2OutputTPS.mp4</code> and <code class="highlighter-rouge">Data2OutputPRNet.mp4</code> for Data 2 respectively in the <code class="highlighter-rouge">Data</code> folder. (Be sure to have the format as <code class="highlighter-rouge">.mp4</code> <strong>ONLY</strong>).</li>
-  <li>For Phase 1, present input and output images for two frames from each of the videos using both Triangulation and TPS approach.</li>
-  <li>For Phase 2, present input and output images for two frames from each of the videos using PRNet approach.</li>
-  <li>Present failure cases for both Phase 1 and 2 and present your thoughts on why the failure occurred.</li>
+  <li>
+    <p>Please make your report extremely detailed with re-projection error after each step (Linear, Non-linear triangulation, Linear, Non-linear PnP before and after BA and so on). Describe all the steps (anything that is not obvious) and any<br />
+other observations in your report.</p>
+  </li>
+  <li>
+    <p>Your report <strong>MUST</strong> be typeset in LaTeX in the IEEE Tran format provided to you in the <code class="highlighter-rouge">Draft</code> folder and should of a conference quality paper.</p>
+  </li>
+  <li>
+    <p>Present the Data you collected in <code class="highlighter-rouge">Data/Imgs/</code>.</p>
+  </li>
+  <li>
+    <p>Present failure cases and explanation, if any.</p>
+  </li>
+  <li>
+    <p>Do not use any function that directly implements a part of the pipeline. If you have any doubts, please contact us via Piazza.</p>
+  </li>
 </ul>
 
 <p><a name="coll"></a><br />

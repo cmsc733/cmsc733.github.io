@@ -1,222 +1,176 @@
 ---
 layout: page
 mathjax: true
-title: Sexy Semantic Mapping
+title: Buildings built in minutes - An SfM Approach
 permalink: /2019/proj/p4/
 ---
 
+
 Table of Contents:
 
-- [1. Deadline](#due)
-- [2. Introduction](#intro)
-- [3. Extract object of interest from Table-Top Images](#table-top)
-  - [3.1. Create a Point Cloud from RGB-D images](#create-pcl)  
-  - [3.2. Build 3D model of object from RGB-D Images](#build-3D-model)
-  - [3.3. Extract the ‘Collection of Objects’ from a given scene](#extract)
-- [4. Segment the scene using known Objects](#segment)
-- [5. Build a Semantic Map](#semantic)
-- [6. Stuff Given to you](#stuff)
-- [7. Notes about Test Set](#testset)
-- [8. Submission Guidelines](#sub)
-  - [8.1. File tree and naming](#files)
-  - [8.2. Report](#report)
-- [9. Collaboration Policy](#coll)
-- [10. Acknowledgements](#ack)
+- [4. Phase 2: Deep Learning Approach (SfMLearner)](#sfmlearner)
+   	- [4.1. View Synthesis](#view)
+   	- [4.2. Differentiable Depth Image-based Rendering](#render)
+   	- [4.3. Explainability Mask](#expl-mask)
+   	- [4.4. Gradient Locality Issues](#gradlocal)
+- [5. Notes about Test Set](#testset)
+- [6. Submission Guidelines](#sub)
+  - [6.1. File tree and naming](#files)
+  - [6.2. Report](#report)
+- [7. Collaboration Policy](#coll)
 
+<i>To be submitted in a group.</i>
 
 <a name='due'></a>
-## 1. Deadline 
-**11:59PM, Monday, May 20, 2019.**
 
+## 1. Deadline 
+
+**11:59PM, May 16, 2019.**
 
 <a name='intro'></a>
+
 ## 2. Introduction
 
-The aim of this project is to build semantic map of a 3D scene (See Fig. 1). This project gives you a peek into the world of robotics perception <i>i.e.</i> how robots understand and build the model of the world. <i>Excited?</i>
+We have dealt with reconstructing 3D structure of a given scene using images from multiple views using the traditional (geometric) approach. Though, there is a possibility of achieving more robust results. In this project, we will learn about estimating depth and pose (or ego-motion) from a sequence of images using unsupervised learning methods. In [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) paper by David Lowe's team at Google, an unsupervised learning framework was presented for the task of monocular depth and camera motion estimation from unstructured video sequences. 
 
-<div class="fig fighighlight"><center>
-  <img src="/assets/2019/p4/seg.png" width="60%"></center>
-  <div class="figcaption">
-    Figure 1: (a) Reconstruction from a samples of RGBD images. (b) Segmentation of a 3D scene.
-  </div>
-  <div style="clear:both;"></div>
-</div>
+Your task is to make [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) 'better'! When we say better, it means that the error in depth and pose estimation should be less than that of SfMLearner's paper on different empirical evaluation scales. Research papers like [GeoNet](https://arxiv.org/pdf/1803.02276.pdf) might help you in improving the results. Although, research papers in this field are in abundance. Feel free to search through the internet. 
+
+You will be mainly graded on the analysis of your approach and 'your original' implementation to make the SfMLearner better! Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in [section 5](#sub).
+
+Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify or use any code available online to make the results better but DO NOT forget to cite them. You are restricted to $\sim$ 20K images provided in the dataset for training.
 
 
-In the next few sections, we will detail how this can be done along with the specifications of the functions for each part. <b>Just like the previous projects, this project is to be done in groups of two and only one submission is required per group.</b>
+[SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf)
 
-<a name='table-top'></a>
+<a name='sfmlearner'></a>
 
-## 3. Extract object of interest from Table-Top Images
+## 3. SfMLearner
 
-You are given a set of RGB-D (RGB-Depth) frames of table top images and you need to extract the 'object of interest' from each frame and build a 3D model of the filtered object. When we say 'extract object of interest', you need to remove the table, walls of the room (if any) and any such irrelevant data from the scene. You also might need to filter stray points during the extraction process. But before that we need to align the data from RGB camera and the depth sensor from the Kinect. See Fig xx. Clearly, the RGB image and Depth images are not aligned. 
+One of the trivial ways to solve this problem is to learn rotation and translation from a sequence of data. Although, learning such parameters directly is a weakly constrained problem. Thus, methods like [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf), jointly train a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequence. 
 
-<div class="fig fighighlight">
-  <img src="/assets/2019/p4/rgb.png" width="49%">
-  <img src="/assets/2019/p4/depth.png" width="49%">
-  <div class="figcaption">
-  Figure 3 (a): RGB and Depth images from Kinect.
-  </div>
-  <br><center>
-  <img src="/assets/2019/p4/rgbd.png" width="75%"></center>
-  <div class="figcaption">
-  Figure 3 (b): Uncalibrated RGB-D images. Thus we need calibration parameters in order to align the two images.
-  </div>
-  <div style="clear:both;"></div>
-</div>
+<b> You are required to read [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) paper before reading further. </b>
 
-<a name='create-pcl'></a>
-
-### 3.1. Create a Point Cloud from RGB-D images
+Following the a brief summary of the proposed framework in SfMLearner for jointly training a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequences.  
+<b>Assumption: The scene is fairly rigid <i>i.e.</i> the scene appearance change across different frames is dominated by the camera motion.</b>
 
 
-So, in order to align them we would need calibration parameters <i>i.e.</i> the rotation and translation between the camera centers of RGB camera and the depth sensor as $$(u,v)$$ does not represents $$(u',v')$$, see fig. xx. 
+<a name='view'></a>
 
-<div class="fig fighighlight"><center>
-  <img src="/assets/2019/p4/RotAndTrans1.png" width="90%"></center>
-  <div class="figcaption">
-    Figure 2: .
-  </div>
-  <div style="clear:both;"></div>
-</div>
+### 3.1. View Synthesis
+The key supervision signal for our depth and pose prediction CNNs comes from the task of novel view synthesis: given one input view of a scene, synthesize a new image of the scene seen from a different camera pose. We can synthesize a target view given a per-pixel depth in that image, plus the pose and visibility in a nearby view. Thus, synthesizing the target view works as a supervision for training. The view synthesis objective can be formulated as:
 
-To formulate: Given all camera parameters $$(R,t,f)$$ (rotation, translation and focal lengths of both sensors), find the corresponding points of a RGB and a depth image. Thus, we need to generate a point cloud that can be represented as $$(x,y,z,r,g,b)$$. (See Fig. xx)
-<div class="fig fighighlight"><center>
-  <img src="/assets/2019/p4/RotAndTrans2.png" width="60%"></center>
-  <div class="figcaption">
-    Figure 2: .
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-
-In order to solve this problem, first recall: $$\cfrac{u}{f_u} = \cfrac{x}{z}$$
-<p style="background-color:#ddd; padding:5px"><b>Note:</b>
-Now, to generate a point cloud from RGB-D data, follow these steps:</p>
-  - Compute 3D coordinate <font color="red">\(X^{IR}\)</font> in the <font color="red">\(IR\)</font> camera frame. (IR: Infrared or depth sensor frame)
-  
-<font color="red">\(x^{IR} = \cfrac{uz}{f^{IR}}\); \ \ \(y^{IR} = \cfrac{vz}{f^{IR}}\); \ \ \(X^{IR} = [x^{IR} \ y^{IR} \ z^{IR}]\)</font>
-- Transform into RGB frame
-  <font color="blue">\(X^{RGB} = RX^{IR} + t\)</font>
-- Reproject them into the image plane
-<font color="blue">\(u^{RGB} = f^{RGB}\cfrac{x^{RGB}}{z^{RGB}} = f^{RGB}\cfrac{y^{RGB}}{z^{RGB}}\)</font>
-- Read <font color="blue">\((r,g,b)\)</font> at <font color="blue">\((u,v)^{RGB}\)</font>
-
-  <font color="blue">\((r,g,b)\)</font> is the color of <font color="red">\(X^{IR}\)</font> point.
-  
-Now, once the point clouds are generated from a single view, let us learn how to build 3D model of the scene from multiple views.
-
-<a name='build-3D-model'></a>
-
-### 3.2. Build 3D model of object from RGB-D Images
-
-The RGB-D data provided is recorded from an Asus Xtion Pro sensor. Using the method in the previous stage, you get the 3D view of the object from one single camera view point, use many such views from different frames of the same object to iteratively build a 3D model of the object.
+$$ L_{vs} = \sum_s \sum_p |I_t(p) - \hat{I_s}(p)|$$ 
+where $$p$$ indexes over pixel coordinates and $$\hat{I_s}$$ is the source view $$I_s$$ warped to the target coordinate frame based on a depth imae-based rendering module. See Figure xx for an illustration of SfMLearner learning pipeline for depth and pose estimation. 
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p4/data-collect.png" width="100%">
+  <img src="/assets/2019/p3/overview.png"  width="80%">
   <div class="figcaption">
-    Figure 2: .
+  Figure xx: Overview of the supervision pipeline based on view synthesis.
   </div>
   <div style="clear:both;"></div>
 </div>
 
 
-The idea here is you need to find out 3D translation and rotation parameters between two 3D point clouds of the same object from different frames, use these parameters to back project 3D point cloud from second frame on to the first and now you have little more information of the 3D model of the object as compared to the 3D point cloud from a single frame. You do it iteratively until you build a complete (or more or less complete) 3D model of the object.
+### 3.2. Differentiable Depth Image-based Rendering
+A key component of this framework is a differentiable depth image-based renderer (Refer section 3.1 of the paper) that reconstructs the target view $$I_t$$ by sampling pixels from a source view $$I_s$$ based on the predicted depth map $$\hat{D_t}$$ and the relative pose $$\hat{T}_{t\rightarrow s}$$
 
-You will need to implement any variant of the Iterative Closest Point (ICP) algorithm which gives the relative translation and rotation between two 3D point clouds. We have uploaded a lot of ICP related papers with this description for your reference, please cite the reference you follow.
+Fig. xx is an illustration of the differentiable image warping process. 
+<div class="fig fighighlight">
+  <img src="/assets/2019/p3/image-warp.png"  width="80%">
+  <div class="figcaption">
+  Figure xx: For each point \(p_t\) in the target view, we first project it onto the source view based on the predicted depth and camera pose, and then use bilinear interpolation to obtain the value of the warped image \(\hat{I}_s\) at location \(p_t\).
+  </div>
+  <div style="clear:both;"></div>
+</div>
 
-<a name='extract'></a>
+To obtain $$I_s(p_s)$$ for populating the value of $$\hat{I}_s(p_t)$$, we use the differentiable bilinear sampling mechanism proposed in the spatial transformer networks(STN) that linearly interpolates the values of the 4-pixel neighboring pixels of $$p_s$$ to approximate $$I_s(p_s)$$. For this project, you may 'use' STN rather than writing your own. A sample tensorflow implementation of STN can be found [here](https://github.com/kevinzakka/spatial-transformer-network). Feel free to use any other implementation.
 
-### 3.3. Extract the ‘Collection of Objects’ from a given scene
 
-Here you will pretty much redo the same thing from previous sections, only difference being the set of table top images now have a collection of objects. And you need to extract just the objects without any irrelevant data from the scene.
+### 3.3. Explainability Mask
 
-<a name='segment'></a>
+<b>Note</b>: Till now, we assume the scene is static; there are no occlusions between the target and source views; the surface is Lambertian so that the photo-consistency error is meaningful. With any of the these assumptions voilated in the training sequence, the gradients could be corrupted. To improve the robustness of our training process, we separately train a <i>explainability prediction</i> network that outputs a per-pixel soft mask $$\hat{E}_s$$ for each  target-source pair. 
 
-### 4. Segment the scene using known Objects
+Thus, the view synthesis objective is updated as:
 
-Now that you have reconstructed the 3D point cloud of the scene you need to segment each individual object of the scene by finding a suitable match in the set of 3D objects that you have already constructed. And while segmenting it you need to color code each object in the scene to the label of that object (feel free to use random color codes for each object such that each object is a different color). Also, note that you cannot assume that you know the number of objects in the scene, this has to be computed by your algorithm.
+$$ L_{vs} = \sum_s \sum_p \hat{E}_s(p)\ |I_t(p) - \hat{I_s}(p)|$$ 
 
-<a name='semantic'></a>
 
-### 5. Build a Semantic Map
+### 3.4. Gradient Locality Issues
 
-Now try to see if you can derive relationships between the segmented objects, like this object is at this angle with respect to another object or this object is so much smaller than another object or this object is on top of another object and so on. Think of this as modelling information how a human would think of this scene.
+There is still another problem that needs to be dealt with. The gradients in the framework are mainly derived from the pixel intensity difference between the center pixel and its neighbours which will cause problems in training if the correct $$p_s$$ (neighbour pixel) is located in a low-texture region. This is a common issue in motion estimation. To overcome this problem, we can use a encoder-decoder CNN with a small bottleneck for the depth network that implicitly constrains the output to be globally smooth and facilitates gradients to propogate from meaningful regions to nearby regions. 
+Thus, for smoothness, we minimize the $$L_1$$ norm of second-order gradients for the predicted depth maps:
 
-<a name='stuff'></a>
+$$L_{final} = \sum_l L^l_{vs} + \lambda_s L^l_{smooth} + \lambda_e \sum_s L_{reg}(\hat{E}^l_s)$$
 
-### 6. Stuff given to you
+where $$l$$ indexes over different images scales, $$s$$ indexes over source images and $$\lambda_s$$ and $$\lambda_e$$ are weighting for the depth smoothness loss and explainability regularization respectively.
 
-Calibration parameters and uncalibrated RGB-D data. Note that you are allowed to use third party code for basic stuff but not for the whole algorithm. You are only allowed to use `pcread`, `pcshow` from the Matlab’s point cloud library. Functions like `KDTreeSearcher` and `knnsearch` can be used for point to point correspondence search. You are also allowed to use any other basic functions built into the computer vision or image processing toolbox in Matlab.
+The network architecture is given below:
 
-Make sure to check Reference Papers folders for papers regarding ICP (Standard ICP paper is the easiest but the worst performing) and Object Segmentation. Dataset folder contains the data of various scenes containing individual objects and multiple objects.
-
+<div class="fig fighighlight">
+  <img src="/assets/2019/p3/network.png"  width="100%">
+  <div class="figcaption">
+  Figure xx: Overview of the supervision pipeline based on view synthesis.
+  </div>
+  <div style="clear:both;"></div>
+</div>
 
 
 <a name='testset'></a>
-## 7. Notes about Test Set
-One day (24 hours) before the deadline, a test set will be released with details of what faces to replace. We'll grade on the completion of the project and visually appealing results.
+
+## 4. Notes about Data
+
+You are given a multiple sequences from the [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php) dataset. You can download the data from [here]().
+
 
 <a name='sub'></a>
-## 8. Submission Guidelines
 
-
-Make a video of all the objects and all the segmented scenes where you pan the 3D point cloud to show it is fully reconstructed and is correctly segmented for each object. You MUST submit a report written in IEEE double column format in L A TEXand should not exceed 6 pages (Template given in Draft folder). The report should be of a conference paper quality. Feel free to add videos you feel are cool or paste YouTube links in your report. You should also include a detailed README file explaining how to run your code.
-
-Submit your .fig files (of 3D point clouds for all individual objects), codes (.m files) with the naming convention YourDirectoryID P5.zip onto ELMS/Canvas (Please compress it to .zip and no other format). If your e-mail ID is `ABCD[at]terpmail.umd.edu` or `ABCD[at]umd.edu` your Directory ID will be `ABCD`.
-
-To summarize, you need to submit these things and in the following strcture: A zip file with the name `YourDirectoryID_P4.zip` onto ELMS/Canvas. A main folder with the name `YourDirectoryID_P4` with the following things (for EACH of the given scene)):
-
-- A video showing a full 3D reconstruction for each object.
-- A video showing a full 3D reconstruction and segmentation of each scene.
-- <b>`.fig`</b> files for 3D models of all individual objects and scenes (color coded with segmentation labels)
-- Code used for this project with a detailed README file.
-- A conference paper quality report written in IEEE double column format in LATEX format (Check <b>`Draft`</b> folder for necessary template and class files)
+## 5. Submission Guidelines
 
 <b> If your submission does not comply with the following guidelines, you'll be given ZERO credit </b>
 
 <a name='files'></a>
-### 8.1. File tree and naming
 
-Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_p3.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_p1.zip``. The file **must have the following directory structure** because we'll be autograding assignments. The file to run for your project should be called ``Wrapper.py``. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. Please **DO NOT** include data in your submission.
+### 5.1. File tree and naming
+
+Your submission on ELMS/Canvas must be a ``zip`` file, following the naming convention ``YourDirectoryID_p4.zip``. If you email ID is ``abc@umd.edu`` or ``abc@terpmail.umd.edu``, then your ``DirectoryID`` is ``abc``. For our example, the submission file should be named ``abc_p1.zip``. The file **must have the following directory structure** because we'll be autograding assignments. You can have any helper functions in sub-folders as you wish, be sure to index them using relative paths and if you have command line arguments for your Wrapper codes, make sure to have default values too. Please provide detailed instructions on how to run your code in ``README.md`` file. Please **DO NOT** include data in your submission.
 
 ```
 YourDirectoryID_hw1.zip
 │   README.md
-|   Your Code files 
-|   ├── Any subfolders you want along with files
-|   Wrapper.py 
+|   Code 
+|   ├── Train.py
+|   ├── Test.py
+|   ├── Any subfolders you want along with files 
 |   Data
-|   ├── Data1.mp4
-|   ├── Data2.mp4
-|   ├── Data1OutputTri.mp4
-|   ├── Data1OutputTPS.mp4
-|   ├── Data1OutputPRNet.mp4
-|   ├── Data2OutputTri.mp4
-|   ├── Data2OutputTPS.mp4
+|   ├── AnyOutputImagesYouWantToHighlight.png
 |   ├── Data2OutputPRNet.mp4
-└── Report.pdf
+├── Report.pdf
+└── PresentationVideo.mp4
 ```
 <a name='report'></a>
-### 8.2. Report
 
-For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
+### 5.2. Report
+
+For each section of newly developed solution in the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
 
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
-- Present the Data you collected in ``Data`` folder with names ``Data1.mp4`` and ``Data2.mp4`` (Be sure to have the format as ``.mp4`` **ONLY**).
-- Present the output videos for Triangulation, TPS and PRNet as ``Data1OutputTri.mp4``, ``Data1OutputTPS.mp4`` and ``Data1OutputPRNet.mp4`` for Data 1 respectively in the ``Data`` folder. Also, present outputs videos for Triangulation, TPS and PRNet as ``Data2OutputTri.mp4``, ``Data2OutputTPS.mp4`` and ``Data2OutputPRNet.mp4`` for Data 2 respectively in the ``Data`` folder. (Be sure to have the format as ``.mp4`` **ONLY**).
-- For Phase 1, present input and output images for two frames from each of the videos using both Triangulation and TPS approach.
-- For Phase 2, present input and output images for two frames from each of the videos using PRNet approach.
-- Present failure cases for both Phase 1 and 2 and present your thoughts on why the failure occurred. 
+- Brief explanation of your approach to this problem.
+- Present a set of images for comparison of depth estimation of SfMLearner, YourMethod and Ground Truth (with the input RGB image).
+- Present a odometry comparison of pose estimation of SfMLearner, YourMethod and Ground Truth.
+- Present a comparison of error of SfMLearner and YourMethod in different error metric scale (Abs, Sq, RMSE and RMSE log) as mentioned in the paper. The scripts for computing error metrics for both pose and depth evaluation can be downloaded from [here](https://github.com/tinghuiz/SfMLearner/tree/master/kitti_eval). For this, train ONLY on the KITTI training set provided here and test it on $$(i)$$ [KITTI testing set]() $$(ii)$$ [CityScape testing set]()
+- Present Training Accuracy on the provided KITTI training set. Present Testing accuracy on the provided KITTI testing set and the Cityscape testing set.
+- Present an in-depth analysis of your proposed approach. Did you try something specific? If yes, why? Talk about why it performed better or worse?
+- Present a 3D structure of the scene, reconstructed from depth and poses estimated. Feel free to directly use parts of your project 3 or any open source code for this.    
+
+
+<a name='video'></a>
+
+### 5.3 Video Presentation
+
+You are required to submit a video explaining your approach to the given problem. Explain what all problems you tackled during this problem and how you overcame them. Also, give an in-depth analysis of your proposed approach. The video MUST be less 7 mins long. We expect the video to be in somewhere between 5-7 mins.
+
 
 <a name='coll'></a>
-### 9. Collaboration Policy
 
-You can discuss the ideas with any number of people. But the code you turn-in should be from your own team and you SHOULD NOT USE codes from other students. For other honor code refer to the CMSC733 Spring 2019 website.
-
-
-<a name='ack'></a>
-### 10. Acknowledgements
-
-We would like to thank [Aleksandrs Ecins](http://users.umiacs.umd.edu/~aecins/) for the dataset. This fun project was inspired from Nitin’s research and a course project at University of Pennsylvania, [GRASP ARCHE](http://www.grasparche.com/).
-
+## 6. Collaboration Policy
+You are encouraged to discuss the ideas with your peers. However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the CMSC733 Spring 2019 website.

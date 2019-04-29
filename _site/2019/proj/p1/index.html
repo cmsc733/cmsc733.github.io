@@ -330,7 +330,31 @@ Though the supervised deep homography estimation works well, it needs a lot of d
 
 <p><a name="testset"></a><br />
 ## 6. Notes about Test Set<br />
-One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in your report (more on this <a href="#sub">later</a>). For the deep learning part, your algorithm will only run on the image size you chose during training, i.e., <script type="math/tex">M_P\times N_P</script>. A simple way to deal with this is to resize the test image to <script type="math/tex">M_P\times N_P</script> to obtain the homography and then warp the original image or crop a central region of <script type="math/tex">M_P\times N_P</script> or obtain random crops of size <script type="math/tex">M_P\times N_P</script> and average all the predicted homography values. <strong>Feel free to be creative here.</strong></p>
+<!-- One day (24 hours) before the deadline, a test set will be released on which we expect you to run your code from both the parts and present the results in your report (more on this [later](#sub)). --></p>
+
+<p>The Test Set can be downloaded from <a href="https://drive.google.com/file/d/1a62PbNlU2N_vN-kboRnGedJ_xTDeGxna/view?usp=sharing">here</a>. The Test Set has the following folder structure.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>P1TestSet.zip
+|   Phase1 
+|   ├── TestSet1
+|	|	└── *.jpg
+|	├── TestSet2
+|	|	└── *.jpg
+|	├── TestSet3
+|	|	└── *.jpg
+|	└── TestSet4
+|	|	└── *.jpg
+|   |   
+└── Phase2
+	└── *.jpg
+</code></pre>
+</div>
+
+<ul>
+  <li>Stich Panoramas of images from <code class="highlighter-rouge">Phase1</code> folder using the traditional approach, supervised homography and unsupervised homography.</li>
+  <li>Use images from <code class="highlighter-rouge">Phase2</code> folder to evaluate your deep learning based homography algorithms (both supervised and unsupervised). Here you can apply random perturbations as before on the center crop of the image (of size you chose during training). This Test is to evaluate how well your algorithm generalized to images outside the training set.<br />
+(For this part, your algorithm will only run on the image size you chose during training, i.e., <script type="math/tex">M_P\times N_P</script>. A simple way to deal with this is to resize the test image to <script type="math/tex">M_P\times N_P</script> to obtain the homography and then warp the original image or crop a central region of <script type="math/tex">M_P\times N_P</script> or obtain random crops of size <script type="math/tex">M_P\times N_P</script> and average all the predicted homography values. <strong>Feel free to be creative here.</strong> Mention what you did for this part in your report.)</li>
+</ul>
 
 <p><a name="extra"></a><br />
 ## 7. Extra Credit<br />
