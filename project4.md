@@ -63,7 +63,7 @@ $$ L_{vs} = \sum_s \sum_p |I_t(p) - \hat{I_s}(p)|$$
 where $$p$$ indexes over pixel coordinates and $$\hat{I_s}$$ is the source view $$I_s$$ warped to the target coordinate frame based on a depth imae-based rendering module. See Figure xx for an illustration of SfMLearner learning pipeline for depth and pose estimation. 
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p3/overview.png"  width="80%">
+  <img src="/assets/2019/p4/overview.png"  width="80%">
   <div class="figcaption">
   Figure xx: Overview of the supervision pipeline based on view synthesis.
   </div>
@@ -76,7 +76,7 @@ A key component of this framework is a differentiable depth image-based renderer
 
 Fig. xx is an illustration of the differentiable image warping process. 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p3/image-warp.png"  width="80%">
+  <img src="/assets/2019/p4/image-warp.png"  width="80%">
   <div class="figcaption">
   Figure xx: For each point \(p_t\) in the target view, we first project it onto the source view based on the predicted depth and camera pose, and then use bilinear interpolation to obtain the value of the warped image \(\hat{I}_s\) at location \(p_t\).
   </div>
@@ -107,7 +107,7 @@ where $$l$$ indexes over different images scales, $$s$$ indexes over source imag
 The network architecture is given below:
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p3/network.png"  width="100%">
+  <img src="/assets/2019/p4/network.png"  width="100%">
   <div class="figcaption">
   Figure xx: Overview of the supervision pipeline based on view synthesis.
   </div>
