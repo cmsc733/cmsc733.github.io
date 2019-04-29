@@ -5,7 +5,7 @@ title: Learning the Structure from Motion: An Unsupervised Approach
 permalink: /2019/proj/p4/
 ---
 
-<b>To be submitted in a group.</b>
+**To be submitted in a group.**
 
 Table of Contents:
 
