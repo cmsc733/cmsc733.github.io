@@ -5,7 +5,8 @@ title: Learning the Structure from Motion | An Unsupervised Approach
 permalink: /2019/proj/p4/
 ---
 
-**To be submitted in a group of two.**
+**To be submitted in a group.**
+**YOU CANNOT USE LATE DAYS FOR THIS PROJECT**
 
 Changes:
 architecture; loss function; data augmentation; retrain SfM Learner; no late days! model file of their trained method; mention architecture and loss function. 
@@ -15,10 +16,6 @@ Table of Contents:
 - [1. Deadline](#due)
 - [2. Introduction](#intro)
 - [3. SfMLearner](#sfmlearner)
-   - [3.1. View Synthesis](#view)
-   - [3.2. Differentiable Depth Image-based Rendering](#render)
-   - [3.3. Explainability Mask](#expl-mask)
-   - [3.4. Gradient Locality Issues](#gradlocal)
 - [4. Notes about the dataset](#testset)
 - [5. Submission Guidelines](#sub)
   - [5.1. File tree and naming](#files)
@@ -39,11 +36,12 @@ Table of Contents:
 
 We have dealt with reconstructing 3D structure of a given scene using images from multiple views using the traditional (geometric) approach. Though, there is a possibility of achieving more robust results. In this project, we will learn about estimating depth and pose (or ego-motion) from a sequence of images using unsupervised learning methods. In [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) paper by David Lowe's team at Google, an unsupervised learning framework was presented for the task of monocular depth and camera motion estimation from unstructured video sequences. 
 
-Your task is to make [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) 'better'! When we say better, it means that the error in depth and pose estimation should be less than that of SfMLearner's paper on different empirical evaluation scales. Research papers like [GeoNet](https://arxiv.org/pdf/1803.02276.pdf) might help you in improving the results. Although, research papers in this field are in abundance. Feel free to search through the internet. 
+Your task is to make [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) 'better'! When we say better, it means that the error in depth and pose estimation must be less than that of SfMLearner's paper on different empirical evaluation scales. Research papers like [GeoNet](https://arxiv.org/pdf/1803.02276.pdf) might help you in improving the results. Although, research papers in this field are in abundance. Feel free to search through the internet. 
 
-You will be mainly graded on the analysis of your approach and 'your original' implementation to make the SfMLearner better! Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in [section 5](#sub).
+You will be mainly graded on the analysis of your approach and 'your original' implementation to make the SfMLearner better! You are encouraged to **change the architecture, loss function and augement the data**. Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in [section 5](#sub).
 
-Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify or use any code available online to make the results better but DO NOT forget to cite them. You are restricted to $$\sim$$ 20K images provided in the dataset for training.
+Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify the SfMLearner code. **You are not allowed to use any online code except SfMLearner that involves any kind of 'deep learning' (apart from your previous projects).** Although, **feel free to use ANY traditional computer vision open source program or toolbox.** DO NOT forget to cite them. You are restricted to $$\sim$$ 20K images provided in the dataset for training.
+**NOTE:** You have to retrain the SfMLearner on the 20K images (rather than getting numbers from the paper) to have a fair comparison with your method.
 
 
 [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf)
@@ -86,6 +84,9 @@ YourDirectoryID_hw1.zip
 |   Data
 |   ├── AnyOutputImagesYouWantToHighlight.png
 |   ├── Data2OutputPRNet.mp4
+├── Models
+|   ├── SfMLearnerTrainedModelFiles
+|   ├── YourMethodTrainedModelFiles
 ├── Report.pdf
 └── PresentationVideo.mp4
 ```
@@ -96,7 +97,7 @@ YourDirectoryID_hw1.zip
 For each section of newly developed solution in the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented.  You must include the following details in your writeup:
 
 - Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the ``Draft`` folder and should of a conference quality paper.
-- Brief explanation of your approach to this problem.
+- Brief explanation of your approach to this problem. Talk about the architectural and loss function changes. Also, talk about how you augmented the data.
 - Present a set of images for comparison of depth estimation of SfMLearner, YourMethod and Ground Truth (with the input RGB image).
 - Present a odometry comparison of pose estimation of SfMLearner, YourMethod and Ground Truth.
 - Present a comparison of error of SfMLearner and YourMethod in different error metric scale (Abs, Sq, RMSE and RMSE log) as mentioned in the paper. The scripts for computing error metrics for both pose and depth evaluation can be downloaded from [here](https://github.com/tinghuiz/SfMLearner/tree/master/kitti_eval). For this, train ONLY on the KITTI training set provided here and test it on $$(i)$$ [KITTI testing set]() $$(ii)$$ [CityScape testing set]()
