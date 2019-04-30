@@ -17,7 +17,7 @@ Table of Contents:
 - [1. Deadline](#due)
 - [2. Introduction](#intro)
 - [3. SfMLearner](#sfmlearner)
-- [4. Notes about the dataset](#testset)
+- [4. Notes about the dataset](#dataset)
 - [5. Submission Guidelines](#sub)
   - [5.1. File tree and naming](#files)
   - [5.2. Report](#report)
@@ -42,10 +42,8 @@ Your task is to make [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/pro
 You will be mainly graded on the analysis of your approach and 'your original' implementation to make the SfMLearner better! You are encouraged to **change the architecture, loss function and augement the data**. Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in [section 5](#sub).
 
 Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify the SfMLearner code. **You are not allowed to use any online code except SfMLearner that involves any kind of 'deep learning' (apart from your previous projects).** Although, **feel free to use ANY traditional computer vision open source program or toolbox.** DO NOT forget to cite them. You are restricted to $$\sim$$ 20K images provided in the dataset for training.
-**NOTE:** You have to retrain the SfMLearner on the 20K images (rather than getting numbers from the paper) to have a fair comparison with your method.
+**NOTE:** You have to retrain the SfMLearner on the 20K images (rather than getting numbers from the paper) to have a fair comparison with your method. More on the dataset is given in [section 4](#dataset)
 
-
-[SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf)
 
 <a name='sfmlearner'></a>
 
@@ -56,7 +54,7 @@ One of the trivial ways to solve this problem is to learn rotation and translati
 <b> You are required to read [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) paper before reading further. </b>
 
 
-<a name='testset'></a>
+<a name='dataset'></a>
 
 ## 4. Notes about Data
 
