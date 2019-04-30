@@ -7,6 +7,9 @@ permalink: /2019/proj/p4/
 
 **To be submitted in a group of two.**
 
+Changes:
+architecture; loss function; data augmentation; retrain SfM Learner; no late days! model file of their trained method; mention architecture and loss function. 
+
 Table of Contents:
  
 - [1. Deadline](#due)
@@ -49,73 +52,9 @@ Note: You don't have to reimplement SfMLearner again! You will be not graded for
 
 ## 3. SfMLearner
 
-One of the trivial ways to solve this problem is to learn rotation and translation from a sequence of data. Although, learning such parameters directly is a weakly constrained problem. Thus, methods like [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf), jointly train a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequence. 
+One of the trivial ways to solve this problem is to learn rotation and translation from a sequence of data. Although, learning such parameters directly is a weakly constrained problem. Thus, methods like [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf), jointly train a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequence. <b>Assumption: The scene is fairly rigid <i>i.e.</i> the scene appearance change across different frames is dominated by the camera motion.</b>
 
 <b> You are required to read [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf) paper before reading further. </b>
-
-Following the a brief summary of the proposed framework in SfMLearner for jointly training a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequences.  
-<b>Assumption: The scene is fairly rigid <i>i.e.</i> the scene appearance change across different frames is dominated by the camera motion.</b>
-
-
-<a name='view'></a>
-
-### 3.1. View Synthesis
-The key supervision signal for our depth and pose prediction CNNs comes from the task of novel view synthesis: given one input view of a scene, synthesize a new image of the scene seen from a different camera pose. We can synthesize a target view given a per-pixel depth in that image, plus the pose and visibility in a nearby view. Thus, synthesizing the target view works as a supervision for training. The view synthesis objective can be formulated as:
-
-$$ L_{vs} = \sum_s \sum_p |I_t(p) - \hat{I_s}(p)|$$ 
-where $$p$$ indexes over pixel coordinates and $$\hat{I_s}$$ is the source view $$I_s$$ warped to the target coordinate frame based on a depth imae-based rendering module. See Figure xx for an illustration of SfMLearner learning pipeline for depth and pose estimation. 
-
-<div class="fig fighighlight">
-  <img src="/assets/2019/p4/overview.png"  width="80%">
-  <div class="figcaption">
-  Figure 1: Overview of the supervision pipeline based on view synthesis.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-
-### 3.2. Differentiable Depth Image-based Rendering
-A key component of this framework is a differentiable depth image-based renderer (Refer section 3.1 of the paper) that reconstructs the target view $$I_t$$ by sampling pixels from a source view $$I_s$$ based on the predicted depth map $$\hat{D_t}$$ and the relative pose $$\hat{T}_{t\rightarrow s}$$
-
-Fig. xx is an illustration of the differentiable image warping process. 
-<div class="fig fighighlight">
-  <img src="/assets/2019/p4/image-warp.png"  width="80%">
-  <div class="figcaption">
-  Figure 2: For each point \(p_t\) in the target view, we first project it onto the source view based on the predicted depth and camera pose, and then use bilinear interpolation to obtain the value of the warped image \(\hat{I}_s\) at location \(p_t\).
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-To obtain $$I_s(p_s)$$ for populating the value of $$\hat{I}_s(p_t)$$, we use the differentiable bilinear sampling mechanism proposed in the spatial transformer networks(STN) that linearly interpolates the values of the 4-pixel neighboring pixels of $$p_s$$ to approximate $$I_s(p_s)$$. For this project, you may 'use' STN rather than writing your own. A sample tensorflow implementation of STN can be found [here](https://github.com/kevinzakka/spatial-transformer-network). Feel free to use any other implementation.
-
-
-### 3.3. Explainability Mask
-
-<b>Note</b>: Till now, we assume the scene is static; there are no occlusions between the target and source views; the surface is Lambertian so that the photo-consistency error is meaningful. With any of the these assumptions voilated in the training sequence, the gradients could be corrupted. To improve the robustness of our training process, we separately train a <i>explainability prediction</i> network that outputs a per-pixel soft mask $$\hat{E}_s$$ for each  target-source pair. 
-
-Thus, the view synthesis objective is updated as:
-
-$$ L_{vs} = \sum_s \sum_p \hat{E}_s(p)\ |I_t(p) - \hat{I_s}(p)|$$ 
-
-
-### 3.4. Gradient Locality Issues
-
-There is still another problem that needs to be dealt with. The gradients in the framework are mainly derived from the pixel intensity difference between the center pixel and its neighbours which will cause problems in training if the correct $$p_s$$ (neighbour pixel) is located in a low-texture region. This is a common issue in motion estimation. To overcome this problem, we can use a encoder-decoder CNN with a small bottleneck for the depth network that implicitly constrains the output to be globally smooth and facilitates gradients to propogate from meaningful regions to nearby regions. 
-Thus, for smoothness, we minimize the $$L_1$$ norm of second-order gradients for the predicted depth maps:
-
-$$L_{final} = \sum_l L^l_{vs} + \lambda_s L^l_{smooth} + \lambda_e \sum_s L_{reg}(\hat{E}^l_s)$$
-
-where $$l$$ indexes over different images scales, $$s$$ indexes over source images and $$\lambda_s$$ and $$\lambda_e$$ are weighting for the depth smoothness loss and explainability regularization respectively.
-
-The network architecture is given below:
-
-<div class="fig fighighlight">
-  <img src="/assets/2019/p4/network.png"  width="100%">
-  <div class="figcaption">
-  Figure 3: Network architecture for SfMLearner's depth/pose/explainability prediction modules.
-  </div>
-  <div style="clear:both;"></div>
-</div>
 
 
 <a name='testset'></a>
