@@ -122,7 +122,7 @@ The network architecture is given below:
 
 ## 4. Notes about Data
 
-You are given a multiple sequences from the [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php) dataset. You can download the data from [here]().
+You are given a multiple sequences from the [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php) dataset. You can download the training data from [here](). Also, you can download the testing dataset from here: [KITTI Testing set]() and [Cityscape Testing set]().
 
 
 <a name='sub'></a>
