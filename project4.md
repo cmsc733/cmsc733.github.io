@@ -9,8 +9,6 @@ permalink: /2019/proj/p4/
 
 **YOU CANNOT USE LATE DAYS FOR THIS PROJECT**
 
-Changes:
-architecture; loss function; data augmentation; retrain SfM Learner; no late days! model file of their trained method; mention architecture and loss function. 
 
 Table of Contents:
  
@@ -18,6 +16,7 @@ Table of Contents:
 - [2. Introduction](#intro)
 - [3. SfMLearner](#sfmlearner)
 - [4. Notes about the dataset](#dataset)
+  - [4.1. Note about the SfMLearner Code](#code)
 - [5. Submission Guidelines](#sub)
   - [5.1. File tree and naming](#files)
   - [5.2. Report](#report)
@@ -66,7 +65,7 @@ Training set is available now. Testing set will be online soon.
 ### 4.1 Note about the SfMLearner Code
 
 The code provided in their [official Github repository](https://github.com/tinghuiz/SfMLearner) may not work out of the box. 
-In case you have error, like "num_source is not defined", please download the updated `train.py` file from [here](assets/2019/p4/train.py). It's the same `train.py` file with a few flags changed.
+In case you have error, like "num_source is not defined", please download the updated `train.py` file from [here](assets/2019/p4/train.py) and replace it with in the original `train.py`. It is the same file with a few flags changed.
 
 For the rest of the code, please follow their official github repo!
 
