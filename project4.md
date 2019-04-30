@@ -41,8 +41,8 @@ Your task is to make [SfMLearner](https://people.eecs.berkeley.edu/~tinghuiz/pro
 
 You will be mainly graded on the analysis of your approach and 'your original' implementation to make the SfMLearner better! You are encouraged to **change the architecture, loss function and augement the data**. Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in [section 5](#sub).
 
-Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify the SfMLearner code. **You are not allowed to use any online code except SfMLearner that involves any kind of 'deep learning' (apart from your previous projects).** Although, **feel free to use ANY traditional computer vision open source program or toolbox.** DO NOT forget to cite them. You are restricted to $$\sim$$ 20K images provided in the dataset for training.
-**NOTE:** You have to retrain the SfMLearner on the 20K images (rather than getting numbers from the paper) to have a fair comparison with your method. More on the dataset is given in [section 4](#dataset)
+Note: You don't have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on [Github](https://github.com/tinghuiz/SfMLearner) by the original authors. Feel free to modify the SfMLearner code. **You are not allowed to use any online code except SfMLearner that involves any kind of 'deep learning' (apart from your previous projects).** Although, **feel free to use ANY traditional computer vision open source program or toolbox.** DO NOT forget to cite them. You are restricted to $$\sim$$ 12K images provided in the dataset for training.
+**NOTE:** You have to retrain the SfMLearner on the 12K images (rather than getting numbers from the paper) to have a fair comparison with your method. More on the dataset is given in [section 4](#dataset)
 
 
 <a name='sfmlearner'></a>
@@ -58,7 +58,17 @@ One of the trivial ways to solve this problem is to learn rotation and translati
 
 ## 4. Notes about Data
 
-You are given a multiple sequences from the [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php) dataset. You can download the training data from [here](). Also, you can download the testing dataset from here: [KITTI Testing set]() and [Cityscape Testing set]().
+You are given a multiple sequences from the [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php) dataset. You can download the training data (and validation) from [here](https://drive.google.com/file/d/1A1BtjeZW5p7FQGovjd5sySYusOEZy8Vl/view?usp=sharing). Also, you can download the testing dataset from here: [KITTI Testing set]() and [Cityscape Testing set]().
+Training set is available now. Testing set will be online soon. 
+
+<a name='code'></a>
+
+### 4.1 Note about the SfMLearner Code
+
+The code provided in their [official Github repository](https://github.com/tinghuiz/SfMLearner) may not work out of the box. 
+In case you have error, like "num_source is not defined", please download the updated `train.py` file from [here](assets/2019/p4/train.py). It's the same `train.py` file with a few flags changed.
+
+For the rest of the code, please follow their official github repo!
 
 
 <a name='sub'></a>
