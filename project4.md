@@ -88,13 +88,12 @@ YourDirectoryID_hw1.zip
 |   Code 
 |   ├── Train.py
 |   ├── Test.py
-|   ├── Any subfolders you want along with files 
+|   └── Any subfolders you want along with files 
 |   Data
-|   ├── AnyOutputImagesYouWantToHighlight.png
-|   ├── Data2OutputPRNet.mp4
+|   └── AnyOutputImagesYouWantToHighlight.png
 ├── Models
 |   ├── SfMLearnerTrainedModelFiles
-|   ├── YourMethodTrainedModelFiles
+|   └── YourMethodTrainedModelFiles
 ├── Report.pdf
 └── PresentationVideo.mp4
 ```
