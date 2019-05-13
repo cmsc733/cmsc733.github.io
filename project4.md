@@ -57,7 +57,7 @@ One of the trivial ways to solve this problem is to learn rotation and translati
 
 ## 4. Notes about Data
 
-You are given a multiple sequences from the [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php) dataset. You can download the training data (and validation) from [here](https://drive.google.com/file/d/1A1BtjeZW5p7FQGovjd5sySYusOEZy8Vl/view?usp=sharing). Also, you can download the testing dataset from here: [KITTI Testing set]() and [Cityscape Testing set]().
+You are given a multiple sequences from the [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php) dataset. You can download the training data (and validation) from [here](https://drive.google.com/file/d/1A1BtjeZW5p7FQGovjd5sySYusOEZy8Vl/view?usp=sharing). Also, you can download the testing dataset from here: [KITTI Testing set]().
 Training set is available now. Testing set will be online soon. 
 
 <a name='code'></a>
@@ -107,8 +107,8 @@ For each section of newly developed solution in the project, explain briefly wha
 - Brief explanation of your approach to this problem. Talk about the architectural and loss function changes. Also, talk about how you augmented the data.
 - Present a set of images for comparison of depth estimation of SfMLearner, YourMethod and Ground Truth (with the input RGB image).
 - Present a odometry comparison of pose estimation of SfMLearner, YourMethod and Ground Truth.
-- Present a comparison of error of SfMLearner and YourMethod in different error metric scale (Abs, Sq, RMSE and RMSE log) as mentioned in the paper. The scripts for computing error metrics for both pose and depth evaluation can be downloaded from [here](https://github.com/tinghuiz/SfMLearner/tree/master/kitti_eval). For this, train ONLY on the KITTI training set provided here and test it on $$(i)$$ [KITTI testing set]() $$(ii)$$ [CityScape testing set]()
-- Present Training Accuracy on the provided KITTI training set. Present Testing accuracy on the provided KITTI testing set and the Cityscape testing set.
+- Present a comparison of error of SfMLearner and YourMethod in different error metric scale (Abs, Sq, RMSE and RMSE log) as mentioned in the paper. The scripts for computing error metrics for both pose and depth evaluation can be downloaded from [here](https://github.com/tinghuiz/SfMLearner/tree/master/kitti_eval). For this, train ONLY on the KITTI training set provided here and test it on [KITTI testing set]().
+- Present Training Accuracy on the provided KITTI training set. Present Testing accuracy on the provided KITTI testing set.
 - Present an in-depth analysis of your proposed approach. Did you try something specific? If yes, why? Talk about why it performed better or worse?
 - Present a 3D structure of the scene, reconstructed from depth and poses estimated. Feel free to directly use parts of your project 3 or any open source code for this.    
 
