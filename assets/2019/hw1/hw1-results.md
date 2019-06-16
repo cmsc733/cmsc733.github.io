@@ -10,7 +10,7 @@ permalink: /2019/hw/hw1-results/
 <b>phamkhoi</b><br>
 <b>(Gold Submission)<br>
 </b><a href="/assets/2019/hw1/results/pdf/phamkhoi_hw1.pdf">
-<img src="/assets/2019/hw1/results/jpg/phamkhoi_hw1.png" width="100%"></a> 
+<img src="/assets/2019/hw1/results/jpg/phamkhoi_hw1.jpg" width="100%"></a>
 </p>
 
 <!-- Silver -->
