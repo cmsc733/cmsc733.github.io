@@ -79,15 +79,15 @@ aroraprateek
 
 <b>
 sgteja
-</b><a href="/assets/2019/hw1/results/pdf/sgteja_hw1.pdf"> 
-<img src="/assets/2019/hw1/results/jpg/sgteja_hw1.jpg" width="100%"></a>
+</b><a href="/assets/2019/hw1/results/pdf/samudralagnyana_hw1.pdf"> 
+<img src="/assets/2019/hw1/results/jpg/samudralagnyana_hw1.jpg" width="100%"></a>
 <br>
 
 
 <b>
 shoemakerjoanna
-</b><a href="/assets/2019/hw1/results/pdf/shoemakerjoanna_hw1.pdf"> 
-<img src="/assets/2019/hw1/results/jpg/shoemakerjoanna_hw1.jpg" width="100%"></a>
+</b><a href="/assets/2019/hw1/results/pdf/joshoe_hw1.pdf"> 
+<img src="/assets/2019/hw1/results/jpg/joshoe_hw1.jpg" width="100%"></a>
 <br><br>
 
 <b>ssreenat<br>
