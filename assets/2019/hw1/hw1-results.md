@@ -53,13 +53,13 @@ aroraprateek
 <br>
 
 <b>jayarajanrohith
-</b><a href="/assets/2019/hw1/results/pdf/jayarajanrohith_hw1.pdf"> 
-<img src="/assets/2019/hw1/results/jpg/jayarajanrohith_hw1.jpg" width="100%"></a>
+</b><a href="/assets/2019/hw1/results/pdf/jayarajanrohith_hw1-1.pdf"> 
+<img src="/assets/2019/hw1/results/jpg/jayarajanrohith_hw1-1.jpg" width="100%"></a>
 <br>
 
 <b>jdkanu
-</b><a href="/assets/2019/hw1/results/pdf/jdkanu_hw1.pdf"> 
-<img src="/assets/2019/hw1/results/jpg/jdkanu_hw1.jpg" width="100%"></a>
+</b><a href="/assets/2019/hw1/results/pdf/kanujohn_hw1.pdf"> 
+<img src="/assets/2019/hw1/results/jpg/kanujohn_hw1.jpg" width="100%"></a>
 <br>
 
 <b>kmadhira
