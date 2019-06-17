@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Buildings built in minutes - An SfM Approach</title>
+    <title>Learning the Structure from Motion | An Unsupervised Approach</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Course materials and notes for University of Maryland's class CMSC733: Computer Vision.">
     <link rel="canonical" href="http://cmsc733.github.io/2019/proj/p4/">
@@ -46,35 +46,40 @@
       <div class="post">
 
   <header class="post-header">
-    <h1>Buildings built in minutes - An SfM Approach</h1>
+    <h1>Learning the Structure from Motion | An Unsupervised Approach</h1>
   </header>
 
   <article class="post-content">
-  <p>Table of Contents:</p>
+  <p><strong>To be submitted in a group.</strong></p>
+
+<p><strong>YOU CANNOT USE LATE DAYS FOR THIS PROJECT</strong></p>
+
+<p>Table of Contents:</p>
 
 <ul>
-  <li><a href="#sfmlearner">4. Phase 2: Deep Learning Approach (SfMLearner)</a><br />
- 	- <a href="#view">4.1. View Synthesis</a><br />
- 	- <a href="#render">4.2. Differentiable Depth Image-based Rendering</a><br />
- 	- <a href="#expl-mask">4.3. Explainability Mask</a><br />
- 	- <a href="#gradlocal">4.4. Gradient Locality Issues</a></li>
-  <li><a href="#testset">5. Notes about Test Set</a></li>
-  <li><a href="#sub">6. Submission Guidelines</a>
+  <li><a href="#due">1. Deadline</a></li>
+  <li><a href="#intro">2. Introduction</a></li>
+  <li><a href="#sfmlearner">3. SfMLearner</a></li>
+  <li><a href="#dataset">4. Notes about the dataset</a>
     <ul>
-      <li><a href="#files">6.1. File tree and naming</a></li>
-      <li><a href="#report">6.2. Report</a></li>
+      <li><a href="#code">4.1. Note about the SfMLearner Code</a></li>
     </ul>
   </li>
-  <li><a href="#coll">7. Collaboration Policy</a></li>
+  <li><a href="#sub">5. Submission Guidelines</a>
+    <ul>
+      <li><a href="#files">5.1. File tree and naming</a></li>
+      <li><a href="#report">5.2. Report</a></li>
+      <li><a href="#video">5.3. Video Presentation</a></li>
+    </ul>
+  </li>
+  <li><a href="#coll">6. Collaboration Policy</a></li>
 </ul>
-
-<p><i>To be submitted in a group.</i></p>
 
 <p><a name="due"></a></p>
 
 <h2 id="deadline">1. Deadline</h2>
 
-<p><strong>11:59PM, May 16, 2019.</strong></p>
+<p><strong>11:59PM, May 18, 2019.</strong></p>
 
 <p><a name="intro"></a></p>
 
@@ -82,87 +87,36 @@
 
 <p>We have dealt with reconstructing 3D structure of a given scene using images from multiple views using the traditional (geometric) approach. Though, there is a possibility of achieving more robust results. In this project, we will learn about estimating depth and pose (or ego-motion) from a sequence of images using unsupervised learning methods. In <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a> paper by David Lowe’s team at Google, an unsupervised learning framework was presented for the task of monocular depth and camera motion estimation from unstructured video sequences.</p>
 
-<p>Your task is to make <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a> ‘better’! When we say better, it means that the error in depth and pose estimation should be less than that of SfMLearner’s paper on different empirical evaluation scales. Research papers like <a href="https://arxiv.org/pdf/1803.02276.pdf">GeoNet</a> might help you in improving the results. Although, research papers in this field are in abundance. Feel free to search through the internet.</p>
+<p>Your task is to make <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a> ‘better’! When we say better, it means that the error in depth and pose estimation must be less than that of SfMLearner’s paper on different empirical evaluation scales. Research papers like <a href="https://arxiv.org/pdf/1803.02276.pdf">GeoNet</a> might help you in improving the results. Although, research papers in this field are in abundance. Feel free to search through the internet.</p>
 
-<p>You will be mainly graded on the analysis of your approach and ‘your original’ implementation to make the SfMLearner better! Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in <a href="#sub">section 5</a>.</p>
+<p>You will be mainly graded on the analysis of your approach and ‘your original’ implementation to make the SfMLearner better! You are encouraged to <strong>change the architecture, loss function and augement the data</strong>. Along with the standard report, you will be submitting a presentation video of about 5-7 mins long, explaining your approach and the in-depth analysis of your methods and the results. More on submission details are mentioned below in <a href="#sub">section 5</a>.</p>
 
-<p>Note: You don’t have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on <a href="https://github.com/tinghuiz/SfMLearner">Github</a> by the original authors. Feel free to modify or use any code available online to make the results better but DO NOT forget to cite them. You are restricted to $\sim$ 20K images provided in the dataset for training.</p>
-
-<p><a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a></p>
+<p>Note: You don’t have to reimplement SfMLearner again! You will be not graded for that. Use the SfMLearner code on <a href="https://github.com/tinghuiz/SfMLearner">Github</a> by the original authors. Feel free to modify the SfMLearner code. <strong>You are not allowed to use any online code except SfMLearner that involves any kind of ‘deep learning’ (apart from your previous projects).</strong> Although, <strong>feel free to use ANY traditional computer vision open source program or toolbox.</strong> DO NOT forget to cite them. You are restricted to <script type="math/tex">\sim</script> 12K images provided in the dataset for training.<br />
+<strong>NOTE:</strong> You have to retrain the SfMLearner on the 12K images (rather than getting numbers from the paper) to have a fair comparison with your method. More on the dataset is given in <a href="#dataset">section 4</a></p>
 
 <p><a name="sfmlearner"></a></p>
 
 <h2 id="sfmlearner">3. SfMLearner</h2>
 
-<p>One of the trivial ways to solve this problem is to learn rotation and translation from a sequence of data. Although, learning such parameters directly is a weakly constrained problem. Thus, methods like <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a>, jointly train a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequence.</p>
+<p>One of the trivial ways to solve this problem is to learn rotation and translation from a sequence of data. Although, learning such parameters directly is a weakly constrained problem. Thus, methods like <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a>, jointly train a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequence. <b>Assumption: The scene is fairly rigid <i>i.e.</i> the scene appearance change across different frames is dominated by the camera motion.</b></p>
 
-<p><b> You are required to read <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a> paper before reading further. </b></p>
+<p><b> You are required to read <a href="https://people.eecs.berkeley.edu/~tinghuiz/projects/SfMLearner/cvpr17_sfm_final.pdf">SfMLearner</a> paper to work on this project. </b></p>
 
-<p>Following the a brief summary of the proposed framework in SfMLearner for jointly training a single-view depth CNN and a camera pose estimation CNN from unlabeled video sequences.  <br />
-<b>Assumption: The scene is fairly rigid <i>i.e.</i> the scene appearance change across different frames is dominated by the camera motion.</b></p>
-
-<p><a name="view"></a></p>
-
-<h3 id="view-synthesis">3.1. View Synthesis</h3>
-<p>The key supervision signal for our depth and pose prediction CNNs comes from the task of novel view synthesis: given one input view of a scene, synthesize a new image of the scene seen from a different camera pose. We can synthesize a target view given a per-pixel depth in that image, plus the pose and visibility in a nearby view. Thus, synthesizing the target view works as a supervision for training. The view synthesis objective can be formulated as:</p>
-
-<p><script type="math/tex">L_{vs} = \sum_s \sum_p |I_t(p) - \hat{I_s}(p)|</script> <br />
-where <script type="math/tex">p</script> indexes over pixel coordinates and <script type="math/tex">\hat{I_s}</script> is the source view <script type="math/tex">I_s</script> warped to the target coordinate frame based on a depth imae-based rendering module. See Figure xx for an illustration of SfMLearner learning pipeline for depth and pose estimation.</p>
-
-<div class="fig fighighlight">
-  <img src="/assets/2019/p4/overview.png" width="80%" />
-  <div class="figcaption">
-  Figure xx: Overview of the supervision pipeline based on view synthesis.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-<h3 id="differentiable-depth-image-based-rendering">3.2. Differentiable Depth Image-based Rendering</h3>
-<p>A key component of this framework is a differentiable depth image-based renderer (Refer section 3.1 of the paper) that reconstructs the target view <script type="math/tex">I_t</script> by sampling pixels from a source view <script type="math/tex">I_s</script> based on the predicted depth map <script type="math/tex">\hat{D_t}</script> and the relative pose <script type="math/tex">\hat{T}_{t\rightarrow s}</script></p>
-
-<p>Fig. xx is an illustration of the differentiable image warping process.</p>
-<div class="fig fighighlight">
-  <img src="/assets/2019/p4/image-warp.png" width="80%" />
-  <div class="figcaption">
-  Figure xx: For each point \(p_t\) in the target view, we first project it onto the source view based on the predicted depth and camera pose, and then use bilinear interpolation to obtain the value of the warped image \(\hat{I}_s\) at location \(p_t\).
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-<p>To obtain <script type="math/tex">I_s(p_s)</script> for populating the value of <script type="math/tex">\hat{I}_s(p_t)</script>, we use the differentiable bilinear sampling mechanism proposed in the spatial transformer networks(STN) that linearly interpolates the values of the 4-pixel neighboring pixels of <script type="math/tex">p_s</script> to approximate <script type="math/tex">I_s(p_s)</script>. For this project, you may ‘use’ STN rather than writing your own. A sample tensorflow implementation of STN can be found <a href="https://github.com/kevinzakka/spatial-transformer-network">here</a>. Feel free to use any other implementation.</p>
-
-<h3 id="explainability-mask">3.3. Explainability Mask</h3>
-
-<p><b>Note</b>: Till now, we assume the scene is static; there are no occlusions between the target and source views; the surface is Lambertian so that the photo-consistency error is meaningful. With any of the these assumptions voilated in the training sequence, the gradients could be corrupted. To improve the robustness of our training process, we separately train a <i>explainability prediction</i> network that outputs a per-pixel soft mask <script type="math/tex">\hat{E}_s</script> for each  target-source pair.</p>
-
-<p>Thus, the view synthesis objective is updated as:</p>
-
-<script type="math/tex; mode=display">L_{vs} = \sum_s \sum_p \hat{E}_s(p)\ |I_t(p) - \hat{I_s}(p)|</script>
-
-<h3 id="gradient-locality-issues">3.4. Gradient Locality Issues</h3>
-
-<p>There is still another problem that needs to be dealt with. The gradients in the framework are mainly derived from the pixel intensity difference between the center pixel and its neighbours which will cause problems in training if the correct <script type="math/tex">p_s</script> (neighbour pixel) is located in a low-texture region. This is a common issue in motion estimation. To overcome this problem, we can use a encoder-decoder CNN with a small bottleneck for the depth network that implicitly constrains the output to be globally smooth and facilitates gradients to propogate from meaningful regions to nearby regions. <br />
-Thus, for smoothness, we minimize the <script type="math/tex">L_1</script> norm of second-order gradients for the predicted depth maps:</p>
-
-<script type="math/tex; mode=display">L_{final} = \sum_l L^l_{vs} + \lambda_s L^l_{smooth} + \lambda_e \sum_s L_{reg}(\hat{E}^l_s)</script>
-
-<p>where <script type="math/tex">l</script> indexes over different images scales, <script type="math/tex">s</script> indexes over source images and <script type="math/tex">\lambda_s</script> and <script type="math/tex">\lambda_e</script> are weighting for the depth smoothness loss and explainability regularization respectively.</p>
-
-<p>The network architecture is given below:</p>
-
-<div class="fig fighighlight">
-  <img src="/assets/2019/p4/network.png" width="100%" />
-  <div class="figcaption">
-  Figure xx: Overview of the supervision pipeline based on view synthesis.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-<p><a name="testset"></a></p>
+<p><a name="dataset"></a></p>
 
 <h2 id="notes-about-data">4. Notes about Data</h2>
 
-<p>You are given a multiple sequences from the <a href="http://www.cvlibs.net/datasets/kitti/raw_data.php">KITTI</a> dataset. You can download the data from <a href="">here</a>.</p>
+<p>You are given a multiple sequences from the <a href="http://www.cvlibs.net/datasets/kitti/raw_data.php">KITTI</a> dataset. You can download the training data (and validation) from <a href="https://drive.google.com/file/d/1A1BtjeZW5p7FQGovjd5sySYusOEZy8Vl/view?usp=sharing">here</a>. Also, you can download the testing dataset from here: <a href="">KITTI Testing set</a>.<br />
+Training set is available now. Testing set will be online soon.</p>
+
+<p><a name="code"></a></p>
+
+<h3 id="note-about-the-sfmlearner-code">4.1 Note about the SfMLearner Code</h3>
+
+<p>The code provided in their <a href="https://github.com/tinghuiz/SfMLearner">official Github repository</a> may not work out of the box. <br />
+In case you have error, like “num_source is not defined”, please download the updated <code class="highlighter-rouge">train.py</code> file from <a href="assets/2019/p4/train.py">here</a> and replace it with in the original <code class="highlighter-rouge">train.py</code>. It is the same file with a few flags changed.</p>
+
+<p>For the rest of the code, please follow their official github repo!</p>
 
 <p><a name="sub"></a></p>
 
@@ -181,10 +135,12 @@ Thus, for smoothness, we minimize the <script type="math/tex">L_1</script> norm 
 |   Code 
 |   ├── Train.py
 |   ├── Test.py
-|   ├── Any subfolders you want along with files 
+|   └── Any subfolders you want along with files 
 |   Data
-|   ├── AnyOutputImagesYouWantToHighlight.png
-|   ├── Data2OutputPRNet.mp4
+|   └── AnyOutputImagesYouWantToHighlight.png
+├── Models
+|   ├── SfMLearnerTrainedModelFiles
+|   └── YourMethodTrainedModelFiles
 ├── Report.pdf
 └── PresentationVideo.mp4
 </code></pre>
@@ -197,11 +153,11 @@ Thus, for smoothness, we minimize the <script type="math/tex">L_1</script> norm 
 
 <ul>
   <li>Your report <strong>MUST</strong> be typeset in LaTeX in the IEEE Tran format provided to you in the <code class="highlighter-rouge">Draft</code> folder and should of a conference quality paper.</li>
-  <li>Brief explanation of your approach to this problem.</li>
+  <li>Brief explanation of your approach to this problem. Talk about the architectural and loss function changes. Also, talk about how you augmented the data.</li>
   <li>Present a set of images for comparison of depth estimation of SfMLearner, YourMethod and Ground Truth (with the input RGB image).</li>
   <li>Present a odometry comparison of pose estimation of SfMLearner, YourMethod and Ground Truth.</li>
-  <li>Present a comparison of error of SfMLearner and YourMethod in different error metric scale (Abs, Sq, RMSE and RMSE log) as mentioned in the paper. The scripts for computing error metrics for both pose and depth evaluation can be downloaded from <a href="https://github.com/tinghuiz/SfMLearner/tree/master/kitti_eval">here</a>. For this, train ONLY on the KITTI training set provided here and test it on <script type="math/tex">(i)</script> <a href="">KITTI testing set</a> <script type="math/tex">(ii)</script> <a href="">CityScape testing set</a></li>
-  <li>Present Training Accuracy on the provided KITTI training set. Present Testing accuracy on the provided KITTI testing set and the Cityscape testing set.</li>
+  <li>Present a comparison of error of SfMLearner and YourMethod in different error metric scale (Abs, Sq, RMSE and RMSE log) as mentioned in the paper. The scripts for computing error metrics for both pose and depth evaluation can be downloaded from <a href="https://github.com/tinghuiz/SfMLearner/tree/master/kitti_eval">here</a>. For this, train ONLY on the KITTI training set provided here and test it on <a href="">KITTI testing set</a>.</li>
+  <li>Present Training Accuracy on the provided KITTI training set. Present Testing accuracy on the provided KITTI testing set.</li>
   <li>Present an in-depth analysis of your proposed approach. Did you try something specific? If yes, why? Talk about why it performed better or worse?</li>
   <li>Present a 3D structure of the scene, reconstructed from depth and poses estimated. Feel free to directly use parts of your project 3 or any open source code for this.</li>
 </ul>

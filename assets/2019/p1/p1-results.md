@@ -1,94 +1,79 @@
 ---
 layout: page
 mathjax: true
-title: Homework 0 - Alohomora!  All Results
-permalink: /2019/hw/hw0-results/
+title: Project 1 - My AutoPano - Results
+permalink: /2019/p/p1-results/
 ---
 
+<!-- Gold -->
 <p style="background-color:#f4c842; padding:5px">
 <b>phamkhoi</b><br>
 <b>(Gold Submission)<br>
-</b><a href="/assets/2019/hw0/results/pdf/phamkhoi.pdf">
-<img src="/assets/2019/hw0/results/png/phamkhoi.png" width="100%"></a> 
+</b><a href="/assets/2019/p1/results/pdf/akathpal_p1-min.pdf">
+<img src="/assets/2019/p1/results/jpg/akathpal_p1.jpg" height="170"></a>
 </p>
 
+<!-- Silver -->
 <p style="background-color:#ccc; padding:5px">
 <b>ameyap</b><br>
 <b>(Silver Submission)<br>
-</b><a href="/assets/2019/hw0/results/pdf/ameyap.pdf"> 
-<img src="/assets/2019/hw0/results/png/ameyap.png" width="100%"></a>
+</b><a href="/assets/2019/p1/results/pdf/ameyap_p1-compressed.pdf"> 
+<img src="/assets/2019/p1/results/jpg/ameyap_p1.jpg" height="170"></a>
 </p>
 
-
+<!-- Bronze -->
 <p style="background-color:#9e5d24; padding:5px">
 <b><font color="white">abhinavmodi<br>
 <b>(Bronze Submission)<br>
-</b><a href="/assets/2019/hw0/results/pdf/abhinavmodi.pdf"> 
-<img src="/assets/2019/hw0/results/png/abhinavmodi.png" width="100%"></a>
+</b><a href="/assets/2019/p1/results/pdf/dshah003_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/dshah003_p1.jpg" height="170"></a>
 
 <p></p>
 
 <center>
 <hr width="50%">
 </center>
-<br>
-
-<font color="black">
-<b><b>akathpal</b>
-</b><a href="/assets/2019/hw0/results/pdf/akathpal.pdf"> 
-<img src="/assets/2019/hw0/results/png/akathpal.png" width="100%"></a>
-<br>
-
-<b>
-aroraprateek
-</b><a href="/assets/2019/hw0/results/pdf/aroraprateek.pdf"> 
-<img src="/assets/2019/hw0/results/png/aroraprateek.png" width="100%"></a>
-<br>
-
-<b>bjorgvinssonsigurthor
-</b><a href="/assets/2019/hw0/results/pdf/bjorgvinssonsigurthor.pdf"> 
-<img src="/assets/2019/hw0/results/png/bjorgvinssonsigurthor.png" width="100%"></a>
-<br>
-
-<b>jayarajanrohith
-</b><a href="/assets/2019/hw0/results/pdf/jayarajanrohith.pdf"> 
-<img src="/assets/2019/hw0/results/png/jayarajanrohith.png" width="100%"></a>
-<br>
-
-<b>jdkanu
-</b><a href="/assets/2019/hw0/results/pdf/jdkanu.pdf"> 
-<img src="/assets/2019/hw0/results/png/jdkanu.png" width="100%"></a>
-<br>
-
-<b>kmadhira
-</b><a href="/assets/2019/hw0/results/pdf/kmadhira.pdf"> 
-<img src="/assets/2019/hw0/results/png/kmadhira.png" width="100%"></a>
-<br>
-
-<b>nambiarrohitkrishna
-</b><a href="/assets/2019/hw0/results/pdf/nambiarrohitkrishna.pdf"> 
-<img src="/assets/2019/hw0/results/png/nambiarrohitkrishna.png" width="100%"></a>
-<br>
-
-<b>nsuresh
-</b><a href="/assets/2019/hw0/results/pdf/nsuresh.pdf"> 
-<img src="/assets/2019/hw0/results/png/nsuresh.png" width="100%"></a>
-<br>
-
-<b>
-sgteja
-</b><a href="/assets/2019/hw0/results/pdf/sgteja.pdf"> 
-<img src="/assets/2019/hw0/results/png/sgteja.png" width="100%"></a>
-<br>
-
-
-<b>
-shoemakerjoanna
-</b><a href="/assets/2019/hw0/results/pdf/shoemakerjoanna.pdf"> 
-<img src="/assets/2019/hw0/results/png/shoemakerjoanna.png" width="100%"></a>
 <br><br>
 
-<b>ssreenat<br>
-</b><a href="/assets/2019/hw0/results/pdf/ssreenat.pdf"> 
-<img src="/assets/2019/hw0/results/png/ssreenat.png" width="20%">
-<br>
+<font color="black">
+<b><b>akathpal</b><br>
+</b><a href="/assets/2019/p1/results/pdf/jdkanu_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/jdkanu_p1.jpg" height="170"></a>
+<br><br>
+
+<b>
+aroraprateek<br>
+</b><a href="/assets/2019/p1/results/pdf/joshoe_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/joshoe_p1.jpg" height="170"></a>
+<br><br>
+
+<b>bjorgvinssonsigurthor<br>
+</b><a href="/assets/2019/p1/results/pdf/khoi_sgteja_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/khoi_sgteja_p1.jpg" height="170"></a>
+<br><br>
+
+<b>jayarajanrohith<br>
+</b><a href="/assets/2019/p1/results/pdf/kmadhira_p1-compressed.pdf"> 
+<img src="/assets/2019/p1/results/jpg/kmadhira_p1.jpg" height="170"></a>
+<br><br>
+
+<b>jdkanu<br>
+</b><a href="/assets/2019/p1/results/pdf/nambiarrohitkrishn_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/nambiarrohitkrishn_p1.jpg" height="170"></a>
+<br><br>
+
+<b>kmadhira<br>
+</b><a href="/assets/2019/p1/results/pdf/nsuresh_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/nsuresh_p1.jpg" height="170"></a>
+<br><br>
+
+<b>nambiarrohitkrishna<br>
+</b><a href="/assets/2019/p1/results/pdf/pathak10_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/pathak10_p1.jpg" height="170"></a>
+<br><br>
+
+<b>nsuresh<br>
+</b><a href="/assets/2019/p1/results/pdf/rohith23_p1-min.pdf"> 
+<img src="/assets/2019/p1/results/jpg/rohith23_p1.jpg" height="170"></a>
+<br><br>
+
