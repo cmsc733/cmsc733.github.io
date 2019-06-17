@@ -1,7 +1,7 @@
 ---
 layout: page
 mathjax: true
-title: Homework 1 - AutoCalib:  All Results
+title: Homework 1 - AutoCalib-  All Results
 permalink: /2019/hw/hw1-results/
 ---
 
