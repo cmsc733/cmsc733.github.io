@@ -28,6 +28,9 @@ permalink: /2019/p/p1-results/
 </b><a href="/assets/2019/p1/results/pdf/dshah003_p1-min.pdf"> 
 <img src="/assets/2019/p1/results/jpg/dshah003_p1.jpg" height="170"></a>
 
+
+<!-- Other Submissions -->
+
 <p></p>
 
 <center>
@@ -53,7 +56,7 @@ aroraprateek<br>
 <br><br>
 
 <b>jayarajanrohith<br>
-</b><a href="/assets/2019/p1/results/pdf/kmadhira_p1-compressed.pdf"> 
+</b><a href="/assets/2019/p1/results/pdf/kmadhira_p1-min.pdf"> 
 <img src="/assets/2019/p1/results/jpg/kmadhira_p1.jpg" height="170"></a>
 <br><br>
 
