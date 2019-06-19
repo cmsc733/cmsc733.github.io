@@ -9,11 +9,10 @@ permalink: /2019/proj/p1-results/
 <!-- Gold -->
 <p style="background-color:#f4c842; padding:5px">
 <b>khoi-sgteja</b><br>
-</b><a href="/assets/2019/p1/results/pdf/khoi_sgteja_p1-min.pdf"> 
+<a href="/assets/2019/p1/results/pdf/khoi_sgteja_p1-min.pdf"> 
 <img src="/assets/2019/p1/results/jpg/khoi_sgteja_p1.jpg" height="170"></a>
 <b>(Gold Submission)<br>
 
-</p>
 
 <!-- Silver -->
 <p style="background-color:#ccc; padding:5px">
