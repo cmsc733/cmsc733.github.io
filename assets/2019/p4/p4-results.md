@@ -41,7 +41,7 @@ permalink: /2019/proj/p4-results/
 
 <font color="black">
 <b>arora-madhira-modi</b><br>
-</b><a href="/assets/2019/p4/results/pdf/pratique_p4.pdf"> 
+<a href="/assets/2019/p4/results/pdf/pratique_p4.pdf"> 
 <img src="/assets/2019/p4/results/jpg/pratique_p4.jpg" height="170"></a>
 <br><br>
 
