@@ -12,12 +12,9 @@ permalink: /2019/proj/p4-results/
 </b><a href="/assets/2019/p4/results/pdf/ameyap_p4.pdf"> 
 <img src="/assets/2019/p4/results/jpg/ameyap_p4.jpg" height="170"></a>
 
-
-</p>
-
 <!-- Silver --> <!-- Khoi -->
 <p style="background-color:#ccc; padding:5px">
-<b>khoi-sgteja-kanu</b> <a href="https://www.youtube.com/watch?v=gaZnmD8aItQ">[Video]</a> </b><br>
+<b>khoi-sgteja-kanu</b> <a href="https://www.youtube.com/watch?v=gaZnmD8aItQ">[Video]</a><br>
 <b>(Silver Submission)<br>
 </b><a href="/assets/2019/p4/results/pdf/khoi_sgteja_jdkanu_p4.pdf"> 
 <img src="/assets/2019/p4/results/jpg/khoi_sgteja_jdkanu_p4.jpg" height="170"></a>
@@ -26,7 +23,7 @@ permalink: /2019/proj/p4-results/
 
 <!-- Bronze --> <!-- Mayank -->
 <p style="background-color:#9e5d24; padding:5px">
-<b><font color="white">kathpal-shah-pathak(Bronze Submission) <a href="https://www.youtube.com/watch?v=KLGo489jyY4"><font color="#41e2f4">[Video]</a> </b><br></font>
+<b><font color="white">kathpal-shah-pathak<br>(Bronze Submission) <a href="https://www.youtube.com/watch?v=KLGo489jyY4"><font color="#41e2f4">[Video]</font></a><br>
 <a href="/assets/2019/p4/results/pdf/dshah003_p4.pdf"> 
 <img src="/assets/2019/p4/results/jpg/dshah003_p4.jpg" height="170"></a>
 <p></p>
