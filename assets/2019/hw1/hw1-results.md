@@ -52,11 +52,6 @@ aroraprateek<br>
 <img src="/assets/2019/hw1/results/jpg/bjorgvinssonsigurthor_hw1.jpg" height="170"></a>
 <br><br>
 
-<b>jayarajanrohith<br>
-</b><a href="/assets/2019/hw1/results/pdf/jayarajanrohith_hw1-1.pdf"> 
-<img src="/assets/2019/hw1/results/jpg/jayarajanrohith_hw1-1.jpg" height="170"></a>
-<br><br>
-
 <b>jdkanu<br>
 </b><a href="/assets/2019/hw1/results/pdf/kanujohn_hw1.pdf"> 
 <img src="/assets/2019/hw1/results/jpg/kanujohn_hw1.jpg" height="170"></a>
