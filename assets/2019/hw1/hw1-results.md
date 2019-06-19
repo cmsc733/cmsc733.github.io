@@ -17,7 +17,7 @@ permalink: /2019/hw/hw1-results/
 <p style="background-color:#ccc; padding:5px">
 <b>ameyap</b><br>
 <b>(Silver Submission)<br>
-</b><a href="/assets/2019/hw1/results/pdf/ameyap_hw1.pdf"> 
+</b><a href="/assets/2019/hw1/results/pdf/patilameya_hw1.pdf"> 
 <img src="/assets/2019/hw1/results/jpg/patilameya_hw1.jpg" height="170"></a>
 </p>
 
