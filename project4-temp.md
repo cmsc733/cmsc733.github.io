@@ -35,7 +35,7 @@ Table of Contents:
 The aim of this project is to build semantic map of a 3D scene (See Fig. 1). This project gives you a peek into the world of robotics perception <i>i.e.</i> how robots understand and build the model of the world. <i>Excited?</i>
 
 <div class="fig fighighlight"><center>
-  <img src="/assets/2019/p4/seg.png" width="60%"></center>
+  <img src="/assets/2019/p4_old/seg.png" width="60%"></center>
   <div class="figcaption">
     Figure 1: (a) Reconstruction from a samples of RGBD images. (b) Segmentation of a 3D scene.
   </div>
@@ -52,13 +52,13 @@ In the next few sections, we will detail how this can be done along with the spe
 You are given a set of RGB-D (RGB-Depth) frames of table top images and you need to extract the 'object of interest' from each frame and build a 3D model of the filtered object. When we say 'extract object of interest', you need to remove the table, walls of the room (if any) and any such irrelevant data from the scene. You also might need to filter stray points during the extraction process. But before that we need to align the data from RGB camera and the depth sensor from the Kinect. See Fig xx. Clearly, the RGB image and Depth images are not aligned. 
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p4/rgb.png" width="49%">
-  <img src="/assets/2019/p4/depth.png" width="49%">
+  <img src="/assets/2019/p4_old/rgb.png" width="49%">
+  <img src="/assets/2019/p4_old/depth.png" width="49%">
   <div class="figcaption">
   Figure 3 (a): RGB and Depth images from Kinect.
   </div>
   <br><center>
-  <img src="/assets/2019/p4/rgbd.png" width="75%"></center>
+  <img src="/assets/2019/p4_old/rgbd.png" width="75%"></center>
   <div class="figcaption">
   Figure 3 (b): Uncalibrated RGB-D images. Thus we need calibration parameters in order to align the two images.
   </div>
@@ -73,7 +73,7 @@ You are given a set of RGB-D (RGB-Depth) frames of table top images and you need
 So, in order to align them we would need calibration parameters <i>i.e.</i> the rotation and translation between the camera centers of RGB camera and the depth sensor as $$(u,v)$$ does not represents $$(u',v')$$, see fig. xx. 
 
 <div class="fig fighighlight"><center>
-  <img src="/assets/2019/p4/RotAndTrans1.png" width="90%"></center>
+  <img src="/assets/2019/p4_old/RotAndTrans1.png" width="90%"></center>
   <div class="figcaption">
     Figure 2: .
   </div>
@@ -82,7 +82,7 @@ So, in order to align them we would need calibration parameters <i>i.e.</i> the 
 
 To formulate: Given all camera parameters $$(R,t,f)$$ (rotation, translation and focal lengths of both sensors), find the corresponding points of a RGB and a depth image. Thus, we need to generate a point cloud that can be represented as $$(x,y,z,r,g,b)$$. (See Fig. xx)
 <div class="fig fighighlight"><center>
-  <img src="/assets/2019/p4/RotAndTrans2.png" width="60%"></center>
+  <img src="/assets/2019/p4_old/RotAndTrans2.png" width="60%"></center>
   <div class="figcaption">
     Figure 2: .
   </div>
@@ -113,7 +113,7 @@ Now, once the point clouds are generated from a single view, let us learn how to
 The RGB-D data provided is recorded from an Asus Xtion Pro sensor. Using the method in the previous stage, you get the 3D view of the object from one single camera view point, use many such views from different frames of the same object to iteratively build a 3D model of the object.
 
 <div class="fig fighighlight">
-  <img src="/assets/2019/p4/data-collect.png" width="100%">
+  <img src="/assets/2019/p4_old/data-collect.png" width="100%">
   <div class="figcaption">
     Figure 2: .
   </div>
