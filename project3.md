@@ -5,6 +5,9 @@ title: Buildings built in minutes - An SfM Approach
 permalink: /2019/proj/p3/
 ---
 
+This article is written by Chahat Deep Singh. 
+If you have any questions/corrections regarding the article, please email at chahat[at]terpmail[dot]umd[edu].
+
 **To be submitted in a group of two.**
 
 Table of Contents:
