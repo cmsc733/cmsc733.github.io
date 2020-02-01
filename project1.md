@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: MyAutoPano
-permalink: /2019/proj/p1/
+permalink: /2020/proj/p1/
 ---
 
 Table of Contents:
