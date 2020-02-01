@@ -32,7 +32,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Deadline 
-**11:59 PM, Thursday, February 21, 2019.**
+**11:59 PM, Monday, February 24, 2019.**
 
 <a name='prob'></a>
 ## 2. Problem Statement 
@@ -415,7 +415,7 @@ Test images will be released 24 hours before the deadline.
 - Any third party code for implementing architecture or augmentation
 - `Keras` or any other layer API
 
-If you have any doubts regarding allowed and disallowed functions, please drop a public post on [Piazza](https://piazza.com/umd/spring2019/cmsc733). 
+If you have any doubts regarding allowed and disallowed functions, please drop a public post on [Piazza](https://piazza.com/umd/spring2020/cmsc733). 
 
 <a name='coll'></a>
 
@@ -425,7 +425,7 @@ If you have any doubts regarding allowed and disallowed functions, please drop a
 You are <b>STRONGLY</b> encouraged to discuss the ideas with your peers. Treat the class as a big group/family and enjoy the learning experience. 
 </p>
 
-However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the [CMSC733 Spring 2019 website](http://prg.cs.umd.edu/cmsc733).
+However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the [CMSC733 Spring 2020 website](http://prg.cs.umd.edu/cmsc733).
 
 <a name='ack'></a>
 
