@@ -123,7 +123,7 @@ Now, given the values of the matrix on the left hand size we will call $$ \mathc
 $$
  \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ \end{bmatrix} = \mathcal{B}_{\Delta}^{-1} \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix}
 $$
-Now, given the values of $$ \alpha, \beta, \gamma$$ we can say that a point $$x$$ lies inside the triangle if $$ \alpha \in [0, 1] $$, $$ \beta \in [0, 1] $$ and $$\alpha + \beta + \gamma \in [0,1]$$. **DO NOT USE any built-in function for this part**.
+Now, given the values of $$ \alpha, \beta, \gamma$$ we can say that a point $$x$$ lies inside the triangle if $$ \alpha \in [0, 1] $$, $$ \beta \in [0, 1] $$, \gamma \in [0, 1] $$ and $$\alpha + \beta + \gamma \in (0,1]$$. **DO NOT USE any built-in function for this part**.
 
 - **Step 2:** Compute the corresponding pixel position in the source image $$\mathcal{A}$$ using the barycentric equation shown in the last step but with a different triangle coordinates. This is computed as follows:
 
