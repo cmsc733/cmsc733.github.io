@@ -17,7 +17,7 @@ This project is divided in two phases:
 
 Table of Contents:
 <a name='traditional'></a>
-- [Part I: Traditional]
+- Part I: Traditional
 - [I.1. Deadline](#due)
 - [I.2. Introduction](#intro)
 - [I.3. Phase 1: Traditional Approach](#trad)
@@ -46,7 +46,7 @@ Table of Contents:
 - [I.5. Notes about Data Set](#dataset)
 
 <a name='unsup'></a>
-- [Part II: Unsupervised Deep Learning]
+- Part II: Unsupervised Deep Learning
 - [II.1. Deadline](#due)
 - [II.2. Introduction](#intro-unsup)
 - [II.3. SfMLearner](#sfmlearner)
