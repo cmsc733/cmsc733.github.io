@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Structure from Motion - Traditional and Deep Learning
-permalink: /2020/proj/pfinal/
+permalink: /2019/proj/pfinal/
 ---
 
 This article is written by Chahat Deep Singh. 
