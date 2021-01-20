@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Homework 0 - Alohomora!
-permalink: /2019/hw/hw0/
+permalink: /2021/hw/hw0/
 ---
 
 Student results can be found [here](/2019/hw/hw0-results/)
@@ -41,7 +41,7 @@ Table of Contents:
 
 ## 1. Due Date 
 
-**11:59PM, Friday, January 31, 2020.**
+**11:59PM, Friday, Feb 1, 2021.**
 This homework is to be submitted individually. Download starter Code from [here](#starter).
 
 
@@ -404,7 +404,7 @@ If you have any doubts regarding allowed and disallowed functions, please drop a
 You are <b>STRONGLY</b> encouraged to discuss the ideas with your peers. Treat the class as a big group/family and enjoy the learning experience. 
 </p>
 
-However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the [CMSC733 Spring 2019 website](http://prg.cs.umd.edu/cmsc733).
+However, the code should be your own, and should be the result of you exercising your own understanding of it. If you reference anyone else's code in writing your project, you must properly cite it in your code (in comments) and your writeup. For the full honor code refer to the [CMSC733 Spring 2021 website](http://prg.cs.umd.edu/cmsc733).
 
 <a name='ack'></a>
 
