@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: MyAutoPano
-permalink: /2020/proj/p1/
+permalink: /2022/proj/p1/
 ---
 
 Table of Contents:
@@ -32,7 +32,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Deadline 
-**11:59 PM, February 24, 2021**
+**11:59 PM, February 24, 2022**
 
 <a name='prob'></a>
 ## 2. Problem Statement 
