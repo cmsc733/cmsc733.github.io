@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: AutoCalib
-permalink: /2019/hw/hw1/
+permalink: /2022/hw/hw1/
 ---
 
 **To be submitted individually**
@@ -23,7 +23,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Due Date 
-**11:59PM, Thursday, April 6, 2019.**
+**11:59PM, Thursday, April 7, 2022.**
 
 <a name='intro'></a>
 ## 2. Introduction
