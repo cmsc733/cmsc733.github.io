@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Buildings built in minutes - An SfM Approach
-permalink: /2019/proj/p3/
+permalink: /2022/proj/p3/
 ---
 
 This article is written by Chahat Deep Singh. 
@@ -48,7 +48,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Deadline 
-**11:59PM, Thursday, April 22, 2019.**
+**11:59PM, April 28, 2022.**
 
 <a name='intro'></a>
 ## 2. Introduction
