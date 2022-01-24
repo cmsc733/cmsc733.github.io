@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Homework 0 - Alohomora!
-permalink: /2021/hw/hw0/
+permalink: /2022/hw/hw0/
 ---
 
 Student results can be found [here](/2019/hw/hw0-results/)
@@ -41,7 +41,7 @@ Table of Contents:
 
 ## 1. Due Date 
 
-**11:59PM, Friday, Feb 1, 2021.**
+**11:59PM, Thursday, Feb 3, 2022.**
 This homework is to be submitted individually. Download starter Code from [here](#starter).
 
 
