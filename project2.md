@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: FaceSwap
-permalink: /2019/proj/p2/
+permalink: /2022/proj/p2/
 ---
 
 Table of Contents:
@@ -28,7 +28,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Deadline 
-**11:59PM, Sunday, March 17, 2019.**
+**11:59PM, March 17, 2022.**
 
 <a name='intro'></a>
 ## 2. Introduction
