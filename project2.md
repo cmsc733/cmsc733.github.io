@@ -116,9 +116,9 @@ $$ \begin{bmatrix}
  1 & 1 & 1\\
  \end{bmatrix} \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ \end{bmatrix} = \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix} $$
 
-Here, the Barycentric coordinate is given by $$ \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T $$. Note that, the matrix on the left hand size and it's inverse need to be computed only once per triangle. In this matrix, $$ a, b, c $$ represent the corners of the triangle and $$x,y$$ represent the $$x$$ and $$y$$ coordinates of the particular triangle corner respectively. 
+Here, the Barycentric coordinate is given by $$ \begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T $$. Note that, the matrix on the left hand side and it's inverse needs to be computed only once per triangle. In this matrix, $$ a, b, c $$ represent the corners of the triangle and $$x,y$$ represent the $$x$$ and $$y$$ coordinates of the particular triangle corner respectively. 
 
-Now, given the values of the matrix on the left hand size we will call $$ \mathcal{B}_{\Delta} $$ and the value of $$ \begin{bmatrix} x & y & 1 \end{bmatrix}^T $$ we can compute the value of $$\begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T $$ as follows:
+Now, given the values of the matrix on the left hand side, we will call $$ \mathcal{B}_{\Delta} $$ and the value of $$ \begin{bmatrix} x & y & 1 \end{bmatrix}^T $$ we can compute the value of $$\begin{bmatrix} \alpha & \beta & \gamma \end{bmatrix}^T $$ as follows:
 
 $$
  \begin{bmatrix} \alpha \\ \beta \\ \gamma \\ \end{bmatrix} = \mathcal{B}_{\Delta}^{-1} \begin{bmatrix} x \\ y \\ 1\\ \end{bmatrix}
