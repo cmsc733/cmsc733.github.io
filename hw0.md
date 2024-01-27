@@ -41,7 +41,7 @@ Table of Contents:
 
 ## 1. Due Date 
 
-**11:59PM, Thursday, Feb 3, 2024.**
+**11:59PM, Thursday, Feb 9, 2024.**
 This homework is to be submitted individually. Download starter Code from [here](#starter).
 
 
