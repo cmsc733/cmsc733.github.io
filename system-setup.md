@@ -6,7 +6,7 @@ permalink: /system-setup/
 
 ## System Setup for local machines:
 
-This is the system setup instructions for CMSC733 class for local machines. We <b>ONLY</b> support Ubuntu-16.04. Feel free to use a Virtual Machine on your system if you don't an Ubuntu machine. We <b>STRONGLY</b> recommend [Virtual Box](https://www.virtualbox.org/wiki/Downloads) as a virtual machine monitor.
+This is the system setup instructions for CMSC733 class for local machines. Feel free to use a Virtual Machine on your system if you don't an Ubuntu machine. We <b>STRONGLY</b> recommend [Virtual Box](https://www.virtualbox.org/wiki/Downloads) as a virtual machine monitor. Please note that while this tutorial may be slightly outdated, you can install newer versions, but the procedure remains the same.
 
 ### 1. Install OpenCV-3.4:
 
