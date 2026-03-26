@@ -56,7 +56,7 @@ That question is the problem of **Novel View Synthesis (NVS)**, and it is one of
 Here is an example of 3DGS rendering applied to a real-world scene:
 
 <div class=" fig fighighlight">
-  <iframe width="560" height="315" src="assets/2026/bicycle.mp4" frameborder="0" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="/assets/2026/bicycle.mp4" frameborder="0" allowfullscreen></iframe>
   <div class="figcaption">
     Video 1: 3DGS rendering of the <em>bicycle</em> scene (Mip-NeRF 360 dataset). Each frame is rendered in real-time by alpha-compositing millions of 3D Gaussian primitives.
   </div>
@@ -106,7 +106,7 @@ What we need is a representation that: (a) fills in continuous regions of the sc
 3DGS represents a scene as a set of **N 3D Gaussian primitives**, where each Gaussian is a fuzzy, colored, semi-transparent ellipsoid floating in 3D space. Think of each primitive as a soft blob of paint: a position, a shape (how elongated and how it is oriented), a color, and a transparency. Together, millions of these blobs tile the entire scene.
 
 <div class="fig fighighlight">
-  <img src="assets/2026/3dgs_pipeline.png" width="100%">
+  <img src="/assets/2026/3dgs_pipeline.png" width="100%">
   <div class="figcaption">
     Figure 2: The 3DGS pipeline. Starting from a sparse SfM point cloud, each point seeds one Gaussian ellipsoid. After optimization, the ellipsoids grow, flatten, and orient to model surface patches. The final rendered image is produced by alpha-compositing the 2D projections of all Gaussians from the current camera viewpoint.
   </div>
@@ -407,7 +407,7 @@ Once you have finished implementing the functions, you can open the file `render
 After completing `render.py`, you can test the rendering code by running `python render.py`. This script will take a few minutes to render views of a scene represented by pre-trained 3D Gaussians!
 
 <div class="fig fighighlight">
-  <img src=" assets/2026/q1_training_example_1.png" width="100%">
+  <img src="/assets/2026/q1_training_example_1.png" width="100%">
   <div class="figcaption">
     Figure 5: Sample training view from the truck dataset alongside expected rasterizer outputs — RGB color (left), depth map (center), and silhouette mask (right). All three come from the same splatting computation with different per-Gaussian attributes substituted into the compositing equation.
   </div>
@@ -462,7 +462,7 @@ Finally, we can now start training. You can do so by running `python train.py`. 
 For reference, here is one frame from the training progress GIF from our reference implementation. The top row displays renderings obtained from Gaussians that are being trained and the bottom row displays the ground truth. The top row looks good in this reference because this frame is from near the end of the optimization procedure. You can expect the top row to look bad during the start of the optimization procedure.
 
 <div class="fig fighighlight">
-  <img src="assets/2026/q1_training_example_1.png" width="100%">
+  <img src="/assets/2026/q1_training_example_1.png" width="100%">
   <div class="figcaption">
     Figure 7: One frame from the training progress GIF.
   </div>
