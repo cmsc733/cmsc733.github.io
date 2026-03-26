@@ -2,7 +2,7 @@
 layout: page
 mathjax: true
 title: Scenes in Splats - A 3D Gaussian Splatting Approach
-permalink: /2024/proj/p4/
+permalink: /2026/proj/p2_phase2/
 ---
 
 This article is written by Naitri Rajyaguru.
