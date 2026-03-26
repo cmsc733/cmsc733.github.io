@@ -55,10 +55,8 @@ That question is the problem of **Novel View Synthesis (NVS)**, and it is one of
 
 Here is an example of 3DGS rendering applied to a real-world scene:
 
-<div class="fig fighighlight">
-  <video width="100%" controls autoplay loop muted>
-    <source src="https://drive.google.com/uc?export=download&id=1sES9hflNWKaCfSkhphWpWRik8CEZxe3J" type="video/mp4">
-  </video>
+<div class=" fig fighighlight">
+  <iframe width="560" height="315" src="assets/2026/bicycle.mp4" frameborder="0" allowfullscreen></iframe>
   <div class="figcaption">
     Video 1: 3DGS rendering of the <em>bicycle</em> scene (Mip-NeRF 360 dataset). Each frame is rendered in real-time by alpha-compositing millions of 3D Gaussian primitives.
   </div>
@@ -85,14 +83,6 @@ There are a few steps that collectively form 3DGS:
 
 Given a finite set of photographs of a scene taken from known viewpoints, _novel view synthesis_ asks: **synthesize a photorealistic image of the same scene from an arbitrary new viewpoint that was never photographed.**
 
-<div class="fig fighighlight">
-  <img src="/assets/2024/p4/nvs.png" width="100%">
-  <div class="figcaption">
-    Figure 1: Novel view synthesis. Given a set of posed input images (left), render any new viewpoint (right).
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
 This is hard because:
 
 - **Depth ambiguity.** A 2D photograph discards depth. You cannot trivially un-project a pixel into 3D without additional information.
@@ -116,7 +106,7 @@ What we need is a representation that: (a) fills in continuous regions of the sc
 3DGS represents a scene as a set of **N 3D Gaussian primitives**, where each Gaussian is a fuzzy, colored, semi-transparent ellipsoid floating in 3D space. Think of each primitive as a soft blob of paint: a position, a shape (how elongated and how it is oriented), a color, and a transparency. Together, millions of these blobs tile the entire scene.
 
 <div class="fig fighighlight">
-  <img src="https://drive.google.com/uc?export=view&id=1b-WLPPY2e03pylWaeG0dm-gXh7sbco5E" width="100%">
+  <img src="assets/2026/3dgs_pipeline.png" width="100%">
   <div class="figcaption">
     Figure 2: The 3DGS pipeline. Starting from a sparse SfM point cloud, each point seeds one Gaussian ellipsoid. After optimization, the ellipsoids grow, flatten, and orient to model surface patches. The final rendered image is produced by alpha-compositing the 2D projections of all Gaussians from the current camera viewpoint.
   </div>
@@ -378,14 +368,6 @@ Now that we have implemented functionality to project 3D Gaussians, we can start
 
 Before starting the rasterization procedure, we should first sort the 3D Gaussians in increasing order by their depth value. We should also discard 3D Gaussians whose depth value is less than 0 (we only want to project 3D Gaussians that lie in front of the image plane).
 
-<div class="fig fighighlight">
-  <img src="/assets/2024/p4/depth_sort.png" width="80%">
-  <div class="figcaption">
-    Figure 4: Effect of depth sorting on alpha compositing correctness. Without sorting (left), occlusion is physically wrong. After sorting front-to-back (right), the result is correct.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
 Complete the functions `compute_depth_values` and `get_idxs_to_filter_and_sort` of the class `Scene` in `model.py`. You can refer to the function `render` in class `Scene` to see how these functions will be used.
 
 <a name='alpha'></a>
@@ -425,19 +407,9 @@ Once you have finished implementing the functions, you can open the file `render
 After completing `render.py`, you can test the rendering code by running `python render.py`. This script will take a few minutes to render views of a scene represented by pre-trained 3D Gaussians!
 
 <div class="fig fighighlight">
-  <img src="https://drive.google.com/uc?export=view&id=1hjmHlN4dS-LLKdeAGxujmuRZj8Had09H" width="100%">
+  <img src=" assets/2026/q1_training_example_1.png" width="100%">
   <div class="figcaption">
     Figure 5: Sample training view from the truck dataset alongside expected rasterizer outputs — RGB color (left), depth map (center), and silhouette mask (right). All three come from the same splatting computation with different per-Gaussian attributes substituted into the compositing equation.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-For reference, here is one frame of the GIF that you can expect to see after running `render.py`:
-
-<div class="fig fighighlight">
-  <img src="/assets/2024/p4/Q1_Render.png" width="60%">
-  <div class="figcaption">
-    Figure 6: One frame of the expected rendering GIF. Do note that while the reference we have provided is a still frame, we expect you to submit the GIF that is output by the rendering code.
   </div>
   <div style="clear:both;"></div>
 </div>
@@ -490,19 +462,9 @@ Finally, we can now start training. You can do so by running `python train.py`. 
 For reference, here is one frame from the training progress GIF from our reference implementation. The top row displays renderings obtained from Gaussians that are being trained and the bottom row displays the ground truth. The top row looks good in this reference because this frame is from near the end of the optimization procedure. You can expect the top row to look bad during the start of the optimization procedure.
 
 <div class="fig fighighlight">
-  <img src="/assets/2024/p4/Q1_Training_1.png" width="100%">
+  <img src="assets/2026/q1_training_example_1.png" width="100%">
   <div class="figcaption">
     Figure 7: One frame from the training progress GIF.
-  </div>
-  <div style="clear:both;"></div>
-</div>
-
-Also, for reference, here is one frame from the final rendering GIF created after training is complete:
-
-<div class="fig fighighlight">
-  <img src="/assets/2024/p4/Q1_Training_2.png" width="100%">
-  <div class="figcaption">
-    Figure 8: One frame from the final renders GIF.
   </div>
   <div style="clear:both;"></div>
 </div>
