@@ -406,13 +406,6 @@ Once you have finished implementing the functions, you can open the file `render
 
 After completing `render.py`, you can test the rendering code by running `python render.py`. This script will take a few minutes to render views of a scene represented by pre-trained 3D Gaussians!
 
-<div class="fig fighighlight">
-  <img src="/assets/2026/q1_training_example_1.png" width="100%">
-  <div class="figcaption">
-    Figure 5: Sample training view from the truck dataset alongside expected rasterizer outputs — RGB color (left), depth map (center), and silhouette mask (right). All three come from the same splatting computation with different per-Gaussian attributes substituted into the compositing equation.
-  </div>
-  <div style="clear:both;"></div>
-</div>
 
 **GPU Memory Usage:** This task (with default parameter settings) may use approximately 6GB GPU memory. You can decrease/increase GPU memory utilization for performance by using the `--gaussians_per_splat` argument.
 
