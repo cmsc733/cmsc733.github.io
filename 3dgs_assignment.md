@@ -8,10 +8,6 @@ permalink: /2024/proj/p4/
 This article is written by Naitri Rajyaguru.
 If you have any questions/corrections regarding the article, please email at nrajyagu[at]umd[dot]edu.
 
-Adapted from _16-825: Learning for 3D Vision_, Shubham Tulsiani, CMU ([learning3d.github.io](https://learning3d.github.io/)).
-
-**To be submitted individually.**
-
 Table of Contents:
 - [1. Deadline](#due)
 - [2. Introduction](#intro)
@@ -225,15 +221,6 @@ $$C(\mathbf{x}) = \sum_{i=1}^{N} c_i \cdot \alpha(\mathbf{x}, i) \cdot T(\mathbf
 > **Note — 3DGS uses zero neural networks.** Not at training, not at inference, not at any point. There is no MLP, no encoder, no decoder. The optimization is purely mathematical gradient descent on explicit float parameters (means, scales, quaternions, opacity logits, SH coefficients). This total absence of neural computation is precisely why rendering is real-time. It is sometimes said 3DGS "doesn't use a neural network at inference" — but this understates it. There is no neural network at any stage whatsoever.
 
 <a name='pipeline'></a>
-### 3.8. The Full 3DGS Pipeline at a Glance
-
-<div class="fig fighighlight">
-  <img src="https://drive.google.com/uc?export=view&id=1b-WLPPY2e03pylWaeG0dm-gXh7sbco5E" width="100%">
-  <div class="figcaption">
-    Figure 3: The complete 3DGS pipeline. The training loop renders the current Gaussians to produce a predicted image, computes a photometric loss against the ground-truth photograph, and backpropagates gradients through the differentiable rasterizer to update all Gaussian parameters. Every ~100 iterations, Adaptive Density Control clones, splits, or prunes Gaussians to improve scene coverage.
-  </div>
-  <div style="clear:both;"></div>
-</div>
 
 <a name='setup'></a>
 ## 4. Environment Setup
@@ -531,7 +518,7 @@ Feel free to experiment with different learning rate values and number of iterat
 - Learning rates that you used for each parameter. If you had experimented with multiple sets of learning rates, just mention the set that obtains the best performance.
 - Number of iterations that you trained the model for.
 - The PSNR and SSIM.
-- Both the GIFs output by `train.py`.
+- The GIFs output by `train.py`.
 
 <a name='extra'></a>
 ## 6. Extra Credit
@@ -545,23 +532,17 @@ Your report must include:
 - Side-by-side rendered frames from at least 3 held-out test views.
 - A quantitative comparison table: PSNR and SSIM for both implementations on the same test split.
 - Analysis of the performance gap: isotropic vs. anisotropic Gaussians? Degree-0 vs. degree-3 SH? PyTorch vs. CUDA rasterizer? Number of Gaussians after training? Be specific — attribute the gap to each factor if possible.
-- A timing comparison: wall-clock training time and rendering fps for both implementations.
 
 <a name='ec2'></a>
 ### 6.2. Run on a More Challenging Dataset &nbsp;&nbsp; _(+10 points)_
 
 Run your 3DGS implementation (and optionally the official one) on a **more challenging scene** beyond the truck dataset. The following datasets are available:
 
-**Additional data provided:** [Download additional scenes (Google Drive)](https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4)
-
 Other publicly available datasets:
 - **NeRF Synthetic / Blender** — 8 synthetic objects (lego, drums, ship, hotdog, etc.) placed on white backgrounds with complex geometry and challenging view-dependent effects. [Download (Google Drive)](https://drive.google.com/drive/folders/128yBriW1IG_3NJ5Rp7APSTZsJqdJdfc1)
-- **Mip-NeRF 360** — 4 indoor + 5 outdoor unbounded object-centric scenes (bicycle, garden, stump, kitchen, etc.). [Download (360\_v2.zip)](http://storage.googleapis.com/gresearch/refraw360/360_v2.zip)
-- **Tanks and Temples + Deep Blending** — large-scale outdoor/indoor scenes; the standard benchmark used in the original 3DGS paper. [Download (tandt\_db.zip, 650 MB)](https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/datasets/input/tandt_db.zip)
-- **Your own captured dataset** — capture ≥ 50 images of a scene yourself (do **not** download from the internet), run COLMAP, calibrate and undistort, then run 3DGS. Analyze the success and the failure of your algorithm and showcase that in your report. Note: you will need to capture images, calibrate them, and undistort them.
+
 
 Your report must include:
-- Description of the chosen dataset: scene type, number of images, resolution, and why it is more challenging than the truck dataset.
 - PSNR and SSIM on the test split.
 - Novel-view rendered GIF or frames.
 - Analysis of **successes and failure cases**: where does 3DGS do well? Where does it struggle? (e.g., reflective surfaces, thin structures, unbounded background.) Explain why each failure occurs based on your understanding of the algorithm.
@@ -571,15 +552,8 @@ Your report must include:
 
 Run your 3DGS algorithm on the **truck scene** provided in the [starter code download](https://drive.google.com/file/d/1saZDsOn_7h37rer3N_KjsgsQYFHGS2Cr/view?usp=sharing). The data given to you are a set of images of a toy truck captured from multiple viewpoints, along with a point cloud produced by COLMAP and camera pose files. The point cloud is used to initialize the Gaussian means.
 
-The data folder `./data/truck` contains:
-- **Images:** posed RGB images of the truck from multiple viewpoints. The last $$N_\text{test}$$ views are held out for evaluation.
-- **Camera poses:** `transforms_train.json` / `transforms_test.json` in NeRF-style **camera-to-world (c2w)** format (see §5.1.1 warning on convention).
-- **Point cloud:** A sparse `.ply` file produced by COLMAP, with per-point RGB color, used to initialize Gaussian means.
-- **Calibration:** Camera intrinsic parameters $$(f_x, f_y, c_x, c_y)$$ are embedded in the JSON files.
-
 A data loader is provided — you do not need to write one. Please **DO NOT** include the dataset in your submission.
 
-**For the extra credit:** Also run your 3DGS algorithm on the additional scenes provided at [this link](https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4) or on your own captured images. Analyze the success and the failure of your algorithm and showcase that in your report.
 
 <a name='sub'></a>
 ## 8. Submission Guidelines
@@ -598,34 +572,14 @@ YourDirectoryID_p4.zip
 |   ├── model.py
 |   ├── render.py
 |   ├── train.py
-|   ├── unit_test_gaussians.py
-|   ├── Wrapper.py
-|   ├── Any subfolders you want along with files
-|   Wrapper.py
 |   Outputs
-|   ├── q1_render.gif
-|   ├── q1_training_progress.gif
-|   ├── q1_training_final_renders.gif
-|   ├── RenderFrames/
-|   ├── TrainingFrames/
-|   ├── ExtraCredit/
 └── Report.pdf
 ```
 
 <a name='report'></a>
 ### 8.2. Report
-
-There will be no Test Set for this project. For each section of the project, explain briefly what you did, and describe any interesting problems you encountered and/or solutions you implemented. You must include the following details in your writeup:
-
 - Please make your report extremely detailed with PSNR and SSIM after each step (rasterizer outputs, training convergence, before and after ADC ablation, and so on). Describe all the steps (anything that is not obvious) and any other observations in your report.
-- Your report **MUST** be typeset in LaTeX in the IEEE Tran format provided to you in the `Draft` folder and should be of a conference quality paper.
-- Present the following in your report:
-	- Section 5.1: the output GIF from `render.py`, rendered color + depth + silhouette images from the pre-trained scene.
-	- Section 5.2: learning rates used and justification; number of iterations; training progress GIF and final renders GIF; PSNR and SSIM on test views.
-	- ADC ablation: results with full ADC / without ADC / pruning only.
-	- Extra Credit 6.1 (if attempted): side-by-side frames, PSNR/SSIM comparison table, gap analysis, timing comparison.
-	- Extra Credit 6.2 (if attempted): dataset description, PSNR/SSIM, novel-view renders, success/failure case analysis.
-- Present failure cases and explanation, if any.
+- 
 - Do not use any function that directly implements a part of the pipeline. If you have any doubts, please contact us via Piazza.
 
 <a name='coll'></a>
