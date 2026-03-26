@@ -42,7 +42,7 @@ Table of Contents:
 
 <a name='due'></a>
 ## 1. Deadline
-**11:59PM, May 12, 2024.**
+**11:59PM, April 13, 2026.**
 
 Starter code and data: [Download Project Codebase (Google Drive)](https://drive.google.com/file/d/1saZDsOn_7h37rer3N_KjsgsQYFHGS2Cr/view?usp=sharing)
 
